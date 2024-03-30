@@ -26,6 +26,8 @@ CCObject* PracticePlusCCArray::lastObject() {
             l_playLayer->getActiveStartpointId() != -1
         ) {
             l_lastObject = static_cast<CCObject*>(l_playLayer->getActiveStartpoint());
+            log::info("startpoint id: {}", l_playLayer->getActiveStartpointId());
+            log::info("Memory address of startpoint: {}", l_lastObject);
         }
     }
     return l_lastObject;
