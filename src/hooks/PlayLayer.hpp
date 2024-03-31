@@ -23,6 +23,8 @@ public:
 
     $override void togglePracticeMode(bool i_value);
 
+    $override void updateVisibility(float i_unkFloat);
+
     // custom methods
 
     void addStartpoint(CheckpointObject* i_startpoint, int i_index = -1);

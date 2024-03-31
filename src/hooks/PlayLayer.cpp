@@ -5,6 +5,8 @@
 
 using namespace geode::prelude;
 
+// overrides
+
 bool PracticePlusPlayLayer::init(GJGameLevel* i_level, bool i_useReplay, bool i_dontCreateObjects) {
     if (!PlayLayer::init(i_level, i_useReplay, i_dontCreateObjects)) return false;
 
@@ -26,6 +28,16 @@ void PracticePlusPlayLayer::togglePracticeMode(bool i_value) {
 
     PlayLayer::togglePracticeMode(i_value);
 }
+
+void PracticePlusPlayLayer::updateVisibility(float i_unkFloat) {
+    PlayLayer::updateVisibility(i_unkFloat);
+
+    if (!m_fields->m_isPlusMode) {
+        updatePlusModeVisibility();
+    }
+}
+
+// custom methods
 
 void PracticePlusPlayLayer::addStartpoint(CheckpointObject* i_startpoint, int i_index) {
     if (i_index != -1) {
@@ -134,10 +146,7 @@ void PracticePlusPlayLayer::togglePlusMode(bool i_value) {
 }
 
 void PracticePlusPlayLayer::togglePlusMode() {
-    m_fields->m_isPlusMode = !m_fields->m_isPlusMode;
-
-    updatePlusModeLogic();
-    updatePlusModeVisibility();
+    togglePlusMode(!m_fields->m_isPlusMode);
 }
 
 void PracticePlusPlayLayer::prevStartpoint() {
@@ -173,7 +182,7 @@ void PracticePlusPlayLayer::setupKeybinds() {
     addEventListener<keybinds::InvokeBindFilter>(
         [this](keybinds::InvokeBindEvent* event) {
             if (event->isDown() && m_fields->m_isPlusMode) {
-                
+                createStartpoint();
             }
             return ListenerResult::Propagate;
         },
