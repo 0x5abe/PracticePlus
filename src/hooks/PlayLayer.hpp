@@ -4,7 +4,7 @@
 
 class $modify(PracticePlusPlayLayer, PlayLayer) {
 protected:
-    std::vector<CheckpointObject*> m_startpoints;
+    geode::Ref<cocos2d::CCArray> m_startpoints = nullptr;
     int m_activeStartpointId = -1;
 
     void updatePlusModeVisibility();
@@ -12,7 +12,8 @@ protected:
     void updatePlusModeLogic();
 public:
     bool m_isPlusMode = false;
-    bool m_isResetLevel = false;
+    bool m_enableArrayHook = false;
+    bool m_removeStartpoint = false;
 
     // overrides
 
@@ -22,9 +23,11 @@ public:
 
     $override void togglePracticeMode(bool i_value);
 
-    // my stuff
+    // custom methods
 
     void addStartpoint(CheckpointObject* i_startpoint, int i_index = -1);
+
+    void createStartpoint();
 
     bool removeStartpoint(int i_index = -1);
 
@@ -34,13 +37,17 @@ public:
 
     int getActiveStartpointId();
 
-    bool setActiveStartpointId(int i_index = -1);
+    void setActiveStartpointId(int i_index = -1);
 
     bool reloadFromActiveStartpoint();
 
     void togglePlusMode(bool i_value);
 
     void togglePlusMode();
+
+    void prevStartpoint();
+
+    void nextStartpoint();
 
     void setupKeybinds();
 };

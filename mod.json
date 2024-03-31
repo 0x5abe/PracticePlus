@@ -9,7 +9,7 @@
 	"dependencies": [
 		{
 			"id": "geode.custom-keybinds",
-			"version": ">=v1.5.3",
+			"version": "v1.5.3",
             "importance": "required",
             "platforms": [
                 "windows"

@@ -15,6 +15,14 @@ file(GLOB_RECURSE SOURCES
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 
+target_compile_definitions(${PROJECT_NAME}
+    PUBLIC
+      $<$<CONFIG:Debug>:DEBUG>
+      $<$<CONFIG:RelWithDebInfo>:DEBUG>
+      $<$<CONFIG:Release>:RELEASE>
+      $<$<CONFIG:MinSizeRel>:RELEASE>
+)
+
 if (NOT DEFINED ENV{GEODE_SDK})
     message(FATAL_ERROR "Unable to find Geode SDK! Please define GEODE_SDK environment variable to point to Geode")
 else()
@@ -25,4 +33,5 @@ target_include_directories(${PROJECT_NAME} PRIVATE src/)
 
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
-setup_geode_mod(${PROJECT_NAME})
+#setup_geode_mod(${PROJECT_NAME})
+setup_geode_mod(${PROJECT_NAME} EXTERNALS geode.custom-keybinds:1.5.3)
