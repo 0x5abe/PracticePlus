@@ -1,6 +1,4 @@
 #include <Geode/Geode.hpp>
-#include <Geode/modify/PlayerObject.hpp>
-#include <hooks/PlayLayer.hpp>
 #include <geode.custom-keybinds/include/Keybinds.hpp>
 
 using namespace geode::prelude;

@@ -8,7 +8,7 @@ unsigned int PracticePlusCCArray::count() {
     PracticePlusPlayLayer* l_playLayer = static_cast<PracticePlusPlayLayer*>(PlayLayer::get());
 	if (l_playLayer && this == l_playLayer->m_checkpointArray) {
         if (l_playLayer->m_fields->m_enableArrayHook &&
-            l_playLayer->m_fields->m_isPlusMode &&
+            l_playLayer->isPlusMode() &&
             l_playLayer->getActiveStartpointId() != -1
         ) {
             l_count += 1;
@@ -22,7 +22,7 @@ CCObject* PracticePlusCCArray::lastObject() {
     PracticePlusPlayLayer* l_playLayer = static_cast<PracticePlusPlayLayer*>(PlayLayer::get());
 	if (l_playLayer && this == l_playLayer->m_checkpointArray && !l_lastObject) {
         if (l_playLayer->m_fields->m_enableArrayHook &&
-            l_playLayer->m_fields->m_isPlusMode &&
+            l_playLayer->isPlusMode() &&
             l_playLayer->getActiveStartpointId() != -1
         ) {
             l_lastObject = static_cast<CCObject*>(l_playLayer->getActiveStartpoint());

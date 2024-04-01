@@ -9,6 +9,9 @@ project(PracticePlus VERSION 1.0.0)
 # source files
 file(GLOB_RECURSE SOURCES
 	src/hooks/*.cpp
+    src/managers/*.cpp
+    src/domain/*.cpp
+    src/util/*.cpp
 	src/*.cpp
     ${OS_SOURCES}
 )
