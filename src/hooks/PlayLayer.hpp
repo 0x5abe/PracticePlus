@@ -3,7 +3,7 @@
 #include <Geode/modify/PlayLayer.hpp>
 #include <managers/StartpointManager.hpp>
 
-class $modify(PracticePlusPlayLayer, PlayLayer) {
+class $modify(PPPlayLayer, PlayLayer) {
 protected:
     void updatePlusModeVisibility(bool i_isPlusMode);
 

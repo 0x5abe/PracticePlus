@@ -2,6 +2,11 @@
 #include "StartpointManager.hpp"
 #include <util/math.hpp>
 #include <util/debug.hpp>
+#include <hooks/PlayerCheckpoint.hpp>
+#include <hooks/cocos2d/CCArray.hpp>
+#include <hooks/CheckpointObject.hpp>
+//TODO: remove
+#include <iostream>
 
 using namespace geode::prelude;
 
@@ -17,13 +22,20 @@ CheckpointObject* StartpointManager::createStartpoint(CheckpointObject* i_startp
     l_newPhysicalCPO->m_objectID = 0x2c;
     l_newPhysicalCPO->m_objectType = GameObjectType::Decoration;
     l_newPhysicalCPO->m_glowSprite = nullptr;
-    int* l_unkField1 = (int*)((unsigned int)l_newPhysicalCPO+0x3d4);
+    int* l_unkField1 = reinterpret_cast<int*>(reinterpret_cast<unsigned int>(l_newPhysicalCPO)+0x3d4);
     *l_unkField1 = 3;
-    
+
 	CC_SAFE_RELEASE(i_startpoint->m_physicalCheckpointObject);
     i_startpoint->m_physicalCheckpointObject = l_newPhysicalCPO;
 	
 	i_startpoint->m_physicalCheckpointObject->setStartPos(i_startPosition);
+
+    //TODO: remove
+    if (m_startpoints->count() > 0) {
+        InputStream l_ifstream = InputStream("./testPlayerCheckpoint.bin");
+        static_cast<PPPlayerCheckpoint*>(i_startpoint->m_player1Checkpoint)->load(l_ifstream);
+    }
+    //EndTODO: remove
 
     m_startpoints->addObject(i_startpoint);
 
@@ -31,6 +43,10 @@ CheckpointObject* StartpointManager::createStartpoint(CheckpointObject* i_startp
 }
 
 void StartpointManager::removeStartpoint(int i_index) {
+    //TODO: remove
+    OutputStream l_ofstream = OutputStream("./testPlayerCheckpoint.bin");
+    saveStartpointsToStream(l_ofstream);
+    //EndTODO: remove
     if (i_index == -1) {
         m_startpoints->removeLastObject(true);
     } else {
@@ -119,7 +135,22 @@ void StartpointManager::updatePlusModeLogic() {
     }
 }
 
-#ifdef DEBUG
+void StartpointManager::loadStartpointsFromStream(InputStream& i_stream) {
+    int test;
+    i_stream >> test;
+}
+
+void StartpointManager::saveStartpointsToStream(OutputStream& o_stream) {
+    if (m_startpoints->count() > 0) {
+        // CheckpointObject* l_lastObject = static_cast<CheckpointObject*>(m_startpoints->lastObject());
+        // static_cast<PPPlayerCheckpoint*>(l_lastObject->m_player1Checkpoint)->save(o_stream);
+        cocos2d::CCArray* l_intermediate = m_startpoints;
+        static_cast<PPCCArray*>(l_intermediate)->save<PPCheckpointObject>(o_stream);
+        log::info("Saved playerCheckpoint to stream");
+    }
+}
+
+#ifdef PP_DEBUG
 Ref<CCArray> StartpointManager::getStartpointArray() {
     return m_startpoints;
 }

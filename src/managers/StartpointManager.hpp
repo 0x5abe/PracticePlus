@@ -1,5 +1,7 @@
 #pragma once
 #include <Geode/Geode.hpp>
+#include <util/InputStream.hpp>
+#include <util/OutputStream.hpp>
 
 class StartpointManager {
 protected:
@@ -52,7 +54,11 @@ public:
 
     void setupKeybinds();
 
-#ifdef DEBUG
+    void loadStartpointsFromStream(InputStream& i_stream);
+
+    void saveStartpointsToStream(OutputStream& o_stream);
+
+#ifdef PP_DEBUG
     geode::Ref<cocos2d::CCArray> getStartpointArray();
 #endif
 };

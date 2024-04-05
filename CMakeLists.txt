@@ -9,6 +9,7 @@ project(PracticePlus VERSION 1.0.0)
 # source files
 file(GLOB_RECURSE SOURCES
 	src/hooks/*.cpp
+    src/hooks/cocos2d/*.cpp
     src/managers/*.cpp
     src/domain/*.cpp
     src/util/*.cpp
@@ -20,10 +21,10 @@ add_library(${PROJECT_NAME} SHARED ${SOURCES})
 
 target_compile_definitions(${PROJECT_NAME}
     PUBLIC
-      $<$<CONFIG:Debug>:DEBUG>
-      $<$<CONFIG:RelWithDebInfo>:DEBUG>
-      $<$<CONFIG:Release>:RELEASE>
-      $<$<CONFIG:MinSizeRel>:RELEASE>
+      $<$<CONFIG:Debug>:PP_DEBUG>
+      $<$<CONFIG:RelWithDebInfo>:PP_DEBUG>
+      $<$<CONFIG:Release>:PP_RELEASE>
+      $<$<CONFIG:MinSizeRel>:PP_RELEASE>
 )
 
 if (NOT DEFINED ENV{GEODE_SDK})

@@ -6,7 +6,7 @@ using namespace geode::prelude;
 
 // overrides
 
-bool PracticePlusPlayLayer::init(GJGameLevel* i_level, bool i_useReplay, bool i_dontCreateObjects) {
+bool PPPlayLayer::init(GJGameLevel* i_level, bool i_useReplay, bool i_dontCreateObjects) {
     if (!PlayLayer::init(i_level, i_useReplay, i_dontCreateObjects)) return false;
     
     setupKeybinds();
@@ -14,7 +14,7 @@ bool PracticePlusPlayLayer::init(GJGameLevel* i_level, bool i_useReplay, bool i_
     return true;
 }
 
-void PracticePlusPlayLayer::resetLevel() {
+void PPPlayLayer::resetLevel() {
     m_fields->m_enableArrayHook = true;
  
     PlayLayer::resetLevel();
@@ -22,13 +22,13 @@ void PracticePlusPlayLayer::resetLevel() {
     m_fields->m_enableArrayHook = false;
 }
 
-void PracticePlusPlayLayer::togglePracticeMode(bool i_value) {
+void PPPlayLayer::togglePracticeMode(bool i_value) {
     togglePlusMode(i_value);
 
     PlayLayer::togglePracticeMode(i_value);
 }
 
-void PracticePlusPlayLayer::updateVisibility(float i_unkFloat) {
+void PPPlayLayer::updateVisibility(float i_unkFloat) {
     PlayLayer::updateVisibility(i_unkFloat);
 
     if (!isPlusMode()) {
@@ -36,7 +36,7 @@ void PracticePlusPlayLayer::updateVisibility(float i_unkFloat) {
     }
 }
 
-void PracticePlusPlayLayer::onQuit() {
+void PPPlayLayer::onQuit() {
     PlayLayer::onQuit();
 
     StartpointManager::get().reset();
@@ -44,16 +44,16 @@ void PracticePlusPlayLayer::onQuit() {
 
 // custom methods
 
-void PracticePlusPlayLayer::createStartpoint() {
+void PPPlayLayer::createStartpoint() {
     addStartpoint(StartpointManager::get().createStartpoint(createCheckpoint(), m_player1->getPosition()));
 }
 
-void PracticePlusPlayLayer::addStartpoint(CheckpointObject* i_startpoint, int i_index) {
+void PPPlayLayer::addStartpoint(CheckpointObject* i_startpoint, int i_index) {
     PlayLayer::addToSection(i_startpoint->m_physicalCheckpointObject);
 	i_startpoint->m_physicalCheckpointObject->activateObject();
 }
 
-bool PracticePlusPlayLayer::removeStartpoint(int i_index) {
+bool PPPlayLayer::removeStartpoint(int i_index) {
     StartpointManager& l_startpointManager = StartpointManager::get();
     CheckpointObject* l_startpoint = l_startpointManager.getStartpoint(i_index);
     if (!l_startpoint) return false;
@@ -66,20 +66,20 @@ bool PracticePlusPlayLayer::removeStartpoint(int i_index) {
     return true;
 }
 
-bool PracticePlusPlayLayer::setActiveStartpointAndReload(int i_index) {
+bool PPPlayLayer::setActiveStartpointAndReload(int i_index) {
     StartpointManager::get().setActiveStartpointId(i_index);
     reloadFromActiveStartpoint();
     return true;
 }
 
-void PracticePlusPlayLayer::reloadFromActiveStartpoint() {
+void PPPlayLayer::reloadFromActiveStartpoint() {
     while (m_checkpointArray->count() > 0) {
         PlayLayer::removeCheckpoint(false);
     }
     resetLevel();
 }
 
-void PracticePlusPlayLayer::togglePlusMode(bool i_value) {
+void PPPlayLayer::togglePlusMode(bool i_value) {
     StartpointManager& l_startpointManager = StartpointManager::get();
 
     l_startpointManager.togglePlusMode(i_value);
@@ -87,7 +87,7 @@ void PracticePlusPlayLayer::togglePlusMode(bool i_value) {
     l_startpointManager.updatePlusModeVisibility();
 }
 
-void PracticePlusPlayLayer::setupKeybinds() {
+void PPPlayLayer::setupKeybinds() {
     addEventListener<keybinds::InvokeBindFilter>(
         [this](keybinds::InvokeBindEvent* event) {
             if (event->isDown() && isPlusMode()) {

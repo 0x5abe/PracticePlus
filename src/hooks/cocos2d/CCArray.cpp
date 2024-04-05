@@ -1,11 +1,12 @@
 #include "CCArray.hpp"
 #include <hooks/PlayLayer.hpp>
+#include <hooks/cocos2d/CCObject.hpp>
 
 using namespace geode::prelude;
 
-unsigned int PracticePlusCCArray::count() {
+unsigned int PPCCArray::count() {
     unsigned int l_count = CCArray::count();
-    PracticePlusPlayLayer* l_playLayer = static_cast<PracticePlusPlayLayer*>(PlayLayer::get());
+    PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
     if (l_playLayer && this == l_playLayer->m_checkpointArray) {
         if (l_playLayer->m_fields->m_enableArrayHook &&
             l_playLayer->isPlusMode() &&
@@ -17,9 +18,9 @@ unsigned int PracticePlusCCArray::count() {
     return l_count;
 }
 
-CCObject* PracticePlusCCArray::lastObject() {
+CCObject* PPCCArray::lastObject() {
     CCObject* l_lastObject = CCArray::lastObject();
-    PracticePlusPlayLayer* l_playLayer = static_cast<PracticePlusPlayLayer*>(PlayLayer::get());
+    PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
     if (l_playLayer && this == l_playLayer->m_checkpointArray && !l_lastObject) {
         if (l_playLayer->m_fields->m_enableArrayHook &&
             l_playLayer->isPlusMode() &&
