@@ -7,6 +7,9 @@ using namespace geode::prelude;
 // overrides
 
 bool PPPlayLayer::init(GJGameLevel* i_level, bool i_useReplay, bool i_dontCreateObjects) {
+    // reset GameObject uniqueID global
+    *reinterpret_cast<unsigned int*>(geode::base::get()+0x4ea028) = 10;
+
     if (!PlayLayer::init(i_level, i_useReplay, i_dontCreateObjects)) return false;
     
     setupKeybinds();
@@ -18,7 +21,6 @@ void PPPlayLayer::resetLevel() {
     m_fields->m_enableArrayHook = true;
  
     PlayLayer::resetLevel();
-
     m_fields->m_enableArrayHook = false;
 }
 
@@ -81,7 +83,15 @@ void PPPlayLayer::reloadFromActiveStartpoint() {
 
 void PPPlayLayer::togglePlusMode(bool i_value) {
     StartpointManager& l_startpointManager = StartpointManager::get();
-
+    //TODO REMOVE
+    if (true && !m_fields->m_loggedObjects) {
+        m_fields->m_loggedObjects = true;
+        for (int i = 0; i < m_objects->count(); i++) {
+            GameObject* l_object = reinterpret_cast<GameObject*>(m_objects->objectAtIndex(i));
+            log::info("Object at index: {}, m_objectID: {}, m_uniqueID: {}", i, l_object->m_objectID, l_object->m_uniqueID);
+        }
+    }
+    //EndTodo
     l_startpointManager.togglePlusMode(i_value);
     l_startpointManager.updatePlusModeLogic();
     l_startpointManager.updatePlusModeVisibility();

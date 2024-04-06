@@ -28,12 +28,21 @@ public:
     //custom operators
 
     template <class T>
-    void operator<<(std::vector<T>& o_value) {
-        unsigned int l_size = o_value.size();
+    void operator<<(std::vector<T>& i_value) {
+        unsigned int l_size = i_value.size();
         geode::log::info("VECTOR SIZE out: {}", l_size);
         m_stream->write(reinterpret_cast<char*>(&l_size), 4);
-        m_stream->write(reinterpret_cast<char*>(o_value.data()), l_size*sizeof(T));
+        m_stream->write(reinterpret_cast<char*>(i_value.data()), l_size*sizeof(T));
     }
+
+    template <>
+    void operator<<<DynamicSaveObject>(std::vector<DynamicSaveObject>& i_value);
+
+    template <>
+    void operator<<<ActiveSaveObject1>(std::vector<ActiveSaveObject1>& i_value);
+
+    template <>
+    void operator<<<ActiveSaveObject2>(std::vector<ActiveSaveObject2>& i_value);
 
     void write(char* i_value, int i_size) { m_stream->write(i_value, i_size); }
 };

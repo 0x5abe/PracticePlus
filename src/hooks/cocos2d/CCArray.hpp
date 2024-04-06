@@ -17,6 +17,10 @@ public:
 
     template <typename T>
     void save(OutputStream& o_stream);
-};
 
-#include "CCArray.inl"
+    template <>
+    void load<GradientTriggerObject>(InputStream& i_stream);
+
+    template <>
+    void save<GradientTriggerObject>(OutputStream& o_stream);
+};

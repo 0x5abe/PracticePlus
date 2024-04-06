@@ -32,8 +32,18 @@ public:
         unsigned int l_size;
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("VECTOR SIZE in: {}", l_size);
+        o_value.reserve(l_size);
         m_stream->read(reinterpret_cast<char*>(o_value.data()), l_size*sizeof(T));
     }
+
+    template <>
+    void operator>><DynamicSaveObject>(std::vector<DynamicSaveObject>& o_value);
+
+    template <>
+    void operator>><ActiveSaveObject1>(std::vector<ActiveSaveObject1>& o_value);
+
+    template <>
+    void operator>><ActiveSaveObject2>(std::vector<ActiveSaveObject2>& o_value);
 
     void read(char* o_value, int i_size) { m_stream->read(o_value, i_size); }
     void ignore(int i_size) { m_stream->ignore(i_size); }

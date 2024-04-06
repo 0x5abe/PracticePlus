@@ -29,12 +29,13 @@ CheckpointObject* StartpointManager::createStartpoint(CheckpointObject* i_startp
     i_startpoint->m_physicalCheckpointObject = l_newPhysicalCPO;
 	
 	i_startpoint->m_physicalCheckpointObject->setStartPos(i_startPosition);
-
+    log::info("sizeof CCDictionary {}", sizeof(cocos2d::CCDictionary));
+    log::info("sizeof CCDictElement {}", sizeof(cocos2d::CCDictElement));
     //TODO: remove
-    if (m_startpoints->count() > 0) {
-        InputStream l_ifstream = InputStream("./testPlayerCheckpoint.bin");
-        static_cast<PPPlayerCheckpoint*>(i_startpoint->m_player1Checkpoint)->load(l_ifstream);
-    }
+    //if (m_startpoints->count() > 0) {
+    //    InputStream l_ifstream = InputStream("./testPlayerCheckpoint.bin");
+    //   static_cast<PPPlayerCheckpoint*>(i_startpoint->m_player1Checkpoint)->load(l_ifstream);
+    //}
     //EndTODO: remove
 
     m_startpoints->addObject(i_startpoint);

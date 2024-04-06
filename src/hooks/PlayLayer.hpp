@@ -11,6 +11,7 @@ protected:
 
 public:
     bool m_enableArrayHook = false;
+    bool m_loggedObjects = false;
 
     // overrides
 
