@@ -84,6 +84,12 @@ void PPPlayLayer::reloadFromActiveStartpoint() {
 void PPPlayLayer::togglePlusMode(bool i_value) {
     StartpointManager& l_startpointManager = StartpointManager::get();
     //TODO REMOVE
+    gd::unordered_map<int,double> a = gd::unordered_map<int,double>();
+    a.insert({1,0.8});
+    for (std::pair<int,double> pair : a) {
+        log::info("sizeof std::pair<int,double> {}", sizeof(std::pair<int,double>));
+        log::info("val {}", pair.second);
+    }
     if (true && !m_fields->m_loggedObjects) {
         m_fields->m_loggedObjects = true;
         for (int i = 0; i < m_objects->count(); i++) {

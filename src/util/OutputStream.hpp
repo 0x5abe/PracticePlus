@@ -27,6 +27,8 @@ public:
 
     //custom operators
 
+    //vector
+
     template <class T>
     void operator<<(std::vector<T>& i_value) {
         unsigned int l_size = i_value.size();
@@ -43,6 +45,19 @@ public:
 
     template <>
     void operator<<<ActiveSaveObject2>(std::vector<ActiveSaveObject2>& i_value);
+
+    //unordered_map
+
+    template <class K, class V>
+    void operator<<(gd::unordered_map<K,V>& i_value) {
+        unsigned int l_size = i_value.size();
+        geode::log::info("Unordered Map SIZE out: {}", l_size);
+        m_stream->write(reinterpret_cast<char*>(&l_size), 4);
+        for (std::pair<K,V> l_pair : i_value) {
+            m_stream->write(reinterpret_cast<char*>(&l_pair.first), sizeof(K));
+            m_stream->write(reinterpret_cast<char*>(&l_pair.second), sizeof(V));
+        }
+    }
 
     void write(char* i_value, int i_size) { m_stream->write(i_value, i_size); }
 };

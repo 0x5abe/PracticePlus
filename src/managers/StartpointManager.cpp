@@ -137,8 +137,8 @@ void StartpointManager::updatePlusModeLogic() {
 }
 
 void StartpointManager::loadStartpointsFromStream(InputStream& i_stream) {
-    int test;
-    i_stream >> test;
+    cocos2d::CCArray* l_intermediate = m_startpoints;
+    static_cast<PPCCArray*>(l_intermediate)->load<PPCheckpointObject>(i_stream);
 }
 
 void StartpointManager::saveStartpointsToStream(OutputStream& o_stream) {

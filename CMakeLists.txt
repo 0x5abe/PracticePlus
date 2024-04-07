@@ -38,3 +38,4 @@ target_include_directories(${PROJECT_NAME} PRIVATE src/)
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
 setup_geode_mod(${PROJECT_NAME} EXTERNALS geode.custom-keybinds:1.5.3)
+#setup_geode_mod(${PROJECT_NAME})

@@ -26,6 +26,8 @@ public:
 
     //custom operators
 
+    //vector
+
     template <class T>
     void operator>>(std::vector<T>& o_value) {
         o_value.clear();
@@ -44,6 +46,28 @@ public:
 
     template <>
     void operator>><ActiveSaveObject2>(std::vector<ActiveSaveObject2>& o_value);
+
+    //unordered_map
+
+    template <class K, class V>
+    void operator>>(gd::unordered_map<K,V>& o_value) {
+        o_value.clear();
+        unsigned int l_size;
+        m_stream->read(reinterpret_cast<char*>(&l_size), 4);
+        geode::log::info("Unordered Map SIZE in: {}", l_size);
+        // todo: research if it's worth it to call reserve
+        //o_value.reserve(l_size);
+        for (int i = 0; i < l_size; i++) {
+            K l_key;
+            V l_value;
+            m_stream->read(reinterpret_cast<char*>(&l_key), sizeof(K));
+            m_stream->read(reinterpret_cast<char*>(&l_value), sizeof(V));
+            o_value[l_key] = l_value;
+        }
+    }
+
+    template <>
+    void operator>><int, SequenceTriggerState>(gd::unordered_map<int, SequenceTriggerState>& o_value);
 
     void read(char* o_value, int i_size) { m_stream->read(o_value, i_size); }
     void ignore(int i_size) { m_stream->ignore(i_size); }
