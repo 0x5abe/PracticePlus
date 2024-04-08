@@ -7,10 +7,10 @@ void setupKeybinds();
 
 $on_mod(Loaded) {
     //TodoRemove
-    gd::string a("test");
-    gd::string b("aaaa");
-    a = b;
-    log::info("!!!!!!!!!!!!!!!!!SIZEOF pair<int,FMODSoundState_padded> {} @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",sizeof(std::pair<int,FMODSoundState_padded>));
+    //gd::string a("test");
+    //gd::string b("aaaa");
+    //a = b;
+    //log::info("!!!!!!!!!!!!!!!!!SIZEOF pair<int,FMODSoundState_padded> {} @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",sizeof(std::pair<int,FMODSoundState_padded>));
     //EndTodo
     setupKeybinds();
 }

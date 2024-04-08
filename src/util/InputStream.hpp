@@ -51,6 +51,30 @@ public:
     template <>
     void operator>><ActiveSaveObject2>(std::vector<ActiveSaveObject2>& o_value);
 
+    template <>
+    void operator>><CountTriggerAction>(std::vector<CountTriggerAction>& o_value);
+
+    template <>
+    void operator>><TouchToggleAction>(std::vector<TouchToggleAction>& o_value);
+
+    template <>
+    void operator>><CollisionTriggerAction>(std::vector<CollisionTriggerAction>& o_value);
+
+    template <>
+    void operator>><ToggleTriggerAction>(std::vector<ToggleTriggerAction>& o_value);
+
+    template <>
+    void operator>><SpawnTriggerAction>(std::vector<SpawnTriggerAction>& o_value);
+
+    template <>
+    void operator>><GroupCommandObject2>(std::vector<GroupCommandObject2>& o_value);
+
+    template <>
+    void operator>><KeyframeObject>(std::vector<KeyframeObject>& o_value);
+
+    template <>
+    void operator>><TimerTriggerAction>(std::vector<TimerTriggerAction>& o_value);
+
     //unordered_map
 
     template <class K, class V>
@@ -62,12 +86,29 @@ public:
         if (l_size == 0) return;
         // todo: research if it's worth it to call reserve
         //o_value.reserve(l_size);
+        K l_key;
+        V l_value;
         for (int i = 0; i < l_size; i++) {
-            K l_key;
-            V l_value;
             m_stream->read(reinterpret_cast<char*>(&l_key), sizeof(K));
             m_stream->read(reinterpret_cast<char*>(&l_value), sizeof(V));
             o_value[l_key] = l_value;
+        }
+    }
+
+    template <class K, class V>
+    void operator>>(gd::unordered_map<K,gd::vector<V>>& o_value) {
+        o_value.clear();
+        unsigned int l_size;
+        m_stream->read(reinterpret_cast<char*>(&l_size), 4);
+        geode::log::info("Unordered Map key->vector<T> SIZE in: {}", l_size);
+        if (l_size == 0) return;
+        // todo: research if it's worth it to call reserve
+        //o_value.reserve(l_size);
+        K l_key;
+        V l_value;
+        for (int i = 0; i < l_size; i++) {
+            m_stream->read(reinterpret_cast<char*>(&l_key), sizeof(K));
+            *this >> o_value[l_key];
         }
     }
 
@@ -80,6 +121,27 @@ public:
     template <>
     void operator>><int, FMODSoundState_padded>(gd::unordered_map<int, FMODSoundState_padded>& o_value);
 
+    template <>
+    void operator>><int, TimerItem_padded>(gd::unordered_map<int, TimerItem_padded>& o_value);
+
+    //unordered_set
+
+    template <class K>
+    void operator>>(gd::unordered_set<K>& o_value) {
+        o_value.clear();
+        unsigned int l_size;
+        m_stream->read(reinterpret_cast<char*>(&l_size), 4);
+        geode::log::info("Unordered Set SIZE in: {}", l_size);
+        if (l_size == 0) return;
+        // todo: research if it's worth it to call reserve
+        //o_value.reserve(l_size);
+        K l_key;
+        for (int i = 0; i < l_size; i++) {
+            m_stream->read(reinterpret_cast<char*>(&l_key), sizeof(K));
+            o_value.insert(l_key);
+        }
+    }
+
     //map
 
     template <class K, class V>
@@ -91,12 +153,30 @@ public:
         if (l_size == 0) return;
         // todo: research if it's worth it to call reserve
         //o_value.reserve(l_size);
+        K l_key;
+        V l_value;
         for (int i = 0; i < l_size; i++) {
-            K l_key;
-            V l_value;
             m_stream->read(reinterpret_cast<char*>(&l_key), sizeof(K));
             m_stream->read(reinterpret_cast<char*>(&l_value), sizeof(V));
             o_value[l_key] = l_value;
+        }
+    }
+    
+    //set
+
+    template <class K>
+    void operator>>(gd::set<K>& o_value) {
+        o_value.clear();
+        unsigned int l_size;
+        m_stream->read(reinterpret_cast<char*>(&l_size), 4);
+        geode::log::info("Set SIZE in: {}", l_size);
+        if (l_size == 0) return;
+        // todo: research if it's worth it to call reserve
+        //o_value.reserve(l_size);
+        K l_key;
+        for (int i = 0; i < l_size; i++) {
+            m_stream->read(reinterpret_cast<char*>(&l_key), sizeof(K));
+            o_value.insert(l_key);
         }
     }
 

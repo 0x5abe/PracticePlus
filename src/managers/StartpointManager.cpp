@@ -5,8 +5,6 @@
 #include <hooks/PlayerCheckpoint.hpp>
 #include <hooks/cocos2d/CCArray.hpp>
 #include <hooks/CheckpointObject.hpp>
-//TODO: remove
-#include <iostream>
 
 using namespace geode::prelude;
 
@@ -31,6 +29,7 @@ CheckpointObject* StartpointManager::createStartpoint(CheckpointObject* i_startp
 	i_startpoint->m_physicalCheckpointObject->setStartPos(i_startPosition);
     log::info("sizeof CCDictionary {}", sizeof(cocos2d::CCDictionary));
     log::info("sizeof CCDictElement {}", sizeof(cocos2d::CCDictElement));
+    log::info("sizeof CAState {}", sizeof(CAState));
     //TODO: remove
     //if (m_startpoints->count() > 0) {
     //    InputStream l_ifstream = InputStream("./testPlayerCheckpoint.bin");

@@ -48,6 +48,30 @@ public:
     template <>
     void operator<<<ActiveSaveObject2>(std::vector<ActiveSaveObject2>& i_value);
 
+    template <>
+    void operator<<<CountTriggerAction>(std::vector<CountTriggerAction>& i_value);
+
+    template <>
+    void operator<<<TouchToggleAction>(std::vector<TouchToggleAction>& i_value);
+
+    template <>
+    void operator<<<CollisionTriggerAction>(std::vector<CollisionTriggerAction>& i_value);
+
+    template <>
+    void operator<<<ToggleTriggerAction>(std::vector<ToggleTriggerAction>& i_value);
+
+    template <>
+    void operator<<<SpawnTriggerAction>(std::vector<SpawnTriggerAction>& i_value);
+
+    template <>
+    void operator<<<GroupCommandObject2>(std::vector<GroupCommandObject2>& i_value);
+
+    template <>
+    void operator<<<KeyframeObject>(std::vector<KeyframeObject>& i_value);
+
+    template <>
+    void operator<<<TimerTriggerAction>(std::vector<TimerTriggerAction>& i_value);
+
     //unordered_map
 
     template <class K, class V>
@@ -61,6 +85,17 @@ public:
         }
     }
 
+    template <class K, class V>
+    void operator<<(gd::unordered_map<K,gd::vector<V>>& i_value) {
+        unsigned int l_size = i_value.size();
+        geode::log::info("Unordered Map key->vector<T> SIZE out: {}", l_size);
+        m_stream->write(reinterpret_cast<char*>(&l_size), 4);
+        for (std::pair<K,gd::vector<V>> l_pair : i_value) {
+            m_stream->write(reinterpret_cast<char*>(&l_pair.first), sizeof(K));
+            *this << l_pair.second; 
+        }
+    }
+
     template <>
     void operator<<<int, SequenceTriggerState>(gd::unordered_map<int, SequenceTriggerState>& i_value);
 
@@ -69,6 +104,21 @@ public:
 
     template <>
     void operator<<<int, FMODSoundState_padded>(gd::unordered_map<int, FMODSoundState_padded>& i_value);
+
+    template <>
+    void operator<<<int, TimerItem_padded>(gd::unordered_map<int, TimerItem_padded>& i_value);
+
+    //unordered_set
+
+    template <class K>
+    void operator<<(gd::unordered_set<K>& i_value) {
+        unsigned int l_size = i_value.size();
+        geode::log::info("Unordered Set SIZE out: {}", l_size);
+        m_stream->write(reinterpret_cast<char*>(&l_size), 4);
+        for (K l_key : i_value) {
+            m_stream->write(reinterpret_cast<char*>(&l_key), sizeof(K));
+        }
+    }
 
     //map
 
@@ -80,6 +130,18 @@ public:
         for (std::pair<K,V> l_pair : i_value) {
             m_stream->write(reinterpret_cast<char*>(&l_pair.first), sizeof(K));
             m_stream->write(reinterpret_cast<char*>(&l_pair.second), sizeof(V));
+        }
+    }
+
+    //set
+
+    template <class K>
+    void operator<<(gd::set<K>& i_value) {
+        unsigned int l_size = i_value.size();
+        geode::log::info("Set SIZE out: {}", l_size);
+        m_stream->write(reinterpret_cast<char*>(&l_size), 4);
+        for (K l_key : i_value) {
+            m_stream->write(reinterpret_cast<char*>(&l_key), sizeof(K));
         }
     }
 

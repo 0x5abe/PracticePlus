@@ -5,6 +5,15 @@
 #include <hooks/SequenceTriggerState.hpp>
 #include <hooks/FMODQueuedMusic.hpp>
 #include <hooks/FMODSoundState_padded.hpp>
+#include <hooks/TimerItem_padded.hpp>
+#include <hooks/TimerTriggerAction.hpp>
+#include <hooks/KeyframeObject.hpp>
+#include <hooks/GroupCommandObject2.hpp>
+#include <hooks/SpawnTriggerAction.hpp>
+#include <hooks/ToggleTriggerAction.hpp>
+#include <hooks/CollisionTriggerAction.hpp>
+#include <hooks/TouchToggleAction.hpp>
+#include <hooks/CountTriggerAction.hpp>
 
 //vector
 
@@ -34,6 +43,46 @@ void InputStream::operator>><ActiveSaveObject1>(std::vector<ActiveSaveObject1>& 
 template <>
 void InputStream::operator>><ActiveSaveObject2>(std::vector<ActiveSaveObject2>& o_value) {
     readGenericVector<ActiveSaveObject2, PPActiveSaveObject2>(this, o_value);
+}
+
+template <>
+void InputStream::operator>><CountTriggerAction>(std::vector<CountTriggerAction>& o_value) {
+    readGenericVector<CountTriggerAction, PPCountTriggerAction>(this, o_value);
+}
+
+template <>
+void InputStream::operator>><TouchToggleAction>(std::vector<TouchToggleAction>& o_value) {
+    readGenericVector<TouchToggleAction, PPTouchToggleAction>(this, o_value);
+}
+
+template <>
+void InputStream::operator>><CollisionTriggerAction>(std::vector<CollisionTriggerAction>& o_value) {
+    readGenericVector<CollisionTriggerAction, PPCollisionTriggerAction>(this, o_value);
+}
+
+template <>
+void InputStream::operator>><ToggleTriggerAction>(std::vector<ToggleTriggerAction>& o_value) {
+    readGenericVector<ToggleTriggerAction, PPToggleTriggerAction>(this, o_value);
+}
+
+template <>
+void InputStream::operator>><SpawnTriggerAction>(std::vector<SpawnTriggerAction>& o_value) {
+    readGenericVector<SpawnTriggerAction, PPSpawnTriggerAction>(this, o_value);
+}
+
+template <>
+void InputStream::operator>><GroupCommandObject2>(std::vector<GroupCommandObject2>& o_value) {
+    readGenericVector<GroupCommandObject2, PPGroupCommandObject2>(this, o_value);
+}
+
+template <>
+void InputStream::operator>><KeyframeObject>(std::vector<KeyframeObject>& o_value) {
+    readGenericVector<KeyframeObject, PPKeyframeObject>(this, o_value);
+}
+
+template <>
+void InputStream::operator>><TimerTriggerAction>(std::vector<TimerTriggerAction>& o_value) {
+    readGenericVector<TimerTriggerAction, PPTimerTriggerAction>(this, o_value);
 }
 
 //unordered_map
@@ -67,4 +116,9 @@ void InputStream::operator>><int, FMODQueuedMusic>(gd::unordered_map<int, FMODQu
 template <>
 void InputStream::operator>><int, FMODSoundState_padded>(gd::unordered_map<int, FMODSoundState_padded>& o_value) {
     readGenericUnorderedMap<int, FMODSoundState_padded, PPFMODSoundState_padded>(this, o_value);
+}
+
+template <>
+void InputStream::operator>><int, TimerItem_padded>(gd::unordered_map<int, TimerItem_padded>& o_value) {
+    readGenericUnorderedMap<int, TimerItem_padded, PPTimerItem_padded>(this, o_value);
 }

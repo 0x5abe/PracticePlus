@@ -10,6 +10,8 @@
     static char l_uMapSeparator[] = { 'M', 'A', 'P', 'U' };
     static char l_mapSeparator[] = { 'M', 'A', 'P', 'O' };
     static char l_strSeparator[] = { 'S', 'T', 'R', 'I' };
+    static char l_uSetSeparator[] = { 'S', 'E', 'T', 'U' };
+    static char l_setSeparator[] = { 'S', 'E', 'T', 'O' };
 
     void writeSeparator(std::string i_string, OutputStream& o_stream);
 
@@ -22,6 +24,8 @@
     #define UMAP_SEPARATOR_O o_stream.write(l_uMapSeparator, 4);
     #define MAP_SEPARATOR_O o_stream.write(l_mapSeparator, 4);
     #define STR_SEPARATOR_O o_stream.write(l_strSeparator, 4);
+    #define USET_SEPARATOR_O o_stream.write(l_strSeparator, 4);
+    #define SET_SEPARATOR_O o_stream.write(l_strSeparator, 4);
     #define SEPARATOR_O_END o_stream.write(l_endSeparator, 4);
     #define SEPARATOR_I i_stream.ignore(4);
     #define SEPARATOR_I_C(s) readSeparator(#s, i_stream);
@@ -30,6 +34,8 @@
     #define UMAP_SEPARATOR_I i_stream.ignore(4);
     #define MAP_SEPARATOR_I i_stream.ignore(4);
     #define STR_SEPARATOR_I i_stream.ignore(4);
+    #define USET_SEPARATOR_I i_stream.ignore(4);
+    #define SET_SEPARATOR_I i_stream.ignore(4);
     #define SEPARATOR_I_END i_stream.ignore(4);
 #else
     #define SEPARATOR_O
@@ -39,6 +45,8 @@
     #define UMAP_SEPARATOR_O
     #define MAP_SEPARATOR_O
     #define STR_SEPARATOR_O
+    #define USET_SEPARATOR_O
+    #define SET_SEPARATOR_O
     #define SEPARATOR_O_END
     #define SEPARATOR_I
     #define SEPARATOR_I_C(s)
@@ -47,5 +55,7 @@
     #define UMAP_SEPARATOR_I
     #define MAP_SEPARATOR_I
     #define STR_SEPARATOR_I
+    #define USET_SEPARATOR_I
+    #define SET_SEPARATOR_I
     #define SEPARATOR_I_END
 #endif

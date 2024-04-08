@@ -39,8 +39,8 @@ void PPPlayLayer::updateVisibility(float i_unkFloat) {
 
     //Todo: Remvoe
     if (m_fields->m_autoCreateSp1 && m_fields->m_autoCreateSp2) {
-        createStartpoint();
-        removeStartpoint();
+        //createStartpoint();
+        //removeStartpoint();
     }
     //EndTodo
 }
@@ -67,11 +67,11 @@ bool PPPlayLayer::removeStartpoint(int i_index) {
     CheckpointObject* l_startpoint = l_startpointManager.getStartpoint(i_index);
     if (!l_startpoint) return false;
     //Todo: remove
-    if (l_startpoint->m_audioState.m_unkMapIntFMODQueuedMusic1.size() > 0 || l_startpoint->m_audioState.m_unkMapIntFMODQueuedMusic2.size()) {
-        m_fields->m_autoCreateSp1 = false;
-        m_fields->m_autoCreateSp2 = false;
-        log::info("!!!!!!!!!!!!!!!!!!!!!!!!HAS MEMBERS IN unkMapIntFMODQueuedMusic!!!!!!!!!!!!!!!!!!!!!!!");
-    }
+    // if (l_startpoint->m_audioState.m_unkMapIntFMODQueuedMusic1.size() > 0 || l_startpoint->m_audioState.m_unkMapIntFMODQueuedMusic2.size()) {
+    //     m_fields->m_autoCreateSp1 = false;
+    //     m_fields->m_autoCreateSp2 = false;
+    //     log::info("!!!!!!!!!!!!!!!!!!!!!!!!HAS MEMBERS IN unkMapIntFMODQueuedMusic!!!!!!!!!!!!!!!!!!!!!!!");
+    // }
     // if (l_startpoint->m_sequenceTriggerStateUnorderedMap.size() > 0) {
     //     for (std::pair<int,SequenceTriggerState> l_pair : l_startpoint->m_sequenceTriggerStateUnorderedMap) {
     //         if (l_pair.second.m_unkUnorderedMap1.size() > 0 || l_pair.second.m_unkUnorderedMap2.size() > 0) {
@@ -82,8 +82,6 @@ bool PPPlayLayer::removeStartpoint(int i_index) {
     //     }
     // }
     //EndTodo
-    gd::string a;
-    a.size();
     PlayLayer::removeObjectFromSection(l_startpoint->m_physicalCheckpointObject);
     l_startpoint->m_physicalCheckpointObject->removeMeAndCleanup();
     if (l_startpoint == l_startpointManager.getActiveStartpoint()) {

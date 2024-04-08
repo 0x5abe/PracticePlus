@@ -9,6 +9,7 @@
 #include <hooks/PlayLayer.hpp>
 #include <hooks/SequenceTriggerState.hpp>
 #include <hooks/FMODAudioState.hpp>
+#include <hooks/EffectManagerState.hpp>
 
 using namespace geode::prelude;
 
@@ -96,8 +97,9 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	VEC_SEPARATOR_I
 
 	//EffectManagerState m_effectManagerState;
-
-	//PAD = win 0x1c;
+	SEPARATOR_I_C("EFFE")
+	reinterpret_cast<PPEffectManagerState*>(&o_value.m_effectManagerState)->load(i_stream);
+	SEPARATOR_I_C("EFFE")
 
 	//cocos2d::CCArray* m_gradientTriggerObjectArray;
 	bool l_hasGradientTriggerObjectArray;
@@ -198,8 +200,9 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
 	VEC_SEPARATOR_O
 
 	//EffectManagerState m_effectManagerState;
-
-
+	SEPARATOR_O_C("EFFE")
+	reinterpret_cast<PPEffectManagerState*>(&i_value.m_effectManagerState)->save(o_stream);
+	SEPARATOR_O_C("EFFE")
 
 	//cocos2d::CCArray* m_gradientTriggerObjectArray;
 	bool l_hasGradientTriggerObjectArray = false;
