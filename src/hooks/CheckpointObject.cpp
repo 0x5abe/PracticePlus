@@ -7,6 +7,8 @@
 #include <util/debug.hpp>
 #include <managers/StartpointManager.hpp>
 #include <hooks/PlayLayer.hpp>
+#include <hooks/SequenceTriggerState.hpp>
+#include <hooks/FMODAudioState.hpp>
 
 using namespace geode::prelude;
 
@@ -24,9 +26,14 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
     //GJGameState m_gameState;
 
 	//GJShaderState m_shaderState;
+	SEPARATOR_I_C("SHAD")
 	reinterpret_cast<PPGJShaderState*>(&o_value.m_shaderState)->load(i_stream);
+	SEPARATOR_I_C("SHAD")
 
 	//FMODAudioState m_audioState;
+	SEPARATOR_I_C("AUDI")
+	reinterpret_cast<PPFMODAudioState*>(&o_value.m_audioState)->load(i_stream);
+	SEPARATOR_I_C("AUDI")
 
 	//TODO: see if I'd need to create it here or not
 	//GameObject* m_physicalCheckpointObject;
@@ -107,13 +114,9 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 
 	//PAD = win 0x3;
 
-	//void* m_unkPtr1;
-
-	//PAD = win 0x4;
-
-	//gd::vector<byte> m_unkVector1;
-
-	//PAD = win 0xc;
+	//gd::unordered_map<int,SequenceTriggerState> m_sequenceTriggerStateUnorderedMap;
+	i_stream >> o_value.m_sequenceTriggerStateUnorderedMap;
+	UMAP_SEPARATOR_I
 
 	//int m_unkGetsCopiedFromGameState;
     i_stream >> o_value.m_unkGetsCopiedFromGameState;
@@ -130,9 +133,14 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
     //GJGameState m_gameState;
 
 	//GJShaderState m_shaderState;
+	SEPARATOR_O_C("SHAD")
 	reinterpret_cast<PPGJShaderState*>(&i_value.m_shaderState)->save(o_stream);
+	SEPARATOR_O_C("SHAD")
 
 	//FMODAudioState m_audioState;
+	SEPARATOR_O_C("AUDI")
+	reinterpret_cast<PPFMODAudioState*>(&i_value.m_audioState)->save(o_stream);
+	SEPARATOR_O_C("AUDI")
 
 	//GameObject* m_physicalCheckpointObject;
 	o_stream << i_value.m_physicalCheckpointObject->m_startPosition;
@@ -191,7 +199,7 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
 
 	//EffectManagerState m_effectManagerState;
 
-	//PAD = win 0x1c;
+
 
 	//cocos2d::CCArray* m_gradientTriggerObjectArray;
 	bool l_hasGradientTriggerObjectArray = false;
@@ -200,24 +208,18 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
     }
 	o_stream << l_hasGradientTriggerObjectArray;
 	SEPARATOR_O
-	if (i_value.m_gradientTriggerObjectArray) {
+	if (l_hasGradientTriggerObjectArray) {
 		static_cast<PPCCArray*>(i_value.m_gradientTriggerObjectArray)->save<GradientTriggerObject>(o_stream);
 		ARR_SEPARATOR_O
 	}
 	
 	//bool m_unkBool1;
     o_stream << i_value.m_unkBool1;
-	SEPARATOR_O
+	UMAP_SEPARATOR_O
 
-	//PAD = win 0x3;
-
-	//void* m_unkPtr1;
-
-	//PAD = win 0x4;
-
-	//gd::vector<byte> m_unkVector1; ---> NEXT
-
-	//PAD = win 0xc;
+	//gd::unordered_map<int,SequenceTriggerState> m_sequenceTriggerStateUnorderedMap;
+	o_stream << i_value.m_sequenceTriggerStateUnorderedMap;
+	UMAP_SEPARATOR_O
 
 	//int m_unkGetsCopiedFromGameState;
     o_stream << i_value.m_unkGetsCopiedFromGameState;

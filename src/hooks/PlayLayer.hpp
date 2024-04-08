@@ -11,7 +11,11 @@ protected:
 
 public:
     bool m_enableArrayHook = false;
+    //Todo: Remove
     bool m_loggedObjects = false;
+    bool m_autoCreateSp1 = true;
+    bool m_autoCreateSp2 = true;
+    //EndTodo
 
     // overrides
 

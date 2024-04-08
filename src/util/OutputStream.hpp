@@ -25,6 +25,8 @@ public:
     PP_OPERATOR_WRITE(cocos2d::CCSize)
     PP_OPERATOR_WRITE(cocos2d::CCAffineTransform)
 
+    void write(char* i_value, int i_size) { m_stream->write(i_value, i_size); }
+
     //custom operators
 
     //vector
@@ -59,5 +61,35 @@ public:
         }
     }
 
-    void write(char* i_value, int i_size) { m_stream->write(i_value, i_size); }
+    template <>
+    void operator<<<int, SequenceTriggerState>(gd::unordered_map<int, SequenceTriggerState>& i_value);
+
+    template <>
+    void operator<<<int, FMODQueuedMusic>(gd::unordered_map<int, FMODQueuedMusic>& i_value);
+
+    template <>
+    void operator<<<int, FMODSoundState_padded>(gd::unordered_map<int, FMODSoundState_padded>& i_value);
+
+    //map
+
+    template <class K, class V>
+    void operator<<(gd::map<K,V>& i_value) {
+        unsigned int l_size = i_value.size();
+        geode::log::info("Map SIZE out: {}", l_size);
+        m_stream->write(reinterpret_cast<char*>(&l_size), 4);
+        for (std::pair<K,V> l_pair : i_value) {
+            m_stream->write(reinterpret_cast<char*>(&l_pair.first), sizeof(K));
+            m_stream->write(reinterpret_cast<char*>(&l_pair.second), sizeof(V));
+        }
+    }
+
+    //gd::string
+
+    void operator<<(gd::string& i_value) {
+        unsigned int l_size = i_value.size();
+        m_stream->write(reinterpret_cast<char*>(&l_size), 4);
+        geode::log::info("String SIZE in: {}", l_size);
+        if (l_size == 0) return;
+        m_stream->write(i_value.data(), l_size);
+    }
 };
