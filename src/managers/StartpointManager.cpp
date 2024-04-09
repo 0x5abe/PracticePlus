@@ -30,6 +30,7 @@ CheckpointObject* StartpointManager::createStartpoint(CheckpointObject* i_startp
     log::info("sizeof CCDictionary {}", sizeof(cocos2d::CCDictionary));
     log::info("sizeof CCDictElement {}", sizeof(cocos2d::CCDictElement));
     log::info("sizeof CAState {}", sizeof(CAState));
+    log::info("sizeof EffectManagerState {}", sizeof(EffectManagerState));
     //TODO: remove
     //if (m_startpoints->count() > 0) {
     //    InputStream l_ifstream = InputStream("./testPlayerCheckpoint.bin");

@@ -13,27 +13,27 @@ void PPGroupCommandObject2::save(OutputStream& o_stream) {
 }
 
 inline void operator>>(InputStream& i_stream, PPGroupCommandObject2& o_value) {
-    i_stream.read(reinterpret_cast<char*>(o_value.__pad103), 436);
+    i_stream.read(reinterpret_cast<char*>(o_value.pad_1), 436);
     VEC_SEPARATOR_I
     i_stream >> o_value.m_unkVecKeyframeObject;
     VEC_SEPARATOR_I
-    i_stream.read(reinterpret_cast<char*>(o_value.__pad105), 16);
+    i_stream.read(reinterpret_cast<char*>(o_value.pad_2), 16);
     VEC_SEPARATOR_I
     i_stream >> o_value.m_unkVecInt;
     VEC_SEPARATOR_I
-    i_stream.read(reinterpret_cast<char*>(o_value.__pad105), 12);
+    i_stream.read(reinterpret_cast<char*>(o_value.pad_3), 12);
     SEPARATOR_I
 }
 
 inline void operator<<(OutputStream& o_stream, PPGroupCommandObject2& i_value) {
-    o_stream.write(reinterpret_cast<char*>(i_value.__pad103), 436);
+    o_stream.write(reinterpret_cast<char*>(i_value.pad_1), 436);
     VEC_SEPARATOR_O
     o_stream << i_value.m_unkVecKeyframeObject;
     VEC_SEPARATOR_O
-    o_stream.write(reinterpret_cast<char*>(i_value.__pad105), 16);
+    o_stream.write(reinterpret_cast<char*>(i_value.pad_2), 16);
     VEC_SEPARATOR_O
     o_stream << i_value.m_unkVecInt;
     VEC_SEPARATOR_O
-    o_stream.write(reinterpret_cast<char*>(i_value.__pad105), 12);
+    o_stream.write(reinterpret_cast<char*>(i_value.pad_3), 12);
     SEPARATOR_O
 }

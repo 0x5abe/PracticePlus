@@ -16,7 +16,7 @@ inline void operator>>(InputStream& i_stream, PPFMODQueuedMusic& o_value) {
     STR_SEPARATOR_I
     i_stream >> o_value.m_unkString;
     STR_SEPARATOR_I
-    i_stream.read(reinterpret_cast<char*>(o_value.__pad16), 56);
+    i_stream.read(reinterpret_cast<char*>(o_value.pad_1), 56);
     SEPARATOR_I
 }
 
@@ -24,6 +24,6 @@ inline void operator<<(OutputStream& o_stream, PPFMODQueuedMusic& i_value) {
     STR_SEPARATOR_O
     o_stream << i_value.m_unkString;
     STR_SEPARATOR_O
-    o_stream.write(reinterpret_cast<char*>(i_value.__pad16), 56);
+    o_stream.write(reinterpret_cast<char*>(i_value.pad_1), 56);
     SEPARATOR_O
 }

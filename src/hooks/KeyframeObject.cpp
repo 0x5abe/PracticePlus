@@ -13,7 +13,8 @@ void PPKeyframeObject::save(OutputStream& o_stream) {
 }
 
 inline void operator>>(InputStream& i_stream, PPKeyframeObject& o_value) {
-    i_stream.read(reinterpret_cast<char*>(o_value.__pad23), 32);
+    log::info("INSIDE KeyframeObject save");
+    i_stream.read(reinterpret_cast<char*>(o_value.pad_1), 32);
     VEC_SEPARATOR_I
     i_stream >> o_value.m_unkVecDouble1;
     VEC_SEPARATOR_I
@@ -26,7 +27,7 @@ inline void operator>>(InputStream& i_stream, PPKeyframeObject& o_value) {
     i_stream >> o_value.m_unkVecDouble5;
     VEC_SEPARATOR_I
     SEPARATOR_I
-    i_stream.read(reinterpret_cast<char*>(o_value.__pad29), 52);
+    i_stream.read(reinterpret_cast<char*>(o_value.pad_2), 52);
     SEPARATOR_I
     VEC_SEPARATOR_I
     i_stream >> o_value.m_unkVecDouble6;
@@ -39,12 +40,12 @@ inline void operator>>(InputStream& i_stream, PPKeyframeObject& o_value) {
     VEC_SEPARATOR_I
     i_stream >> o_value.m_unkVecDouble10;
     VEC_SEPARATOR_I
-    i_stream.read(reinterpret_cast<char*>(o_value.__pad35), 132);
+    i_stream.read(reinterpret_cast<char*>(o_value.pad_3), 132);
     SEPARATOR_I
 }
 
 inline void operator<<(OutputStream& o_stream, PPKeyframeObject& i_value) {
-    o_stream.write(reinterpret_cast<char*>(i_value.__pad23), 32);
+    o_stream.write(reinterpret_cast<char*>(i_value.pad_1), 32);
     VEC_SEPARATOR_O
     o_stream << i_value.m_unkVecDouble1;
     VEC_SEPARATOR_O
@@ -57,7 +58,7 @@ inline void operator<<(OutputStream& o_stream, PPKeyframeObject& i_value) {
     o_stream << i_value.m_unkVecDouble5;
     VEC_SEPARATOR_O
     SEPARATOR_O
-    o_stream.write(reinterpret_cast<char*>(i_value.__pad29), 52);
+    o_stream.write(reinterpret_cast<char*>(i_value.pad_2), 52);
     SEPARATOR_O
     VEC_SEPARATOR_O
     o_stream << i_value.m_unkVecDouble6;
@@ -70,6 +71,6 @@ inline void operator<<(OutputStream& o_stream, PPKeyframeObject& i_value) {
     VEC_SEPARATOR_O
     o_stream << i_value.m_unkVecDouble10;
     VEC_SEPARATOR_O
-    o_stream.write(reinterpret_cast<char*>(i_value.__pad35), 132);
+    o_stream.write(reinterpret_cast<char*>(i_value.pad_3), 132);
     SEPARATOR_O
 }

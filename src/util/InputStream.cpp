@@ -87,7 +87,6 @@ void InputStream::operator>><TimerTriggerAction>(std::vector<TimerTriggerAction>
 
 //unordered_map
 
-//TODO: fix broken
 template<class K, class V, class W>
 inline void readGenericUnorderedMap(InputStream* i_stream, gd::unordered_map<K,V>& o_value) {
     o_value.clear();

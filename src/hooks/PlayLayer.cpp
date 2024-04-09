@@ -37,10 +37,11 @@ void PPPlayLayer::updateVisibility(float i_unkFloat) {
         StartpointManager::get().updatePlusModeVisibility();
     }
 
+    
     //Todo: Remvoe
     if (m_fields->m_autoCreateSp1 && m_fields->m_autoCreateSp2) {
-        //createStartpoint();
         //removeStartpoint();
+        //createStartpoint();
     }
     //EndTodo
 }
@@ -67,6 +68,20 @@ bool PPPlayLayer::removeStartpoint(int i_index) {
     CheckpointObject* l_startpoint = l_startpointManager.getStartpoint(i_index);
     if (!l_startpoint) return false;
     //Todo: remove
+    // if (l_startpoint->m_effectManagerState.m_vectorGroupCommandObject2.size() > 0) {
+    //     for (GroupCommandObject2 gco : l_startpoint->m_effectManagerState.m_vectorGroupCommandObject2) {
+    //         if (gco.m_unkVecKeyframeObject.size() > 0) {
+    //             m_fields->m_autoCreateSp1 = false;
+    //             m_fields->m_autoCreateSp2 = false;
+    //             log::info("!!!!!!!!!!!!!!!!!!!!!!!! NOT EMPTY VECTOR KEYFRAMEOBJECT !!!!!!!!!!!!!!!!!!!!!!!");
+    //         }
+    //     }
+    // }
+    // if (l_startpoint->m_effectManagerState.m_unorderedMapInt_vectorTimerTriggerAction.size() > 0) {
+    //     m_fields->m_autoCreateSp1 = false;
+    //     m_fields->m_autoCreateSp2 = false;
+    //     log::info("!!!!!!!!!!!!!!!!!!!!!!!! NOT EMPTY VECTOR TIMERTRIGGERACTION !!!!!!!!!!!!!!!!!!!!!!!");
+    // }
     // if (l_startpoint->m_audioState.m_unkMapIntFMODQueuedMusic1.size() > 0 || l_startpoint->m_audioState.m_unkMapIntFMODQueuedMusic2.size()) {
     //     m_fields->m_autoCreateSp1 = false;
     //     m_fields->m_autoCreateSp2 = false;
@@ -107,19 +122,13 @@ void PPPlayLayer::reloadFromActiveStartpoint() {
 void PPPlayLayer::togglePlusMode(bool i_value) {
     StartpointManager& l_startpointManager = StartpointManager::get();
     //TODO REMOVE
-    gd::unordered_map<int,double> a = gd::unordered_map<int,double>();
-    a.insert({1,0.8});
-    for (std::pair<int,double> pair : a) {
-        log::info("sizeof std::pair<int,double> {}", sizeof(std::pair<int,double>));
-        log::info("val {}", pair.second);
-    }
-    if (true && !m_fields->m_loggedObjects) {
-        m_fields->m_loggedObjects = true;
-        for (int i = 0; i < m_objects->count(); i++) {
-            GameObject* l_object = reinterpret_cast<GameObject*>(m_objects->objectAtIndex(i));
-            log::info("Object at index: {}, m_objectID: {}, m_uniqueID: {}", i, l_object->m_objectID, l_object->m_uniqueID);
-        }
-    }
+    // if (true && !m_fields->m_loggedObjects) {
+    //     m_fields->m_loggedObjects = true;
+    //     for (int i = 0; i < m_objects->count(); i++) {
+    //         GameObject* l_object = reinterpret_cast<GameObject*>(m_objects->objectAtIndex(i));
+    //         log::info("Object at index: {}, m_objectID: {}, m_uniqueID: {}", i, l_object->m_objectID, l_object->m_uniqueID);
+    //     }
+    // }
     //EndTodo
     l_startpointManager.togglePlusMode(i_value);
     l_startpointManager.updatePlusModeLogic();

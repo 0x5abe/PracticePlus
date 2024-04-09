@@ -13,14 +13,14 @@ void PPSpawnTriggerAction::save(OutputStream& o_stream) {
 }
 
 inline void operator>>(InputStream& i_stream, PPSpawnTriggerAction& o_value) {
-    i_stream.read(reinterpret_cast<char*>(o_value.__pad31), 44);
+    i_stream.read(reinterpret_cast<char*>(o_value.pad_1), 44);
     VEC_SEPARATOR_I
     i_stream >> o_value.m_unkVecInt;
     VEC_SEPARATOR_I
 }
 
 inline void operator<<(OutputStream& o_stream, PPSpawnTriggerAction& i_value) {
-    o_stream.write(reinterpret_cast<char*>(i_value.__pad31), 44);
+    o_stream.write(reinterpret_cast<char*>(i_value.pad_1), 44);
     VEC_SEPARATOR_O
     o_stream << i_value.m_unkVecInt;
     VEC_SEPARATOR_O
