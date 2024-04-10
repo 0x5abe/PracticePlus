@@ -1,4 +1,10 @@
 #include "CheckpointObject.hpp"
+#include "Geode/binding/ActiveSaveObject1.hpp"
+#include "Geode/binding/GJGameState.hpp"
+#include "Geode/binding/PlayerCheckpoint.hpp"
+#include "Geode/cocos/cocoa/CCArray.h"
+#include "Geode/cocos/platform/CCPlatformMacros.h"
+#include "Geode/platform/platform.hpp"
 #include <hooks/cocos2d/CCNode.hpp>
 #include <hooks/PlayerCheckpoint.hpp>
 #include <hooks/DynamicSaveObject.hpp>
@@ -10,6 +16,7 @@
 #include <hooks/SequenceTriggerState.hpp>
 #include <hooks/FMODAudioState.hpp>
 #include <hooks/EffectManagerState.hpp>
+#include <hooks/GJGameState.hpp>
 
 using namespace geode::prelude;
 
@@ -25,6 +32,13 @@ void PPCheckpointObject::save(OutputStream& o_stream) {
 
 inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
     //GJGameState m_gameState;
+	log::info("INPUT CCNODE uid: {}", o_value.m_uID);
+	log::info("INPUT CCNODE frotationx: {}", o_value.m_fRotationX);
+	log::info("INPUT CCNODE scale y: {}", o_value.m_fScaleY);
+	SEPARATOR_I_C(GAME)
+	o_value.m_gameState = GJGameState();
+	reinterpret_cast<PPGJGameState*>(&o_value.m_gameState)->load(i_stream);
+	SEPARATOR_I_C(GAME)
 
 	//GJShaderState m_shaderState;
 	SEPARATOR_I_C(SHAD)
@@ -43,36 +57,40 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	SEPARATOR_I
 
 	//PlayerCheckpoint* m_player1Checkpoint;
-    if (!o_value.m_player1Checkpoint) {
-        o_value.m_player1Checkpoint = reinterpret_cast<PlayerCheckpoint*>(malloc(sizeof(PlayerCheckpoint)));
-    }
+    o_value.m_player1Checkpoint = PlayerCheckpoint::create();
+	CC_SAFE_RETAIN(o_value.m_player1Checkpoint);
     reinterpret_cast<PPPlayerCheckpoint*>(o_value.m_player1Checkpoint)->load(i_stream);
 
 	//PlayerCheckpoint* m_player2Checkpoint;
     bool l_hasPlayer2;
     i_stream >> l_hasPlayer2;
+	log::info("Has player 2 in: {}", l_hasPlayer2);
 	SEPARATOR_I
     if (l_hasPlayer2) {
-        if (!o_value.m_player2Checkpoint) {
-            o_value.m_player2Checkpoint = reinterpret_cast<PlayerCheckpoint*>(malloc(sizeof(PlayerCheckpoint)));
-        }
+        o_value.m_player2Checkpoint = PlayerCheckpoint::create();
+		CC_SAFE_RETAIN(o_value.m_player2Checkpoint);
         reinterpret_cast<PPPlayerCheckpoint*>(o_value.m_player2Checkpoint)->load(i_stream);
     }
-    
+	
 	//int m_unkInt1;
     i_stream >> o_value.m_unkInt1;
+	log::info("o_value.m_unkInt1 in: {}", o_value.m_unkInt1);
 	SEPARATOR_I
+
 
 	//int m_unkInt2;
     i_stream >> o_value.m_unkInt2;
+	log::info("o_value.m_unkInt2 in: {}", o_value.m_unkInt2);
 	SEPARATOR_I
 
 	//int m_unkInt3;
     i_stream >> o_value.m_unkInt3;
+	log::info("o_value.m_unkInt3 in: {}", o_value.m_unkInt3);
 	SEPARATOR_I
 
 	//short m_unkShort1;
     i_stream >> o_value.m_unkShort1;
+	log::info("o_value.m_unkShort1 in: {}", o_value.m_unkShort1);
 	SEPARATOR_I
 
 	//PAD = win 0x2;
@@ -85,14 +103,17 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	VEC_SEPARATOR_I
 
 	//gd::vector<DynamicSaveObject> m_vectorDynamicSaveObjects;
+	o_value.m_vectorDynamicSaveObjects = gd::vector<DynamicSaveObject>();
 	i_stream >> o_value.m_vectorDynamicSaveObjects;
 	VEC_SEPARATOR_I
 
-	//gd::vector<byte> m_vectorActiveSaveObjects1;
+	//gd::vector<ActiveSaveObject1> m_vectorActiveSaveObjects1;
+	o_value.m_vectorActiveSaveObjects1 = gd::vector<ActiveSaveObject1>();
 	i_stream >> o_value.m_vectorActiveSaveObjects1;
 	VEC_SEPARATOR_I
 
-	//gd::vector<byte> m_vectorActiveSaveObjects2;
+	//gd::vector<ActiveSaveObject2> m_vectorActiveSaveObjects2;
+	o_value.m_vectorActiveSaveObjects2 = gd::vector<ActiveSaveObject2>();
 	i_stream >> o_value.m_vectorActiveSaveObjects2;
 	VEC_SEPARATOR_I
 
@@ -106,6 +127,8 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
     i_stream >> l_hasGradientTriggerObjectArray;
 	SEPARATOR_I
 	if (l_hasGradientTriggerObjectArray) {
+		o_value.m_gradientTriggerObjectArray = CCArray::create();
+		CC_SAFE_RETAIN(o_value.m_gradientTriggerObjectArray);
 		static_cast<PPCCArray*>(o_value.m_gradientTriggerObjectArray)->load<GradientTriggerObject>(i_stream);
 		ARR_SEPARATOR_I
 	}
@@ -117,6 +140,7 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	//PAD = win 0x3;
 
 	//gd::unordered_map<int,SequenceTriggerState> m_sequenceTriggerStateUnorderedMap;
+	//o_value.m_sequenceTriggerStateUnorderedMap = gd::unordered_map<int,SequenceTriggerState>();
 	i_stream >> o_value.m_sequenceTriggerStateUnorderedMap;
 	UMAP_SEPARATOR_I
 
@@ -132,7 +156,13 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 }
 
 inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
+	log::info("OUTPUT CCNODE uid: {}", i_value.m_uID);
+	log::info("OUTPUT CCNODE frotationx: {}", i_value.m_fRotationX);
+	log::info("OUTPUT CCNODE scale y: {}", i_value.m_fScaleY);
     //GJGameState m_gameState;
+	SEPARATOR_O_C(GAME)
+	reinterpret_cast<PPGJGameState*>(&i_value.m_gameState)->save(o_stream);
+	SEPARATOR_O_C(GAME)
 
 	//GJShaderState m_shaderState;
 	SEPARATOR_O_C(SHAD)
@@ -156,6 +186,7 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
     if (i_value.m_player2Checkpoint) {
         l_hasPlayer2 = true;
     }
+	log::info("Has player 2 out: {}", l_hasPlayer2);
     o_stream << l_hasPlayer2;
 	SEPARATOR_O
     if (l_hasPlayer2) {
@@ -163,18 +194,22 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
     }
     
 	//int m_unkInt1;
+	log::info("i_value.m_unkInt1 in: {}", i_value.m_unkInt1);
     o_stream << i_value.m_unkInt1;
 	SEPARATOR_O
 
 	//int m_unkInt2;
+	log::info("i_value.m_unkInt2 in: {}", i_value.m_unkInt2);
     o_stream << i_value.m_unkInt2;
 	SEPARATOR_O
 
 	//int m_unkInt3;
+	log::info("i_value.m_unkInt3 in: {}", i_value.m_unkInt3);
     o_stream << i_value.m_unkInt3;
 	SEPARATOR_O
 
 	//short m_unkShort1;
+	log::info("i_value.m_unkShort1 in: {}", i_value.m_unkShort1);
     o_stream << i_value.m_unkShort1;
 	SEPARATOR_O
 

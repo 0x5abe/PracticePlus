@@ -1,5 +1,6 @@
 
 #include "StartpointManager.hpp"
+#include "Geode/binding/CheckpointObject.hpp"
 #include <util/math.hpp>
 #include <util/debug.hpp>
 #include <hooks/PlayerCheckpoint.hpp>

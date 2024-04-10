@@ -15,6 +15,7 @@ void PPCollisionTriggerAction::save(OutputStream& o_stream) {
 inline void operator>>(InputStream& i_stream, PPCollisionTriggerAction& o_value) {
     i_stream.read(reinterpret_cast<char*>(o_value.pad_1), 32);
     VEC_SEPARATOR_I
+    o_value.m_unkVecInt = gd::vector<int>();
     i_stream >> o_value.m_unkVecInt;
     VEC_SEPARATOR_I
 }

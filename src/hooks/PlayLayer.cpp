@@ -1,4 +1,8 @@
 #include "PlayLayer.hpp"
+#include "Geode/binding/CheckpointObject.hpp"
+#include "Geode/binding/EnhancedGameObject.hpp"
+// todo remove unused
+#include "util/InputStream.hpp"
 #include <managers/StartpointManager.hpp>
 #include <geode.custom-keybinds/include/Keybinds.hpp>
 
@@ -13,6 +17,7 @@ bool PPPlayLayer::init(GJGameLevel* i_level, bool i_useReplay, bool i_dontCreate
     if (!PlayLayer::init(i_level, i_useReplay, i_dontCreateObjects)) return false;
     
     setupKeybinds();
+    log::info("Object id max: {}",*reinterpret_cast<unsigned int*>(geode::base::get()+0x4ea028));
 
     return true;
 }
@@ -40,6 +45,8 @@ void PPPlayLayer::updateVisibility(float i_unkFloat) {
     
     //Todo: Remvoe
     if (m_fields->m_autoCreateSp1 && m_fields->m_autoCreateSp2) {
+        int id = *reinterpret_cast<unsigned int*>(geode::base::get()+0x4ea028) - m_fields->m_placedCheckpoints ;
+        log::info("Object id cur: {}",id);
         //removeStartpoint();
         //createStartpoint();
     }
@@ -52,6 +59,16 @@ void PPPlayLayer::onQuit() {
     StartpointManager::get().reset();
 }
 
+//Todo: remove
+CheckpointObject* PPPlayLayer::createCheckpoint() {
+    m_fields->m_placedCheckpoints++;
+
+    return PlayLayer::createCheckpoint();
+
+    StartpointManager::get().reset();
+}
+//EndTodo
+
 // custom methods
 
 void PPPlayLayer::createStartpoint() {
@@ -60,12 +77,22 @@ void PPPlayLayer::createStartpoint() {
 
 void PPPlayLayer::addStartpoint(CheckpointObject* i_startpoint, int i_index) {
     PlayLayer::addToSection(i_startpoint->m_physicalCheckpointObject);
+    //Todo: remove
+    if (i_startpoint->m_gameState.m_stateObjects.size() > 0) {
+        for (std::pair<int,EnhancedGameObject*> ego : i_startpoint->m_gameState.m_stateObjects) {
+            log::info("Enhanced game object id: {}", ego.second->m_uniqueID);
+        }
+    }
+    //EndTodo
 	i_startpoint->m_physicalCheckpointObject->activateObject();
 }
 
 bool PPPlayLayer::removeStartpoint(int i_index) {
     StartpointManager& l_startpointManager = StartpointManager::get();
     CheckpointObject* l_startpoint = l_startpointManager.getStartpoint(i_index);
+    //Todo: remove
+    m_fields->m_autoCreateSp1 = !m_fields->m_autoCreateSp1;
+    //EndTodo
     if (!l_startpoint) return false;
     //Todo: remove
     // if (l_startpoint->m_effectManagerState.m_vectorGroupCommandObject2.size() > 0) {
@@ -178,5 +205,16 @@ void PPPlayLayer::setupKeybinds() {
             return ListenerResult::Propagate;
         },
         "switch-sp-next"_spr
+    );
+
+    addEventListener<keybinds::InvokeBindFilter>(
+        [this](keybinds::InvokeBindEvent* event) {
+            if (event->isDown() && isPlusMode()) {
+                InputStream l_ifstream = InputStream("./testPlayerCheckpoint.bin");
+                StartpointManager::get().loadStartpointsFromStream(l_ifstream);
+            }
+            return ListenerResult::Propagate;
+        },
+        "test-key-1"_spr
     );
 }

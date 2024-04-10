@@ -1,4 +1,5 @@
 #pragma once
+#include "Geode/binding/CheckpointObject.hpp"
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <managers/StartpointManager.hpp>
@@ -15,6 +16,7 @@ public:
     bool m_loggedObjects = false;
     bool m_autoCreateSp1 = true;
     bool m_autoCreateSp2 = true;
+    int m_placedCheckpoints = 0;
     //EndTodo
 
     // overrides
@@ -29,6 +31,10 @@ public:
 
     $override void onQuit();
 
+    //TodoRemove
+    $override CheckpointObject* createCheckpoint();
+    //EndTodoRemove
+    
     // custom methods
 
     void addStartpoint(CheckpointObject* i_startpoint, int i_index = -1);

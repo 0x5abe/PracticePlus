@@ -1,4 +1,7 @@
 #pragma once
+#include "Geode/binding/EnhancedGameObject.hpp"
+#include "Geode/binding/EnterEffectInstance.hpp"
+#include "Geode/binding/EventTriggerInstance.hpp"
 #include <iostream>
 #include <Geode/Geode.hpp>
 #include <Geode/loader/Log.hpp>
@@ -8,7 +11,7 @@ class InputStream {
 protected:
     std::istream* m_stream;
 public:
-    InputStream(std::string i_filePath) { m_stream = new std::ifstream(i_filePath); }
+    InputStream(std::string i_filePath) { m_stream = new std::ifstream(i_filePath, std::ios_base::binary); }
     ~InputStream() { delete m_stream; }
 
     PP_OPERATOR_READ(bool)
@@ -23,6 +26,7 @@ public:
     PP_OPERATOR_READ(cocos2d::CCPoint)
     PP_OPERATOR_READ(cocos2d::CCSize)
     PP_OPERATOR_READ(cocos2d::CCAffineTransform)
+    PP_OPERATOR_READ(uint64_t)
     
     void read(char* o_value, int i_size) { m_stream->read(o_value, i_size); }
     void ignore(int i_size) { m_stream->ignore(i_size); }
@@ -33,13 +37,39 @@ public:
 
     template <class T>
     void operator>>(std::vector<T>& o_value) {
-        o_value.clear();
+        if (o_value.size() != 0) {
+            geode::log::info("VECTOR SIZE SHOULD NOT BE HERE AGRIA: {}", o_value.size());
+            o_value.clear();
+        }
         unsigned int l_size;
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("VECTOR SIZE in: {}", l_size);
         if (l_size == 0) return;
         o_value.reserve(l_size);
-        m_stream->read(reinterpret_cast<char*>(o_value.data()), l_size*sizeof(T));
+        T value;
+        for (int i=0; i < l_size; i++) {
+            m_stream->read(reinterpret_cast<char*>(&value), sizeof(T));
+            o_value.push_back(value);
+        }
+    }
+    
+    template <>
+    void operator>><float>(std::vector<float>& o_value) {
+        if (o_value.size() != 0) {
+            geode::log::info("VECTOR SIZE SHOULD NOT BE HERE AGRIA: {}", o_value.size());
+            o_value.clear();
+        }
+        unsigned int l_size;
+        m_stream->read(reinterpret_cast<char*>(&l_size), 4);
+        geode::log::info("VECTOR SIZE in: {}", l_size);
+        if (l_size == 0) return;
+        o_value.reserve(l_size);
+        float value;
+        for (int i=0; i < l_size; i++) {
+            m_stream->read(reinterpret_cast<char*>(&value), sizeof(float));
+            geode::log::info("VALUE VEC READ FLOAT: {}", value);
+            o_value.push_back(value);
+        }
     }
 
     template <>
@@ -75,11 +105,20 @@ public:
     template <>
     void operator>><TimerTriggerAction>(std::vector<TimerTriggerAction>& o_value);
 
+    template <>
+    void operator>><EventTriggerInstance>(std::vector<EventTriggerInstance>& o_value);
+
+    template <>
+    void operator>><EnterEffectInstance>(std::vector<EnterEffectInstance>& o_value);
+
     //unordered_map
 
     template <class K, class V>
     void operator>>(gd::unordered_map<K,V>& o_value) {
-        o_value.clear();
+        if (o_value.size() != 0) {
+            geode::log::info("VECTOR SIZE SHOULD NOT BE HERE AGRIA: {}", o_value.size());
+            o_value.clear();
+        }
         unsigned int l_size;
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("Unordered Map SIZE in: {}", l_size);
@@ -97,7 +136,10 @@ public:
 
     template <class K, class V>
     void operator>>(gd::unordered_map<K,gd::vector<V>>& o_value) {
-        o_value.clear();
+        if (o_value.size() != 0) {
+            geode::log::info("VECTOR SIZE SHOULD NOT BE HERE AGRIA: {}", o_value.size());
+            o_value.clear();
+        }
         unsigned int l_size;
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("Unordered Map key->vector<T> SIZE in: {}", l_size);
@@ -124,11 +166,17 @@ public:
     template <>
     void operator>><int, TimerItem_padded>(gd::unordered_map<int, TimerItem_padded>& o_value);
 
+    template <>
+    void operator>><int, EnhancedGameObject*>(gd::unordered_map<int, EnhancedGameObject*>& o_value);
+
     //unordered_set
 
     template <class K>
     void operator>>(gd::unordered_set<K>& o_value) {
-        o_value.clear();
+        if (o_value.size() != 0) {
+            geode::log::info("VECTOR SIZE SHOULD NOT BE HERE AGRIA: {}", o_value.size());
+            o_value.clear();
+        }
         unsigned int l_size;
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("Unordered Set SIZE in: {}", l_size);
@@ -146,7 +194,10 @@ public:
 
     template <class K, class V>
     void operator>>(gd::map<K,V>& o_value) {
-        o_value.clear();
+        if (o_value.size() != 0) {
+            geode::log::info("VECTOR SIZE SHOULD NOT BE HERE AGRIA: {}", o_value.size());
+            o_value.clear();
+        }
         unsigned int l_size;
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("Map SIZE in: {}", l_size);
@@ -161,12 +212,36 @@ public:
             o_value[l_key] = l_value;
         }
     }
+
+    template <class K, class V>
+    void operator>>(gd::map<K,gd::vector<V>>& o_value) {
+        if (o_value.size() != 0) {
+            geode::log::info("VECTOR SIZE SHOULD NOT BE HERE AGRIA: {}", o_value.size());
+            o_value.clear();
+        }
+        unsigned int l_size;
+        m_stream->read(reinterpret_cast<char*>(&l_size), 4);
+        geode::log::info("Map key->vector<T> SIZE in: {}", l_size);
+        if (l_size == 0) return;
+        // todo: research if it's worth it to call reserve
+        //o_value.reserve(l_size);
+        K l_key;
+        V l_value;
+        for (int i = 0; i < l_size; i++) {
+            m_stream->read(reinterpret_cast<char*>(&l_key), sizeof(K));
+            *this >> o_value[l_key];
+        }
+    }
+
     
     //set
 
     template <class K>
     void operator>>(gd::set<K>& o_value) {
-        o_value.clear();
+        if (o_value.size() != 0) {
+            geode::log::info("VECTOR SIZE SHOULD NOT BE HERE AGRIA: {}", o_value.size());
+            o_value.clear();
+        }
         unsigned int l_size;
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("Set SIZE in: {}", l_size);
@@ -183,7 +258,10 @@ public:
     //gd::string
 
     void operator>>(gd::string& o_value) {
-        o_value.clear();
+        if (o_value.size() != 0) {
+            geode::log::info("VECTOR SIZE SHOULD NOT BE HERE AGRIA: {}", o_value.size());
+            o_value.clear();
+        }
         unsigned int l_size;
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("String SIZE in: {}", l_size);

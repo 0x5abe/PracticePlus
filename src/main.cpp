@@ -49,4 +49,14 @@ void setupKeybinds() {
         { Keybind::create(KEY_E, Modifier::None) },
         Category::PLAY,
     });
+
+    //TODO REMOVE
+    BindManager::get()->registerBindable({
+        "test-key-1"_spr,
+        "Test 1",
+        "Load startpoints",
+        { Keybind::create(KEY_L, Modifier::None) },
+        Category::PLAY,
+    });
+    //ENDTODO
 }

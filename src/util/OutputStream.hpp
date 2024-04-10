@@ -1,4 +1,6 @@
 #pragma once
+#include "Geode/binding/EnhancedGameObject.hpp"
+#include "Geode/binding/EnterEffectInstance.hpp"
 #include <iostream>
 #include <Geode/Geode.hpp>
 #include <Geode/loader/Log.hpp>
@@ -24,6 +26,7 @@ public:
     PP_OPERATOR_WRITE(cocos2d::CCPoint)
     PP_OPERATOR_WRITE(cocos2d::CCSize)
     PP_OPERATOR_WRITE(cocos2d::CCAffineTransform)
+    PP_OPERATOR_WRITE(uint64_t)
 
     void write(char* i_value, int i_size) { m_stream->write(i_value, i_size); }
 
@@ -72,6 +75,12 @@ public:
     template <>
     void operator<<<TimerTriggerAction>(std::vector<TimerTriggerAction>& i_value);
 
+    template <>
+    void operator<<<EventTriggerInstance>(std::vector<EventTriggerInstance>& i_value);
+
+    template <>
+    void operator<<<EnterEffectInstance>(std::vector<EnterEffectInstance>& i_value);
+
     //unordered_map
 
     template <class K, class V>
@@ -108,6 +117,9 @@ public:
     template <>
     void operator<<<int, TimerItem_padded>(gd::unordered_map<int, TimerItem_padded>& i_value);
 
+    template <>
+    void operator<<<int, EnhancedGameObject*>(gd::unordered_map<int, EnhancedGameObject*>& i_value);
+
     //unordered_set
 
     template <class K>
@@ -132,6 +144,18 @@ public:
             m_stream->write(reinterpret_cast<char*>(&l_pair.second), sizeof(V));
         }
     }
+
+    template <class K, class V>
+    void operator<<(gd::map<K,gd::vector<V>>& i_value) {
+        unsigned int l_size = i_value.size();
+        geode::log::info("Unordered Map key->vector<T> SIZE out: {}", l_size);
+        m_stream->write(reinterpret_cast<char*>(&l_size), 4);
+        for (std::pair<K,gd::vector<V>> l_pair : i_value) {
+            m_stream->write(reinterpret_cast<char*>(&l_pair.first), sizeof(K));
+            *this << l_pair.second; 
+        }
+    }
+
 
     //set
 

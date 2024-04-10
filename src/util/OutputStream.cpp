@@ -14,6 +14,8 @@
 #include <hooks/CollisionTriggerAction.hpp>
 #include <hooks/TouchToggleAction.hpp>
 #include <hooks/CountTriggerAction.hpp>
+#include <hooks/EventTriggerInstance.hpp>
+#include <hooks/EnterEffectInstance.hpp>
 
 //vector
 
@@ -91,6 +93,18 @@ void OutputStream::operator<<<TimerTriggerAction>(std::vector<TimerTriggerAction
     writeGenericVector<TimerTriggerAction, PPTimerTriggerAction>(this, i_value);
 }
 
+template <>
+void OutputStream::operator<<<EventTriggerInstance>(std::vector<EventTriggerInstance>& i_value) {
+    geode::log::info("00000000000 VECTOR CustomWrite EventTriggerInstance");
+    writeGenericVector<EventTriggerInstance, PPEventTriggerInstance>(this, i_value);
+}
+
+template <>
+void OutputStream::operator<<<EnterEffectInstance>(std::vector<EnterEffectInstance>& i_value) {
+    geode::log::info("00232353000064545@@@@00003 VECTOR CustomWrite EnterEffectInstance");
+    writeGenericVector<EnterEffectInstance, PPEnterEffectInstance>(this, i_value);
+}
+
 //unordered_map
 
 template<class K, class V, class W>
@@ -124,4 +138,18 @@ template <>
 void OutputStream::operator<<<int, TimerItem_padded>(gd::unordered_map<int, TimerItem_padded>& i_value) {
     geode::log::info("999999999999999999999 Unordered Map CustomWrite TimerItem_padded");
     writeGenericUnorderedMap<int, TimerItem_padded, PPTimerItem_padded>(this, i_value);
+}
+
+template <>
+void OutputStream::operator<<<int, EnhancedGameObject*>(gd::unordered_map<int, EnhancedGameObject*>& i_value) {
+    unsigned int l_size = i_value.size();
+    this->write(reinterpret_cast<char*>(&l_size), 4);
+    geode::log::info("Unordered Map CustomWrite EnhancedGameObject* SIZE out: {}", l_size);
+    if (l_size == 0) return;
+    int l_objectIndex;
+    for (std::pair<int, EnhancedGameObject*> l_pair : i_value) {
+        this->write(reinterpret_cast<char*>(&l_pair.first), sizeof(int));
+        l_objectIndex = l_pair.second->m_uniqueID-12;
+        this->write(reinterpret_cast<char*>(&l_objectIndex), sizeof(int));
+    }
 }

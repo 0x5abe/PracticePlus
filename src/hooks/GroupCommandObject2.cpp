@@ -1,6 +1,8 @@
 #include "GroupCommandObject2.hpp"
+#include "Geode/binding/KeyframeObject.hpp"
 #include <hooks/cocos2d/CCNode.hpp>
 #include <util/debug.hpp>
+#include <vector>
 
 using namespace geode::prelude;
 
@@ -15,10 +17,12 @@ void PPGroupCommandObject2::save(OutputStream& o_stream) {
 inline void operator>>(InputStream& i_stream, PPGroupCommandObject2& o_value) {
     i_stream.read(reinterpret_cast<char*>(o_value.pad_1), 436);
     VEC_SEPARATOR_I
+    o_value.m_unkVecKeyframeObject = gd::vector<KeyframeObject>();
     i_stream >> o_value.m_unkVecKeyframeObject;
     VEC_SEPARATOR_I
     i_stream.read(reinterpret_cast<char*>(o_value.pad_2), 16);
     VEC_SEPARATOR_I
+    o_value.m_unkVecInt = gd::vector<int>();
     i_stream >> o_value.m_unkVecInt;
     VEC_SEPARATOR_I
     i_stream.read(reinterpret_cast<char*>(o_value.pad_3), 12);

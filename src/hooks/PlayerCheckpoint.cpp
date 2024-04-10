@@ -62,6 +62,7 @@ inline void operator>>(InputStream& i_stream, PPPlayerCheckpoint& o_value) {
     i_stream >> o_value.m_yPositionVector;
     VEC_SEPARATOR_I
     i_stream.read((char*)o_value.m_unkBytes3, 8);
+    log::info("PlayerCheckpoint o_value.m_unkBytes3 in: {}", *(double*)o_value.m_unkBytes3);
     SEPARATOR_I
 }
 
@@ -113,5 +114,6 @@ inline void operator<<(OutputStream& o_stream, PPPlayerCheckpoint& i_value) {
     o_stream << i_value.m_yPositionVector;
     VEC_SEPARATOR_O
     o_stream.write((char*)i_value.m_unkBytes3, 8);
+    log::info("PlayerCheckpoint i_value.m_unkBytes3 out: {}", *(double*)i_value.m_unkBytes3);
     SEPARATOR_O
 }
