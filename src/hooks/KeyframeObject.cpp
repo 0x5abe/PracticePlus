@@ -74,3 +74,62 @@ inline void operator<<(OutputStream& o_stream, PPKeyframeObject& i_value) {
     o_stream.write(reinterpret_cast<char*>(i_value.pad_3), 132);
     SEPARATOR_O
 }
+
+
+#ifdef PP_DEBUG
+void PPKeyframeObject::describe() {
+    log::info("[PPKeyframeObject - describe] pad_1: [{}]", hexStr(pad_1, 32));
+    int l_size = m_unkVecDouble1.size();
+    log::info("[PPKeyframeObject - describe] m_unkVecDouble1.size(): {}", l_size);
+    for (int i = 0; i < l_size; i++) {
+        log::info("[PPKeyframeObject - describe] m_unkVecDouble1[{}]: {}", i, m_unkVecDouble1[i]);
+    }
+    l_size = m_unkVecDouble2.size();
+    log::info("[PPKeyframeObject - describe] m_unkVecDouble2.size(): {}", l_size);
+    for (int i = 0; i < l_size; i++) {
+        log::info("[PPKeyframeObject - describe] m_unkVecDouble2[{}]: {}", i, m_unkVecDouble2[i]);
+    }
+    l_size = m_unkVecDouble3.size();
+    log::info("[PPKeyframeObject - describe] m_unkVecDouble3.size(): {}", l_size);
+    for (int i = 0; i < l_size; i++) {
+        log::info("[PPKeyframeObject - describe] m_unkVecDouble3[{}]: {}", i, m_unkVecDouble3[i]);
+    }
+    l_size = m_unkVecDouble4.size();
+    log::info("[PPKeyframeObject - describe] m_unkVecDouble4.size(): {}", l_size);
+    for (int i = 0; i < l_size; i++) {
+        log::info("[PPKeyframeObject - describe] m_unkVecDouble4[{}]: {}", i, m_unkVecDouble4[i]);
+    }
+    l_size = m_unkVecDouble5.size();
+    log::info("[PPKeyframeObject - describe] m_unkVecDouble5.size(): {}", l_size);
+    for (int i = 0; i < l_size; i++) {
+        log::info("[PPKeyframeObject - describe] m_unkVecDouble5[{}]: {}", i, m_unkVecDouble5[i]);
+    }
+    log::info("[PPKeyframeObject - describe] pad_2: [{}]", hexStr(pad_2, 52));
+    l_size = m_unkVecDouble6.size();
+    log::info("[PPKeyframeObject - describe] m_unkVecDouble6.size(): {}", l_size);
+    for (int i = 0; i < l_size; i++) {
+        log::info("[PPKeyframeObject - describe] m_unkVecDouble6[{}]: {}", i, m_unkVecDouble6[i]);
+    }
+    l_size = m_unkVecDouble7.size();
+    log::info("[PPKeyframeObject - describe] m_unkVecDouble7.size(): {}", l_size);
+    for (int i = 0; i < l_size; i++) {
+        log::info("[PPKeyframeObject - describe] m_unkVecDouble7[{}]: {}", i, m_unkVecDouble7[i]);
+    }
+    l_size = m_unkVecDouble8.size();
+    log::info("[PPKeyframeObject - describe] m_unkVecDouble8.size(): {}", l_size);
+    for (int i = 0; i < l_size; i++) {
+        log::info("[PPKeyframeObject - describe] m_unkVecDouble8[{}]: {}", i, m_unkVecDouble8[i]);
+    }
+    l_size = m_unkVecDouble9.size();
+    log::info("[PPKeyframeObject - describe] m_unkVecDouble9.size(): {}", l_size);
+    for (int i = 0; i < l_size; i++) {
+        log::info("[PPKeyframeObject - describe] m_unkVecDouble9[{}]: {}", i, m_unkVecDouble9[i]);
+    }
+    l_size = m_unkVecDouble10.size();
+    log::info("[PPKeyframeObject - describe] m_unkVecDouble10.size(): {}", l_size);
+    for (int i = 0; i < l_size; i++) {
+        log::info("[PPKeyframeObject - describe] m_unkVecDouble10[{}]: {}", i, m_unkVecDouble10[i]);
+    }
+    log::info("[PPKeyframeObject - describe] pad_3: [{}]", hexStr(pad_3, 132));
+}
+#endif

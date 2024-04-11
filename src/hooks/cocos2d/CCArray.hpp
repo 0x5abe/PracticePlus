@@ -3,6 +3,7 @@
 #include <Geode/modify/CCArray.hpp>
 #include <util/InputStream.hpp>
 #include <util/OutputStream.hpp>
+#include <hooks/CheckpointObject.hpp>
 
 class $modify(PPCCArray, cocos2d::CCArray) {
 public:
@@ -23,4 +24,15 @@ public:
 
     template <>
     void save<GradientTriggerObject>(OutputStream& o_stream);
+
+#ifdef PP_DEBUG
+    template <class T>
+    void describe();
+
+    template <>
+    void describe<PPCheckpointObject>();
+
+    template <>
+    void describe<GradientTriggerObject>();
+#endif
 };

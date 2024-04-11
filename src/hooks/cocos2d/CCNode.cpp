@@ -1,4 +1,5 @@
 #include "CCNode.hpp"
+#include "Geode/cocos/base_nodes/CCNode.h"
 #include <hooks/cocos2d/CCObject.hpp>
 #include <util/debug.hpp>
 
@@ -111,3 +112,46 @@ inline void operator<<(OutputStream& o_stream, PPCCNode& i_value) {
     o_stream << i_value.m_bUnkBool2;
     SEPARATOR_O
 }
+
+#ifdef PP_DEBUG
+void PPCCNode::describe() {
+    log::info("[PPCCNode - describe] m_fRotationX: {}", m_fRotationX);
+    log::info("[PPCCNode - describe] m_fRotationY: {}", m_fRotationY);
+    log::info("[PPCCNode - describe] m_fScaleX: {}", m_fScaleX);
+    log::info("[PPCCNode - describe] m_fScaleY: {}", m_fScaleY);
+    log::info("[PPCCNode - describe] m_fVertexZ: {}", m_fVertexZ);
+    log::info("[PPCCNode - describe] m_obPosition: {}", m_obPosition);
+    log::info("[PPCCNode - describe] m_fSkewX: {}", m_fSkewX);
+    log::info("[PPCCNode - describe] m_fSkewY: {}", m_fSkewY);
+    log::info("[PPCCNode - describe] m_obAnchorPointInPoints: {}", m_obAnchorPointInPoints);
+    log::info("[PPCCNode - describe] m_obAnchorPoint: {}", m_obAnchorPoint);
+    log::info("[PPCCNode - describe] m_obContentSize: {}", m_obContentSize);
+    log::info("[PPCCNode - describe] m_sAdditionalTransform.A: {}", m_sAdditionalTransform.a);
+    log::info("[PPCCNode - describe] m_sAdditionalTransform.B: {}", m_sAdditionalTransform.b);
+    log::info("[PPCCNode - describe] m_sAdditionalTransform.C: {}", m_sAdditionalTransform.c);
+    log::info("[PPCCNode - describe] m_sAdditionalTransform.D: {}", m_sAdditionalTransform.d);
+    log::info("[PPCCNode - describe] m_sAdditionalTransform.TX: {}", m_sAdditionalTransform.tx);
+    log::info("[PPCCNode - describe] m_sAdditionalTransform.TY: {}", m_sAdditionalTransform.ty);
+    log::info("[PPCCNode - describe] m_sTransform.A: {}", m_sTransform.a);
+    log::info("[PPCCNode - describe] m_sTransform.B: {}", m_sTransform.b);
+    log::info("[PPCCNode - describe] m_sTransform.C: {}", m_sTransform.c);
+    log::info("[PPCCNode - describe] m_sTransform.D: {}", m_sTransform.d);
+    log::info("[PPCCNode - describe] m_sTransform.TX: {}", m_sTransform.tx);
+    log::info("[PPCCNode - describe] m_sTransform.TY: {}", m_sTransform.ty);
+    log::info("[PPCCNode - describe] m_sInverse.A: {}", m_sInverse.a);
+    log::info("[PPCCNode - describe] m_sInverse.B: {}", m_sInverse.b);
+    log::info("[PPCCNode - describe] m_sInverse.C: {}", m_sInverse.c);
+    log::info("[PPCCNode - describe] m_sInverse.D: {}", m_sInverse.d);
+    log::info("[PPCCNode - describe] m_sInverse.TX: {}", m_sInverse.tx);
+    log::info("[PPCCNode - describe] m_sInverse.TY: {}", m_sInverse.ty);
+    log::info("[PPCCNode - describe] m_bRunning: {}", m_bRunning);
+    log::info("[PPCCNode - describe] m_bTransformDirty: {}", m_bTransformDirty);
+    log::info("[PPCCNode - describe] m_bInverseDirty: {}", m_bInverseDirty);
+    log::info("[PPCCNode - describe] m_bAdditionalTransformDirty: {}", m_bAdditionalTransformDirty);
+    log::info("[PPCCNode - describe] m_bVisible: {}", m_bVisible);
+    log::info("[PPCCNode - describe] m_bIgnoreAnchorPointForPosition: {}", m_bIgnoreAnchorPointForPosition);
+    log::info("[PPCCNode - describe] m_bReorderChildDirty: {}", m_bReorderChildDirty);
+    log::info("[PPCCNode - describe] m_bUnkBool1: {}", m_bUnkBool1);
+    log::info("[PPCCNode - describe] m_bUnkBool2: {}", m_bUnkBool2);
+}
+#endif

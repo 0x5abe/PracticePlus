@@ -1,6 +1,8 @@
 
 #include "StartpointManager.hpp"
+#include "Geode/Enums.hpp"
 #include "Geode/binding/CheckpointObject.hpp"
+#include "Geode/binding/GJGameState.hpp"
 #include <util/math.hpp>
 #include <util/debug.hpp>
 #include <hooks/PlayerCheckpoint.hpp>
@@ -32,6 +34,7 @@ CheckpointObject* StartpointManager::createStartpoint(CheckpointObject* i_startp
     log::info("sizeof CCDictElement {}", sizeof(cocos2d::CCDictElement));
     log::info("sizeof CAState {}", sizeof(CAState));
     log::info("sizeof EffectManagerState {}", sizeof(EffectManagerState));
+    log::info("sizeof GJGameState {}", sizeof(GJGameState));
     //TODO: remove
     //if (m_startpoints->count() > 0) {
     //    InputStream l_ifstream = InputStream("./testPlayerCheckpoint.bin");
@@ -46,8 +49,8 @@ CheckpointObject* StartpointManager::createStartpoint(CheckpointObject* i_startp
 
 void StartpointManager::removeStartpoint(int i_index) {
     //TODO: remove
-    OutputStream l_ofstream = OutputStream("./testPlayerCheckpoint.bin");
-    saveStartpointsToStream(l_ofstream);
+    //OutputStream l_ofstream = OutputStream("./testPlayerCheckpoint.bin");
+    //saveStartpointsToStream(l_ofstream);
     //EndTODO: remove
     if (i_index == -1) {
         m_startpoints->removeLastObject(true);
@@ -144,11 +147,10 @@ void StartpointManager::loadStartpointsFromStream(InputStream& i_stream) {
 
 void StartpointManager::saveStartpointsToStream(OutputStream& o_stream) {
     if (m_startpoints->count() > 0) {
-        // CheckpointObject* l_lastObject = static_cast<CheckpointObject*>(m_startpoints->lastObject());
-        // static_cast<PPPlayerCheckpoint*>(l_lastObject->m_player1Checkpoint)->save(o_stream);
         cocos2d::CCArray* l_intermediate = m_startpoints;
+        log::info("Saving Startpoints to stream");
         static_cast<PPCCArray*>(l_intermediate)->save<PPCheckpointObject>(o_stream);
-        log::info("Saved playerCheckpoint to stream");
+        log::info("Saved Startpoints to stream");
     }
 }
 

@@ -1,10 +1,14 @@
 #include "CheckpointObject.hpp"
+#include "ActiveSaveObject.hpp"
 #include "Geode/binding/ActiveSaveObject1.hpp"
 #include "Geode/binding/GJGameState.hpp"
+#include "Geode/binding/GradientTriggerObject.hpp"
 #include "Geode/binding/PlayerCheckpoint.hpp"
+#include "Geode/binding/SequenceTriggerState.hpp"
 #include "Geode/cocos/cocoa/CCArray.h"
 #include "Geode/cocos/platform/CCPlatformMacros.h"
 #include "Geode/platform/platform.hpp"
+#include "cocos2d/CCObject.hpp"
 #include <hooks/cocos2d/CCNode.hpp>
 #include <hooks/PlayerCheckpoint.hpp>
 #include <hooks/DynamicSaveObject.hpp>
@@ -36,7 +40,6 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	log::info("INPUT CCNODE frotationx: {}", o_value.m_fRotationX);
 	log::info("INPUT CCNODE scale y: {}", o_value.m_fScaleY);
 	SEPARATOR_I_C(GAME)
-	o_value.m_gameState = GJGameState();
 	reinterpret_cast<PPGJGameState*>(&o_value.m_gameState)->load(i_stream);
 	SEPARATOR_I_C(GAME)
 
@@ -77,7 +80,6 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	log::info("o_value.m_unkInt1 in: {}", o_value.m_unkInt1);
 	SEPARATOR_I
 
-
 	//int m_unkInt2;
     i_stream >> o_value.m_unkInt2;
 	log::info("o_value.m_unkInt2 in: {}", o_value.m_unkInt2);
@@ -103,17 +105,17 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	VEC_SEPARATOR_I
 
 	//gd::vector<DynamicSaveObject> m_vectorDynamicSaveObjects;
-	o_value.m_vectorDynamicSaveObjects = gd::vector<DynamicSaveObject>();
+	//o_value.m_vectorDynamicSaveObjects = gd::vector<DynamicSaveObject>();
 	i_stream >> o_value.m_vectorDynamicSaveObjects;
 	VEC_SEPARATOR_I
 
 	//gd::vector<ActiveSaveObject1> m_vectorActiveSaveObjects1;
-	o_value.m_vectorActiveSaveObjects1 = gd::vector<ActiveSaveObject1>();
+	//o_value.m_vectorActiveSaveObjects1 = gd::vector<ActiveSaveObject1>();
 	i_stream >> o_value.m_vectorActiveSaveObjects1;
 	VEC_SEPARATOR_I
 
 	//gd::vector<ActiveSaveObject2> m_vectorActiveSaveObjects2;
-	o_value.m_vectorActiveSaveObjects2 = gd::vector<ActiveSaveObject2>();
+	//o_value.m_vectorActiveSaveObjects2 = gd::vector<ActiveSaveObject2>();
 	i_stream >> o_value.m_vectorActiveSaveObjects2;
 	VEC_SEPARATOR_I
 
@@ -263,3 +265,58 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
     o_stream << i_value.m_unkGetsCopiedFromGameState;
 	SEPARATOR_O
 }
+
+#ifdef PP_DEBUG
+void PPCheckpointObject::describe() {
+	log::info("[PPCheckpointObject - describe] start");
+	reinterpret_cast<PPCCObject*>(this)->describe();
+	reinterpret_cast<PPCCNode*>(this)->describe();
+	reinterpret_cast<PPGJGameState*>(&m_gameState)->describe();
+	reinterpret_cast<PPGJShaderState*>(&m_shaderState)->describe();
+	reinterpret_cast<PPFMODAudioState*>(&m_audioState)->describe();
+	log::info("[PPCheckpointObject - describe] m_physicalCheckpointObject->m_startPosition: {}", m_physicalCheckpointObject->m_startPosition);
+	reinterpret_cast<PPPlayerCheckpoint*>(m_player1Checkpoint)->describe();
+	if (m_player2Checkpoint) {
+		reinterpret_cast<PPPlayerCheckpoint*>(m_player2Checkpoint)->describe();
+	}
+	log::info("[PPCheckpointObject - describe] m_unkInt1: {}", m_unkInt1);
+	log::info("[PPCheckpointObject - describe] m_unkInt2: {}", m_unkInt2);
+	log::info("[PPCheckpointObject - describe] m_unkInt3: {}", m_unkInt3);
+	log::info("[PPCheckpointObject - describe] m_unkInt3: {}", m_unkInt3);
+	log::info("[PPCheckpointObject - describe] m_unkInt3: {}", m_unkInt3);
+	log::info("[PPCheckpointObject - describe] m_unkInt3: {}", m_unkInt3);
+	int l_size = m_vectorDynamicSaveObjects.size();
+    log::info("[PPEffectManagerState - describe] m_vectorDynamicSaveObjects.size(): {}", l_size);
+    for (int i = 0; i < l_size; i++) {
+        log::info("[PPEffectManagerState - describe] m_vectorDynamicSaveObjects[{}]:", i);
+        reinterpret_cast<PPDynamicSaveObject*>(&m_vectorDynamicSaveObjects[i])->describe();
+    }
+	l_size = m_vectorActiveSaveObjects1.size();
+    log::info("[PPEffectManagerState - describe] m_vectorActiveSaveObjects1.size(): {}", l_size);
+    for (int i = 0; i < l_size; i++) {
+        log::info("[PPEffectManagerState - describe] m_vectorActiveSaveObjects1[{}]:", i);
+        reinterpret_cast<PPActiveSaveObject1*>(&m_vectorActiveSaveObjects1[i])->describe();
+    }
+	l_size = m_vectorActiveSaveObjects2.size();
+    log::info("[PPEffectManagerState - describe] m_vectorActiveSaveObjects2.size(): {}", l_size);
+    for (int i = 0; i < l_size; i++) {
+        log::info("[PPEffectManagerState - describe] m_vectorActiveSaveObjects2[{}]:", i);
+        reinterpret_cast<PPActiveSaveObject2*>(&m_vectorActiveSaveObjects2[i])->describe();
+    }
+	reinterpret_cast<PPEffectManagerState*>(&m_effectManagerState)->describe();
+	if (m_gradientTriggerObjectArray) {
+		reinterpret_cast<PPCCArray*>(m_gradientTriggerObjectArray)->describe<GradientTriggerObject>();
+	}
+	log::info("[PPCheckpointObject - describe] m_unkBool1: {}", m_unkBool1);
+	l_size = m_sequenceTriggerStateUnorderedMap.size();
+    log::info("[PPEffectManagerState - describe] m_sequenceTriggerStateUnorderedMap.size(): {}", l_size);
+    int i = 0;
+    for (std::pair<int, SequenceTriggerState> l_pair : m_sequenceTriggerStateUnorderedMap) {
+        log::info("[PPEffectManagerState - describe] m_sequenceTriggerStateUnorderedMap element {} key: {}", i, l_pair.first);
+        log::info("[PPEffectManagerState - describe] m_sequenceTriggerStateUnorderedMap element {} value:", i);
+		reinterpret_cast<PPSequenceTriggerState*>(&l_pair.second)->describe();
+        i++;
+    }
+	log::info("[PPCheckpointObject - describe] m_unkGetsCopiedFromGameState: {}", m_unkGetsCopiedFromGameState);
+}
+#endif

@@ -1,19 +1,18 @@
 #pragma once
 #include <Geode/Geode.hpp>
-#include <Geode/modify/CCNode.hpp>
+#include <Geode/modify/CAState.hpp>
 #include <util/InputStream.hpp>
 #include <util/OutputStream.hpp>
 
-
-class $modify(PPCCNode, cocos2d::CCNode) {
+class $modify(PPCAState, CAState) {
 protected:
-    friend void operator>>(InputStream& i_stream, PPCCNode& o_value);
-    friend void operator<<(OutputStream& o_stream, PPCCNode& i_value);
+    friend void operator>>(InputStream& i_stream, PPCAState& o_value);
+    friend void operator<<(OutputStream& o_stream, PPCAState& i_value);
 
 public:
     void load(InputStream& i_stream);
     void save(OutputStream& o_stream);
-    
+
 #ifdef PP_DEBUG
     void describe();
 #endif

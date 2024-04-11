@@ -29,3 +29,16 @@ inline void operator<<(OutputStream& o_stream, PPTimerItem_padded& i_value) {
     o_stream.write(reinterpret_cast<char*>(i_value.pad_2), 4);
     SEPARATOR_O
 }
+
+
+#ifdef PP_DEBUG
+void PPTimerItem_padded::describe() {
+    log::info("[PPTimerItem_padded - describe] pad_1: [{}]", hexStr(pad_1, 60));
+    int l_size = m_unkVecInt.size();
+    log::info("[PPTimerItem_padded - describe] m_unkVecInt.size(): {}", l_size);
+    for (int i = 0; i < l_size; i++) {
+        log::info("[PPTimerItem_padded - describe] m_unkVecInt[{}]: {}", i, m_unkVecInt[i]);
+    }
+    log::info("[PPTimerItem_padded - describe] pad_2: [{}]", hexStr(pad_1, 4));
+}
+#endif

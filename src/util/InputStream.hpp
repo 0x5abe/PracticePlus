@@ -1,4 +1,5 @@
 #pragma once
+#include "Geode/binding/AdvancedFollowInstance.hpp"
 #include "Geode/binding/EnhancedGameObject.hpp"
 #include "Geode/binding/EnterEffectInstance.hpp"
 #include "Geode/binding/EventTriggerInstance.hpp"
@@ -37,15 +38,11 @@ public:
 
     template <class T>
     void operator>>(std::vector<T>& o_value) {
-        if (o_value.size() != 0) {
-            geode::log::info("VECTOR SIZE SHOULD NOT BE HERE AGRIA: {}", o_value.size());
-            o_value.clear();
-        }
+        o_value = std::vector<T>();
         unsigned int l_size;
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("VECTOR SIZE in: {}", l_size);
         if (l_size == 0) return;
-        o_value.reserve(l_size);
         T value;
         for (int i=0; i < l_size; i++) {
             m_stream->read(reinterpret_cast<char*>(&value), sizeof(T));
@@ -55,10 +52,7 @@ public:
     
     template <>
     void operator>><float>(std::vector<float>& o_value) {
-        if (o_value.size() != 0) {
-            geode::log::info("VECTOR SIZE SHOULD NOT BE HERE AGRIA: {}", o_value.size());
-            o_value.clear();
-        }
+        o_value = std::vector<float>();
         unsigned int l_size;
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("VECTOR SIZE in: {}", l_size);
@@ -111,20 +105,23 @@ public:
     template <>
     void operator>><EnterEffectInstance>(std::vector<EnterEffectInstance>& o_value);
 
+    template <>
+    void operator>><AdvancedFollowInstance>(std::vector<AdvancedFollowInstance>& o_value);
+
+    template <>
+    void operator>><CAState>(std::vector<CAState>& o_value);
+
     //unordered_map
 
     template <class K, class V>
     void operator>>(gd::unordered_map<K,V>& o_value) {
         if (o_value.size() != 0) {
-            geode::log::info("VECTOR SIZE SHOULD NOT BE HERE AGRIA: {}", o_value.size());
             o_value.clear();
         }
         unsigned int l_size;
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("Unordered Map SIZE in: {}", l_size);
         if (l_size == 0) return;
-        // todo: research if it's worth it to call reserve
-        //o_value.reserve(l_size);
         K l_key;
         V l_value;
         for (int i = 0; i < l_size; i++) {
@@ -144,8 +141,6 @@ public:
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("Unordered Map key->vector<T> SIZE in: {}", l_size);
         if (l_size == 0) return;
-        // todo: research if it's worth it to call reserve
-        //o_value.reserve(l_size);
         K l_key;
         V l_value;
         for (int i = 0; i < l_size; i++) {
@@ -181,8 +176,6 @@ public:
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("Unordered Set SIZE in: {}", l_size);
         if (l_size == 0) return;
-        // todo: research if it's worth it to call reserve
-        //o_value.reserve(l_size);
         K l_key;
         for (int i = 0; i < l_size; i++) {
             m_stream->read(reinterpret_cast<char*>(&l_key), sizeof(K));
@@ -202,8 +195,6 @@ public:
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("Map SIZE in: {}", l_size);
         if (l_size == 0) return;
-        // todo: research if it's worth it to call reserve
-        //o_value.reserve(l_size);
         K l_key;
         V l_value;
         for (int i = 0; i < l_size; i++) {
@@ -223,8 +214,6 @@ public:
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("Map key->vector<T> SIZE in: {}", l_size);
         if (l_size == 0) return;
-        // todo: research if it's worth it to call reserve
-        //o_value.reserve(l_size);
         K l_key;
         V l_value;
         for (int i = 0; i < l_size; i++) {
@@ -246,8 +235,6 @@ public:
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("Set SIZE in: {}", l_size);
         if (l_size == 0) return;
-        // todo: research if it's worth it to call reserve
-        //o_value.reserve(l_size);
         K l_key;
         for (int i = 0; i < l_size; i++) {
             m_stream->read(reinterpret_cast<char*>(&l_key), sizeof(K));
@@ -266,11 +253,10 @@ public:
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("String SIZE in: {}", l_size);
         if (l_size == 0) return;
-        // todo: research if it's worth it to call reserve
-        //o_value.reserve(l_size);
-        std::string l_string;
-        l_string.reserve(l_size);
-        m_stream->read(l_string.data(), l_size);
-        o_value = l_string;
+        char* l_buf = new char[l_size+1];
+        m_stream->read(l_buf, l_size);
+        l_buf[l_size] = '\0';
+        o_value = l_buf;
+        delete[] l_buf;
     }
 };

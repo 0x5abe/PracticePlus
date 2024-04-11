@@ -1,8 +1,10 @@
 #pragma once
+#ifdef PP_DEBUG
 #include <util/InputStream.hpp>
 #include <util/OutputStream.hpp>
-
-#ifdef PP_DEBUG
+#include <iomanip>
+#include <sstream>
+#include <string>
     static char l_testSeparator[] = { 'T', 'E', 'S', 'T' };
     static char l_vecSeparator[] = { 'V', 'E', 'C', 'T' };
     static char l_endSeparator[] = { 'E', 'N', 'D', 'E' };
@@ -12,6 +14,17 @@
     static char l_strSeparator[] = { 'S', 'T', 'R', 'I' };
     static char l_uSetSeparator[] = { 'S', 'E', 'T', 'U' };
     static char l_setSeparator[] = { 'S', 'E', 'T', 'O' };
+
+    inline std::string hexStr(const uint8_t *data, int len)
+    {
+        std::stringstream ss;
+        ss << std::hex;
+
+        for( int i(0) ; i < len; ++i )
+            ss << std::setw(2) << std::setfill('0') << (int)data[i];
+
+        return ss.str();
+    }
 
     void writeSeparator(std::string i_string, OutputStream& o_stream);
 

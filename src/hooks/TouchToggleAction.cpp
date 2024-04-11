@@ -1,4 +1,5 @@
 #include "TouchToggleAction.hpp"
+#include "Geode/loader/Log.hpp"
 #include <hooks/cocos2d/CCNode.hpp>
 #include <util/debug.hpp>
 
@@ -25,3 +26,15 @@ inline void operator<<(OutputStream& o_stream, PPTouchToggleAction& i_value) {
     o_stream << i_value.m_unkVecInt;
     VEC_SEPARATOR_O
 }
+
+
+#ifdef PP_DEBUG
+void PPTouchToggleAction::describe() {
+    log::info("[PPTouchToggleAction - describe] pad_1: [{}]", hexStr(pad_1, 32));
+    int l_size = m_unkVecInt.size();
+    log::info("[PPTouchToggleAction - describe] m_unkVecInt.size(): {}", l_size);
+    for (int i = 0; i < l_size; i++) {
+        log::info("[PPTouchToggleAction - describe] m_unkVecInt[{}]: {}", i, m_unkVecInt[i]);
+    }
+}
+#endif

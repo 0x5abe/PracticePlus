@@ -27,3 +27,10 @@ inline void operator<<(OutputStream& o_stream, PPFMODQueuedMusic& i_value) {
     o_stream.write(reinterpret_cast<char*>(i_value.pad_1), 56);
     SEPARATOR_O
 }
+
+#ifdef PP_DEBUG
+void PPFMODQueuedMusic::describe() {
+    log::info("[PPFMODQueuedMusic - describe] m_unkString: {}", m_unkString);
+    log::info("[PPFMODQueuedMusic - describe] pad_1: [{}]", hexStr(pad_1, 56));
+}
+#endif

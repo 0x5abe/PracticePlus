@@ -1,5 +1,7 @@
 
 #include "InputStream.hpp"
+#include "Geode/binding/AdvancedFollowInstance.hpp"
+#include "Geode/binding/CAState.hpp"
 #include "Geode/binding/EventTriggerInstance.hpp"
 #include <hooks/DynamicSaveObject.hpp>
 #include <hooks/ActiveSaveObject.hpp>
@@ -17,21 +19,21 @@
 #include <hooks/CountTriggerAction.hpp>
 #include <hooks/EventTriggerInstance.hpp>
 #include <hooks/EnterEffectInstance.hpp>
+#include <hooks/AdvancedFollowInstance.hpp>
+#include <hooks/CAState.hpp>
 
 //vector
 
 template<class T, class U>
 inline void readGenericVector(InputStream* i_stream, std::vector<T>& o_value) {
-    if (o_value.size() != 0) {
-        geode::log::info("VECTOR SIZE SHOULD NOT BE HERE AGRIA: {}", o_value.size());
-        o_value.clear();
-    }
+    o_value = std::vector<T>();
     unsigned int l_size;
     i_stream->read(reinterpret_cast<char*>(&l_size), 4);
     geode::log::info("VECTOR SIZE CustomRead SIZE in: {}", l_size);
     if (l_size == 0) return;
-    o_value.reserve(l_size);
+    o_value.resize(l_size);
     for (int i = 0; i < l_size; i++) {
+        geode::log::info("VECTOR SIZE CustomRead SIZE in TRYING TO LOAD: {}", l_size);
         reinterpret_cast<U&>(o_value[i]).load(*i_stream);
     }
 }
@@ -101,6 +103,16 @@ void InputStream::operator>><EnterEffectInstance>(std::vector<EnterEffectInstanc
     readGenericVector<EnterEffectInstance, PPEnterEffectInstance>(this, o_value);
 }
 
+template <>
+void InputStream::operator>><AdvancedFollowInstance>(std::vector<AdvancedFollowInstance>& o_value) {
+    readGenericVector<AdvancedFollowInstance, PPAdvancedFollowInstance>(this, o_value);
+}
+
+template <>
+void InputStream::operator>><CAState>(std::vector<CAState>& o_value) {
+    readGenericVector<CAState, PPCAState>(this, o_value);
+}
+
 //unordered_map
 
 template<class K, class V, class W>
@@ -112,8 +124,6 @@ inline void readGenericUnorderedMap(InputStream* i_stream, gd::unordered_map<K,V
     unsigned int l_size;
     i_stream->read(reinterpret_cast<char*>(&l_size), 4);
     geode::log::info("Unordered Map CustomRead SIZE in: {}", l_size);
-    // todo: research if it's worth it to call reserve
-    //o_value.reserve(l_size);
     for (int i = 0; i < l_size; i++) {
         K l_key;
         i_stream->read(reinterpret_cast<char*>(&l_key), sizeof(K));
@@ -143,15 +153,9 @@ void InputStream::operator>><int, TimerItem_padded>(gd::unordered_map<int, Timer
 
 template <>
 void InputStream::operator>><int, EnhancedGameObject*>(gd::unordered_map<int, EnhancedGameObject*>& o_value) {
-    if (o_value.size() != 0) {
-        geode::log::info("VECTOR SIZE SHOULD NOT BE HERE AGRIA: {}", o_value.size());
-        o_value.clear();
-    }
     unsigned int l_size;
     this->read(reinterpret_cast<char*>(&l_size), 4);
     geode::log::info("Unordered Map EnhancedGameObject* CustomRead SIZE in: {}", l_size);
-    // todo: research if it's worth it to call reserve
-    //o_value.reserve(l_size);
     for (int i = 0; i < l_size; i++) {
         int l_key;
         int l_objectIndex;
@@ -159,8 +163,10 @@ void InputStream::operator>><int, EnhancedGameObject*>(gd::unordered_map<int, En
         this->read(reinterpret_cast<char*>(&l_objectIndex), sizeof(int));
 
         PlayLayer* l_playLayer = PlayLayer::get();
-        if (l_playLayer) {
-            o_value[l_key]  = static_cast<EnhancedGameObject*>(l_playLayer->m_objects->objectAtIndex(l_objectIndex));
+        if (l_playLayer && l_objectIndex != -1) {
+            o_value[l_key] = static_cast<EnhancedGameObject*>(l_playLayer->m_objects->objectAtIndex(l_objectIndex));
+        } else {
+            o_value[l_key] = nullptr;
         }
     }
 }

@@ -25,3 +25,15 @@ inline void operator<<(OutputStream& o_stream, PPTimerTriggerAction& i_value) {
     o_stream << i_value.m_unkVecInt;
     VEC_SEPARATOR_O
 }
+
+
+#ifdef PP_DEBUG
+void PPTimerTriggerAction::describe() {
+    log::info("[PPTimerTriggerAction - describe] pad_1: [{}]", hexStr(pad_1, 32));
+    int l_size = m_unkVecInt.size();
+    log::info("[PPTimerTriggerAction - describe] m_unkVecInt.size(): {}", l_size);
+    for (int i = 0; i < l_size; i++) {
+        log::info("[PPTimerTriggerAction - describe] m_unkVecInt[{}]: {}", i, m_unkVecInt[i]);
+    }
+}
+#endif

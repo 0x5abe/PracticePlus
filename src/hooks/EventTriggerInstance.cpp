@@ -25,3 +25,14 @@ inline void operator<<(OutputStream& o_stream, PPEventTriggerInstance& i_value) 
     o_stream << i_value.m_unkVecInt;
     VEC_SEPARATOR_O
 }
+
+#ifdef PP_DEBUG
+void PPEventTriggerInstance::describe() {
+    log::info("[PPEventTriggerInstance - describe] pad_1: [{}]", hexStr(pad_1, 16));
+    int l_size = m_unkVecInt.size();
+    log::info("[PPEventTriggerInstance - describe] m_unkVecInt.size(): {}", l_size);
+    for (int i = 0; i < l_size; i++) {
+        log::info("[PPEventTriggerInstance - describe] m_unkVecInt[{}]: {}", i, m_unkVecInt[i]);
+    }
+}
+#endif

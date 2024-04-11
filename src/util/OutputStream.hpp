@@ -1,4 +1,6 @@
 #pragma once
+#include "Geode/binding/AdvancedFollowInstance.hpp"
+#include "Geode/binding/CAState.hpp"
 #include "Geode/binding/EnhancedGameObject.hpp"
 #include "Geode/binding/EnterEffectInstance.hpp"
 #include <iostream>
@@ -80,6 +82,12 @@ public:
 
     template <>
     void operator<<<EnterEffectInstance>(std::vector<EnterEffectInstance>& i_value);
+
+    template <>
+    void operator<<<AdvancedFollowInstance>(std::vector<AdvancedFollowInstance>& i_value);
+
+    template <>
+    void operator<<<CAState>(std::vector<CAState>& i_value);
 
     //unordered_map
 

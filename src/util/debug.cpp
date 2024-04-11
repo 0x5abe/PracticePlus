@@ -1,5 +1,5 @@
+#ifdef PP_DEBUG
 #include "debug.hpp"
-
 void writeSeparator(std::string i_string, OutputStream& o_stream) {
     o_stream.write(i_string.data(),i_string.length());
 }
@@ -7,3 +7,4 @@ void writeSeparator(std::string i_string, OutputStream& o_stream) {
 void readSeparator(std::string o_string, InputStream& i_stream) {
     i_stream.ignore(o_string.length());
 }
+#endif

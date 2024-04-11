@@ -46,7 +46,7 @@ void PPPlayLayer::updateVisibility(float i_unkFloat) {
     //Todo: Remvoe
     if (m_fields->m_autoCreateSp1 && m_fields->m_autoCreateSp2) {
         int id = *reinterpret_cast<unsigned int*>(geode::base::get()+0x4ea028) - m_fields->m_placedCheckpoints ;
-        log::info("Object id cur: {}",id);
+        //log::info("Object id cur: {}",id);
         //removeStartpoint();
         //createStartpoint();
     }
@@ -78,11 +78,11 @@ void PPPlayLayer::createStartpoint() {
 void PPPlayLayer::addStartpoint(CheckpointObject* i_startpoint, int i_index) {
     PlayLayer::addToSection(i_startpoint->m_physicalCheckpointObject);
     //Todo: remove
-    if (i_startpoint->m_gameState.m_stateObjects.size() > 0) {
-        for (std::pair<int,EnhancedGameObject*> ego : i_startpoint->m_gameState.m_stateObjects) {
-            log::info("Enhanced game object id: {}", ego.second->m_uniqueID);
-        }
-    }
+    // if (i_startpoint->m_gameState.m_stateObjects.size() > 0) {
+    //     for (std::pair<int,EnhancedGameObject*> ego : i_startpoint->m_gameState.m_stateObjects) {
+    //         log::info("Enhanced game object id: {}", ego.second->m_uniqueID);
+    //     }
+    // }
     //EndTodo
 	i_startpoint->m_physicalCheckpointObject->activateObject();
 }
@@ -206,7 +206,7 @@ void PPPlayLayer::setupKeybinds() {
         },
         "switch-sp-next"_spr
     );
-
+    //TodoRemove
     addEventListener<keybinds::InvokeBindFilter>(
         [this](keybinds::InvokeBindEvent* event) {
             if (event->isDown() && isPlusMode()) {
@@ -217,4 +217,15 @@ void PPPlayLayer::setupKeybinds() {
         },
         "test-key-1"_spr
     );
+    addEventListener<keybinds::InvokeBindFilter>(
+        [this](keybinds::InvokeBindEvent* event) {
+            if (event->isDown() && isPlusMode()) {
+                OutputStream l_ofstream = OutputStream("./testPlayerCheckpoint.bin");
+                StartpointManager::get().saveStartpointsToStream(l_ofstream);
+            }
+            return ListenerResult::Propagate;
+        },
+        "test-key-2"_spr
+    );
+    //EndTodo
 }

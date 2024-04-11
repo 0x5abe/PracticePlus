@@ -1,5 +1,7 @@
 
 #include "OutputStream.hpp"
+#include "Geode/binding/AdvancedFollowInstance.hpp"
+#include "Geode/binding/CAState.hpp"
 #include <hooks/DynamicSaveObject.hpp>
 #include <hooks/ActiveSaveObject.hpp>
 #include <hooks/SequenceTriggerState.hpp>
@@ -16,6 +18,8 @@
 #include <hooks/CountTriggerAction.hpp>
 #include <hooks/EventTriggerInstance.hpp>
 #include <hooks/EnterEffectInstance.hpp>
+#include <hooks/AdvancedFollowInstance.hpp>
+#include <hooks/CAState.hpp>
 
 //vector
 
@@ -105,6 +109,18 @@ void OutputStream::operator<<<EnterEffectInstance>(std::vector<EnterEffectInstan
     writeGenericVector<EnterEffectInstance, PPEnterEffectInstance>(this, i_value);
 }
 
+template <>
+void OutputStream::operator<<<AdvancedFollowInstance>(std::vector<AdvancedFollowInstance>& i_value) {
+    geode::log::info("UWUWUWUWUWUWUWUUWUWUWUWW VECTOR CustomWrite AdvancedFollowInstance");
+    writeGenericVector<AdvancedFollowInstance, PPAdvancedFollowInstance>(this, i_value);
+}
+
+template <>
+void OutputStream::operator<<<CAState>(std::vector<CAState>& i_value) {
+    geode::log::info("OWOWOWOWOOWOWOW VECTOR CustomWrite CAState");
+    writeGenericVector<CAState, PPCAState>(this, i_value);
+}
+
 //unordered_map
 
 template<class K, class V, class W>
@@ -149,7 +165,12 @@ void OutputStream::operator<<<int, EnhancedGameObject*>(gd::unordered_map<int, E
     int l_objectIndex;
     for (std::pair<int, EnhancedGameObject*> l_pair : i_value) {
         this->write(reinterpret_cast<char*>(&l_pair.first), sizeof(int));
-        l_objectIndex = l_pair.second->m_uniqueID-12;
+        int l_objectIndex = -1;
+        if (!l_pair.second) {
+            geode::log::info("no game object??");
+        } else {
+            l_objectIndex = l_pair.second->m_uniqueID-12;
+        }
         this->write(reinterpret_cast<char*>(&l_objectIndex), sizeof(int));
     }
 }
