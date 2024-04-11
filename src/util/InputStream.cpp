@@ -25,8 +25,8 @@
 //vector
 
 template<class T, class U>
-inline void readGenericVector(InputStream* i_stream, std::vector<T>& o_value) {
-    o_value = std::vector<T>();
+inline void readGenericVector(InputStream* i_stream, gd::vector<T>& o_value) {
+    o_value = gd::vector<T>();
     unsigned int l_size;
     i_stream->read(reinterpret_cast<char*>(&l_size), 4);
     geode::log::info("VECTOR SIZE CustomRead SIZE in: {}", l_size);
@@ -39,77 +39,77 @@ inline void readGenericVector(InputStream* i_stream, std::vector<T>& o_value) {
 }
 
 template <>
-void InputStream::operator>><DynamicSaveObject>(std::vector<DynamicSaveObject>& o_value) {
+void InputStream::operator>><DynamicSaveObject>(gd::vector<DynamicSaveObject>& o_value) {
     readGenericVector<DynamicSaveObject, PPDynamicSaveObject>(this, o_value);
 }
 
 template <>
-void InputStream::operator>><ActiveSaveObject1>(std::vector<ActiveSaveObject1>& o_value) {
+void InputStream::operator>><ActiveSaveObject1>(gd::vector<ActiveSaveObject1>& o_value) {
     readGenericVector<ActiveSaveObject1, PPActiveSaveObject1>(this, o_value);
 }
 
 template <>
-void InputStream::operator>><ActiveSaveObject2>(std::vector<ActiveSaveObject2>& o_value) {
+void InputStream::operator>><ActiveSaveObject2>(gd::vector<ActiveSaveObject2>& o_value) {
     readGenericVector<ActiveSaveObject2, PPActiveSaveObject2>(this, o_value);
 }
 
 template <>
-void InputStream::operator>><CountTriggerAction>(std::vector<CountTriggerAction>& o_value) {
+void InputStream::operator>><CountTriggerAction>(gd::vector<CountTriggerAction>& o_value) {
     readGenericVector<CountTriggerAction, PPCountTriggerAction>(this, o_value);
 }
 
 template <>
-void InputStream::operator>><TouchToggleAction>(std::vector<TouchToggleAction>& o_value) {
+void InputStream::operator>><TouchToggleAction>(gd::vector<TouchToggleAction>& o_value) {
     readGenericVector<TouchToggleAction, PPTouchToggleAction>(this, o_value);
 }
 
 template <>
-void InputStream::operator>><CollisionTriggerAction>(std::vector<CollisionTriggerAction>& o_value) {
+void InputStream::operator>><CollisionTriggerAction>(gd::vector<CollisionTriggerAction>& o_value) {
     readGenericVector<CollisionTriggerAction, PPCollisionTriggerAction>(this, o_value);
 }
 
 template <>
-void InputStream::operator>><ToggleTriggerAction>(std::vector<ToggleTriggerAction>& o_value) {
+void InputStream::operator>><ToggleTriggerAction>(gd::vector<ToggleTriggerAction>& o_value) {
     readGenericVector<ToggleTriggerAction, PPToggleTriggerAction>(this, o_value);
 }
 
 template <>
-void InputStream::operator>><SpawnTriggerAction>(std::vector<SpawnTriggerAction>& o_value) {
+void InputStream::operator>><SpawnTriggerAction>(gd::vector<SpawnTriggerAction>& o_value) {
     readGenericVector<SpawnTriggerAction, PPSpawnTriggerAction>(this, o_value);
 }
 
 template <>
-void InputStream::operator>><GroupCommandObject2>(std::vector<GroupCommandObject2>& o_value) {
+void InputStream::operator>><GroupCommandObject2>(gd::vector<GroupCommandObject2>& o_value) {
     readGenericVector<GroupCommandObject2, PPGroupCommandObject2>(this, o_value);
 }
 
 template <>
-void InputStream::operator>><KeyframeObject>(std::vector<KeyframeObject>& o_value) {
+void InputStream::operator>><KeyframeObject>(gd::vector<KeyframeObject>& o_value) {
     readGenericVector<KeyframeObject, PPKeyframeObject>(this, o_value);
 }
 
 template <>
-void InputStream::operator>><TimerTriggerAction>(std::vector<TimerTriggerAction>& o_value) {
+void InputStream::operator>><TimerTriggerAction>(gd::vector<TimerTriggerAction>& o_value) {
     readGenericVector<TimerTriggerAction, PPTimerTriggerAction>(this, o_value);
 }
 
 template <>
-void InputStream::operator>><EventTriggerInstance>(std::vector<EventTriggerInstance>& o_value) {
+void InputStream::operator>><EventTriggerInstance>(gd::vector<EventTriggerInstance>& o_value) {
     readGenericVector<EventTriggerInstance, PPEventTriggerInstance>(this, o_value);
 }
 
 template <>
-void InputStream::operator>><EnterEffectInstance>(std::vector<EnterEffectInstance>& o_value) {
+void InputStream::operator>><EnterEffectInstance>(gd::vector<EnterEffectInstance>& o_value) {
     readGenericVector<EnterEffectInstance, PPEnterEffectInstance>(this, o_value);
 }
 
 template <>
-void InputStream::operator>><AdvancedFollowInstance>(std::vector<AdvancedFollowInstance>& o_value) {
+void InputStream::operator>><AdvancedFollowInstance>(gd::vector<AdvancedFollowInstance>& o_value) {
     readGenericVector<AdvancedFollowInstance, PPAdvancedFollowInstance>(this, o_value);
 }
 
 template <>
-void InputStream::operator>><CAState>(std::vector<CAState>& o_value) {
+void InputStream::operator>><CAState>(gd::vector<CAState>& o_value) {
     readGenericVector<CAState, PPCAState>(this, o_value);
 }
 

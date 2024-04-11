@@ -37,7 +37,7 @@ public:
     //vector
 
     template <class T>
-    void operator<<(std::vector<T>& i_value) {
+    void operator<<(gd::vector<T>& i_value) {
         unsigned int l_size = i_value.size();
         geode::log::info("VECTOR SIZE out: {}", l_size);
         m_stream->write(reinterpret_cast<char*>(&l_size), 4);
@@ -45,49 +45,49 @@ public:
     }
 
     template <>
-    void operator<<<DynamicSaveObject>(std::vector<DynamicSaveObject>& i_value);
+    void operator<<<DynamicSaveObject>(gd::vector<DynamicSaveObject>& i_value);
 
     template <>
-    void operator<<<ActiveSaveObject1>(std::vector<ActiveSaveObject1>& i_value);
+    void operator<<<ActiveSaveObject1>(gd::vector<ActiveSaveObject1>& i_value);
 
     template <>
-    void operator<<<ActiveSaveObject2>(std::vector<ActiveSaveObject2>& i_value);
+    void operator<<<ActiveSaveObject2>(gd::vector<ActiveSaveObject2>& i_value);
 
     template <>
-    void operator<<<CountTriggerAction>(std::vector<CountTriggerAction>& i_value);
+    void operator<<<CountTriggerAction>(gd::vector<CountTriggerAction>& i_value);
 
     template <>
-    void operator<<<TouchToggleAction>(std::vector<TouchToggleAction>& i_value);
+    void operator<<<TouchToggleAction>(gd::vector<TouchToggleAction>& i_value);
 
     template <>
-    void operator<<<CollisionTriggerAction>(std::vector<CollisionTriggerAction>& i_value);
+    void operator<<<CollisionTriggerAction>(gd::vector<CollisionTriggerAction>& i_value);
 
     template <>
-    void operator<<<ToggleTriggerAction>(std::vector<ToggleTriggerAction>& i_value);
+    void operator<<<ToggleTriggerAction>(gd::vector<ToggleTriggerAction>& i_value);
 
     template <>
-    void operator<<<SpawnTriggerAction>(std::vector<SpawnTriggerAction>& i_value);
+    void operator<<<SpawnTriggerAction>(gd::vector<SpawnTriggerAction>& i_value);
 
     template <>
-    void operator<<<GroupCommandObject2>(std::vector<GroupCommandObject2>& i_value);
+    void operator<<<GroupCommandObject2>(gd::vector<GroupCommandObject2>& i_value);
 
     template <>
-    void operator<<<KeyframeObject>(std::vector<KeyframeObject>& i_value);
+    void operator<<<KeyframeObject>(gd::vector<KeyframeObject>& i_value);
 
     template <>
-    void operator<<<TimerTriggerAction>(std::vector<TimerTriggerAction>& i_value);
+    void operator<<<TimerTriggerAction>(gd::vector<TimerTriggerAction>& i_value);
 
     template <>
-    void operator<<<EventTriggerInstance>(std::vector<EventTriggerInstance>& i_value);
+    void operator<<<EventTriggerInstance>(gd::vector<EventTriggerInstance>& i_value);
 
     template <>
-    void operator<<<EnterEffectInstance>(std::vector<EnterEffectInstance>& i_value);
+    void operator<<<EnterEffectInstance>(gd::vector<EnterEffectInstance>& i_value);
 
     template <>
-    void operator<<<AdvancedFollowInstance>(std::vector<AdvancedFollowInstance>& i_value);
+    void operator<<<AdvancedFollowInstance>(gd::vector<AdvancedFollowInstance>& i_value);
 
     template <>
-    void operator<<<CAState>(std::vector<CAState>& i_value);
+    void operator<<<CAState>(gd::vector<CAState>& i_value);
 
     //unordered_map
 

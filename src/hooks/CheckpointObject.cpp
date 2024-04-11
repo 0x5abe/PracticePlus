@@ -104,18 +104,12 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
     i_stream >> o_value.m_unkInt5;
 	VEC_SEPARATOR_I
 
-	//gd::vector<DynamicSaveObject> m_vectorDynamicSaveObjects;
-	//o_value.m_vectorDynamicSaveObjects = gd::vector<DynamicSaveObject>();
 	i_stream >> o_value.m_vectorDynamicSaveObjects;
 	VEC_SEPARATOR_I
 
-	//gd::vector<ActiveSaveObject1> m_vectorActiveSaveObjects1;
-	//o_value.m_vectorActiveSaveObjects1 = gd::vector<ActiveSaveObject1>();
 	i_stream >> o_value.m_vectorActiveSaveObjects1;
 	VEC_SEPARATOR_I
 
-	//gd::vector<ActiveSaveObject2> m_vectorActiveSaveObjects2;
-	//o_value.m_vectorActiveSaveObjects2 = gd::vector<ActiveSaveObject2>();
 	i_stream >> o_value.m_vectorActiveSaveObjects2;
 	VEC_SEPARATOR_I
 
@@ -142,7 +136,6 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	//PAD = win 0x3;
 
 	//gd::unordered_map<int,SequenceTriggerState> m_sequenceTriggerStateUnorderedMap;
-	//o_value.m_sequenceTriggerStateUnorderedMap = gd::unordered_map<int,SequenceTriggerState>();
 	i_stream >> o_value.m_sequenceTriggerStateUnorderedMap;
 	UMAP_SEPARATOR_I
 

@@ -24,7 +24,7 @@
 //vector
 
 template<class T, class U>
-inline void writeGenericVector(OutputStream* o_stream, std::vector<T>& i_value) {
+inline void writeGenericVector(OutputStream* o_stream, gd::vector<T>& i_value) {
     unsigned int l_size = i_value.size();
     o_stream->write(reinterpret_cast<char*>(&l_size), 4);
     geode::log::info("VECTOR SIZE CustomWrite SIZE out: {}", l_size);
@@ -35,88 +35,88 @@ inline void writeGenericVector(OutputStream* o_stream, std::vector<T>& i_value) 
 }
 
 template <>
-void OutputStream::operator<<<DynamicSaveObject>(std::vector<DynamicSaveObject>& i_value) {
+void OutputStream::operator<<<DynamicSaveObject>(gd::vector<DynamicSaveObject>& i_value) {
     writeGenericVector<DynamicSaveObject, PPDynamicSaveObject>(this, i_value);
 }
 
 template <>
-void OutputStream::operator<<<ActiveSaveObject1>(std::vector<ActiveSaveObject1>& i_value) {
+void OutputStream::operator<<<ActiveSaveObject1>(gd::vector<ActiveSaveObject1>& i_value) {
     writeGenericVector<ActiveSaveObject1, PPActiveSaveObject1>(this, i_value);
 }
 
 template <>
-void OutputStream::operator<<<ActiveSaveObject2>(std::vector<ActiveSaveObject2>& i_value) {
+void OutputStream::operator<<<ActiveSaveObject2>(gd::vector<ActiveSaveObject2>& i_value) {
     writeGenericVector<ActiveSaveObject2, PPActiveSaveObject2>(this, i_value);
 }
 
 template <>
-void OutputStream::operator<<<CountTriggerAction>(std::vector<CountTriggerAction>& i_value) {
+void OutputStream::operator<<<CountTriggerAction>(gd::vector<CountTriggerAction>& i_value) {
     geode::log::info("1111111111111111111 VECTOR CustomWrite CountTriggerAction");
     writeGenericVector<CountTriggerAction, PPCountTriggerAction>(this, i_value);
 }
 
 template <>
-void OutputStream::operator<<<TouchToggleAction>(std::vector<TouchToggleAction>& i_value) {
+void OutputStream::operator<<<TouchToggleAction>(gd::vector<TouchToggleAction>& i_value) {
     geode::log::info("22222222222222222222 VECTOR CustomWrite TouchToggleAction");
     writeGenericVector<TouchToggleAction, PPTouchToggleAction>(this, i_value);
 }
 
 template <>
-void OutputStream::operator<<<CollisionTriggerAction>(std::vector<CollisionTriggerAction>& i_value) {
+void OutputStream::operator<<<CollisionTriggerAction>(gd::vector<CollisionTriggerAction>& i_value) {
     geode::log::info("33333333333333333333 VECTOR CustomWrite CollisionTriggerAction");
     writeGenericVector<CollisionTriggerAction, PPCollisionTriggerAction>(this, i_value);
 }
 
 template <>
-void OutputStream::operator<<<ToggleTriggerAction>(std::vector<ToggleTriggerAction>& i_value) {
+void OutputStream::operator<<<ToggleTriggerAction>(gd::vector<ToggleTriggerAction>& i_value) {
     geode::log::info("4444444444444444444 VECTOR CustomWrite ToggleTriggerAction");
     writeGenericVector<ToggleTriggerAction, PPToggleTriggerAction>(this, i_value);
 }
 
 template <>
-void OutputStream::operator<<<SpawnTriggerAction>(std::vector<SpawnTriggerAction>& i_value) {
+void OutputStream::operator<<<SpawnTriggerAction>(gd::vector<SpawnTriggerAction>& i_value) {
     geode::log::info("55555555555555555555 VECTOR CustomWrite SpawnTriggerAction");
     writeGenericVector<SpawnTriggerAction, PPSpawnTriggerAction>(this, i_value);
 }
 
 template <>
-void OutputStream::operator<<<GroupCommandObject2>(std::vector<GroupCommandObject2>& i_value) {
+void OutputStream::operator<<<GroupCommandObject2>(gd::vector<GroupCommandObject2>& i_value) {
     geode::log::info("666666666666666666666 VECTOR CustomWrite GroupCommandObject2");
     writeGenericVector<GroupCommandObject2, PPGroupCommandObject2>(this, i_value);
 }
 
 template <>
-void OutputStream::operator<<<KeyframeObject>(std::vector<KeyframeObject>& i_value) {
+void OutputStream::operator<<<KeyframeObject>(gd::vector<KeyframeObject>& i_value) {
     geode::log::info("777777777777777777 VECTOR CustomWrite KeyframeObject");
     writeGenericVector<KeyframeObject, PPKeyframeObject>(this, i_value);
 }
 
 template <>
-void OutputStream::operator<<<TimerTriggerAction>(std::vector<TimerTriggerAction>& i_value) {
+void OutputStream::operator<<<TimerTriggerAction>(gd::vector<TimerTriggerAction>& i_value) {
     geode::log::info("8888888888888888888 VECTOR CustomWrite TimerTriggerAction");
     writeGenericVector<TimerTriggerAction, PPTimerTriggerAction>(this, i_value);
 }
 
 template <>
-void OutputStream::operator<<<EventTriggerInstance>(std::vector<EventTriggerInstance>& i_value) {
+void OutputStream::operator<<<EventTriggerInstance>(gd::vector<EventTriggerInstance>& i_value) {
     geode::log::info("00000000000 VECTOR CustomWrite EventTriggerInstance");
     writeGenericVector<EventTriggerInstance, PPEventTriggerInstance>(this, i_value);
 }
 
 template <>
-void OutputStream::operator<<<EnterEffectInstance>(std::vector<EnterEffectInstance>& i_value) {
+void OutputStream::operator<<<EnterEffectInstance>(gd::vector<EnterEffectInstance>& i_value) {
     geode::log::info("00232353000064545@@@@00003 VECTOR CustomWrite EnterEffectInstance");
     writeGenericVector<EnterEffectInstance, PPEnterEffectInstance>(this, i_value);
 }
 
 template <>
-void OutputStream::operator<<<AdvancedFollowInstance>(std::vector<AdvancedFollowInstance>& i_value) {
+void OutputStream::operator<<<AdvancedFollowInstance>(gd::vector<AdvancedFollowInstance>& i_value) {
     geode::log::info("UWUWUWUWUWUWUWUUWUWUWUWW VECTOR CustomWrite AdvancedFollowInstance");
     writeGenericVector<AdvancedFollowInstance, PPAdvancedFollowInstance>(this, i_value);
 }
 
 template <>
-void OutputStream::operator<<<CAState>(std::vector<CAState>& i_value) {
+void OutputStream::operator<<<CAState>(gd::vector<CAState>& i_value) {
     geode::log::info("OWOWOWOWOOWOWOW VECTOR CustomWrite CAState");
     writeGenericVector<CAState, PPCAState>(this, i_value);
 }

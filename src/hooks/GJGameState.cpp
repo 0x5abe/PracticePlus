@@ -948,7 +948,7 @@ void PPGJGameState::describe() {
         i++;
     }
     i = 0;
-    for (std::pair<std::pair<GJGameEvent,int>, std::vector<EventTriggerInstance>> l_pair : m_unkMapPairGJGameEventIntVectorEventTriggerInstance) {
+    for (std::pair<std::pair<GJGameEvent,int>, gd::vector<EventTriggerInstance>> l_pair : m_unkMapPairGJGameEventIntVectorEventTriggerInstance) {
         log::info("[PPGJGameState - describe] m_unkMapPairGJGameEventIntVectorEventTriggerInstance element {} key.key: {}", i, *reinterpret_cast<int*>(&l_pair.first.first));
         log::info("[PPGJGameState - describe] m_unkMapPairGJGameEventIntVectorEventTriggerInstance element {} key.value: {}", i, l_pair.first.second);
         log::info("[PPGJGameState - describe] m_unkMapPairGJGameEventIntVectorEventTriggerInstance element {} value:", i);
@@ -968,7 +968,7 @@ void PPGJGameState::describe() {
         i++;
     }
     i = 0;
-    for (std::pair<int, std::vector<EnterEffectInstance>> l_pair : m_unorderedMapEnterEffectInstanceVectors1) {
+    for (std::pair<int, gd::vector<EnterEffectInstance>> l_pair : m_unorderedMapEnterEffectInstanceVectors1) {
         log::info("[PPGJGameState - describe] m_unorderedMapEnterEffectInstanceVectors1 element {} key.key: {}", i, l_pair.first);
         log::info("[PPGJGameState - describe] m_unorderedMapEnterEffectInstanceVectors1 element {} value:", i);
         l_size = l_pair.second.size();
@@ -980,7 +980,7 @@ void PPGJGameState::describe() {
         i++;
     }
     i = 0;
-    for (std::pair<int, std::vector<EnterEffectInstance>> l_pair : m_unorderedMapEnterEffectInstanceVectors2) {
+    for (std::pair<int, gd::vector<EnterEffectInstance>> l_pair : m_unorderedMapEnterEffectInstanceVectors2) {
         log::info("[PPGJGameState - describe] m_unorderedMapEnterEffectInstanceVectors2 element {} key.key: {}", i, l_pair.first);
         log::info("[PPGJGameState - describe] m_unorderedMapEnterEffectInstanceVectors2 element {} value:", i);
         l_size = l_pair.second.size();
@@ -1056,7 +1056,7 @@ void PPGJGameState::describe() {
     log::info("[PPGJGameState - describe] m_unkBool28: {}", m_unkBool28);
     log::info("[PPGJGameState - describe] m_unkUint17: {}", m_unkUint17);
     i = 0;
-    for (std::pair<int, std::vector<int>> l_pair : unkUMap8) {
+    for (std::pair<int, gd::vector<int>> l_pair : unkUMap8) {
         log::info("[PPGJGameState - describe] unkUMap8 element {} key.key: {}", i, l_pair.first);
         log::info("[PPGJGameState - describe] unkUMap8 element {} value:", i);
         l_size = l_pair.second.size();
@@ -1080,7 +1080,7 @@ void PPGJGameState::describe() {
         i++;
     }
     i = 0;
-    for (std::pair<int, std::vector<SongTriggerState>> l_pair : m_songTriggerStateVectors) {
+    for (std::pair<int, gd::vector<SongTriggerState>> l_pair : m_songTriggerStateVectors) {
         log::info("[PPGJGameState - describe] m_songTriggerStateVectors element {} key.key: {}", i, l_pair.first);
         log::info("[PPGJGameState - describe] m_songTriggerStateVectors element {} value:", i);
         l_size = l_pair.second.size();

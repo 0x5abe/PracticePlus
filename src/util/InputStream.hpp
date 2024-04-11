@@ -37,8 +37,8 @@ public:
     //vector
 
     template <class T>
-    void operator>>(std::vector<T>& o_value) {
-        o_value = std::vector<T>();
+    void operator>>(gd::vector<T>& o_value) {
+        o_value = gd::vector<T>();
         unsigned int l_size;
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("VECTOR SIZE in: {}", l_size);
@@ -51,8 +51,8 @@ public:
     }
     
     template <>
-    void operator>><float>(std::vector<float>& o_value) {
-        o_value = std::vector<float>();
+    void operator>><float>(gd::vector<float>& o_value) {
+        o_value = gd::vector<float>();
         unsigned int l_size;
         m_stream->read(reinterpret_cast<char*>(&l_size), 4);
         geode::log::info("VECTOR SIZE in: {}", l_size);
@@ -67,49 +67,49 @@ public:
     }
 
     template <>
-    void operator>><DynamicSaveObject>(std::vector<DynamicSaveObject>& o_value);
+    void operator>><DynamicSaveObject>(gd::vector<DynamicSaveObject>& o_value);
 
     template <>
-    void operator>><ActiveSaveObject1>(std::vector<ActiveSaveObject1>& o_value);
+    void operator>><ActiveSaveObject1>(gd::vector<ActiveSaveObject1>& o_value);
 
     template <>
-    void operator>><ActiveSaveObject2>(std::vector<ActiveSaveObject2>& o_value);
+    void operator>><ActiveSaveObject2>(gd::vector<ActiveSaveObject2>& o_value);
 
     template <>
-    void operator>><CountTriggerAction>(std::vector<CountTriggerAction>& o_value);
+    void operator>><CountTriggerAction>(gd::vector<CountTriggerAction>& o_value);
 
     template <>
-    void operator>><TouchToggleAction>(std::vector<TouchToggleAction>& o_value);
+    void operator>><TouchToggleAction>(gd::vector<TouchToggleAction>& o_value);
 
     template <>
-    void operator>><CollisionTriggerAction>(std::vector<CollisionTriggerAction>& o_value);
+    void operator>><CollisionTriggerAction>(gd::vector<CollisionTriggerAction>& o_value);
 
     template <>
-    void operator>><ToggleTriggerAction>(std::vector<ToggleTriggerAction>& o_value);
+    void operator>><ToggleTriggerAction>(gd::vector<ToggleTriggerAction>& o_value);
 
     template <>
-    void operator>><SpawnTriggerAction>(std::vector<SpawnTriggerAction>& o_value);
+    void operator>><SpawnTriggerAction>(gd::vector<SpawnTriggerAction>& o_value);
 
     template <>
-    void operator>><GroupCommandObject2>(std::vector<GroupCommandObject2>& o_value);
+    void operator>><GroupCommandObject2>(gd::vector<GroupCommandObject2>& o_value);
 
     template <>
-    void operator>><KeyframeObject>(std::vector<KeyframeObject>& o_value);
+    void operator>><KeyframeObject>(gd::vector<KeyframeObject>& o_value);
 
     template <>
-    void operator>><TimerTriggerAction>(std::vector<TimerTriggerAction>& o_value);
+    void operator>><TimerTriggerAction>(gd::vector<TimerTriggerAction>& o_value);
 
     template <>
-    void operator>><EventTriggerInstance>(std::vector<EventTriggerInstance>& o_value);
+    void operator>><EventTriggerInstance>(gd::vector<EventTriggerInstance>& o_value);
 
     template <>
-    void operator>><EnterEffectInstance>(std::vector<EnterEffectInstance>& o_value);
+    void operator>><EnterEffectInstance>(gd::vector<EnterEffectInstance>& o_value);
 
     template <>
-    void operator>><AdvancedFollowInstance>(std::vector<AdvancedFollowInstance>& o_value);
+    void operator>><AdvancedFollowInstance>(gd::vector<AdvancedFollowInstance>& o_value);
 
     template <>
-    void operator>><CAState>(std::vector<CAState>& o_value);
+    void operator>><CAState>(gd::vector<CAState>& o_value);
 
     //unordered_map
 
