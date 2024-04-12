@@ -38,7 +38,6 @@ inline void operator<<(OutputStream& o_stream, PPAdvancedFollowInstance& i_value
     SEPARATOR_O
 }
 
-
 #ifdef PP_DEBUG
 void PPAdvancedFollowInstance::describe() {
     log::info("[PPAdvancedFollowInstance - describe] pad_1: [{}]", hexStr(pad_1, 24));

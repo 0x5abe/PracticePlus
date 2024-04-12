@@ -27,7 +27,6 @@ inline void operator<<(OutputStream& o_stream, PPTouchToggleAction& i_value) {
     VEC_SEPARATOR_O
 }
 
-
 #ifdef PP_DEBUG
 void PPTouchToggleAction::describe() {
     log::info("[PPTouchToggleAction - describe] pad_1: [{}]", hexStr(pad_1, 32));

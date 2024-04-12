@@ -75,7 +75,6 @@ inline void operator<<(OutputStream& o_stream, PPKeyframeObject& i_value) {
     SEPARATOR_O
 }
 
-
 #ifdef PP_DEBUG
 void PPKeyframeObject::describe() {
     log::info("[PPKeyframeObject - describe] pad_1: [{}]", hexStr(pad_1, 32));

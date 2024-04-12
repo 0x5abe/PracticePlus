@@ -2,7 +2,8 @@
 #include "Geode/binding/CheckpointObject.hpp"
 #include "Geode/binding/EnhancedGameObject.hpp"
 // todo remove unused
-#include "util/InputStream.hpp"
+#include <util/InputStream.hpp>
+#include <util/OutputStream.hpp>
 #include <managers/StartpointManager.hpp>
 #include <geode.custom-keybinds/include/Keybinds.hpp>
 
@@ -210,7 +211,7 @@ void PPPlayLayer::setupKeybinds() {
     addEventListener<keybinds::InvokeBindFilter>(
         [this](keybinds::InvokeBindEvent* event) {
             if (event->isDown() && isPlusMode()) {
-                InputStream l_ifstream = InputStream("./testPlayerCheckpoint.bin");
+                InputStream l_ifstream = InputStream("./testPlayerCheckpoint.spf");
                 StartpointManager::get().loadStartpointsFromStream(l_ifstream);
             }
             return ListenerResult::Propagate;
@@ -220,7 +221,7 @@ void PPPlayLayer::setupKeybinds() {
     addEventListener<keybinds::InvokeBindFilter>(
         [this](keybinds::InvokeBindEvent* event) {
             if (event->isDown() && isPlusMode()) {
-                OutputStream l_ofstream = OutputStream("./testPlayerCheckpoint.bin");
+                OutputStream l_ofstream = OutputStream("./testPlayerCheckpoint.spf");
                 StartpointManager::get().saveStartpointsToStream(l_ofstream);
             }
             return ListenerResult::Propagate;

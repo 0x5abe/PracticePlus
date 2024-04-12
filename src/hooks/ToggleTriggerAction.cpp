@@ -27,7 +27,6 @@ inline void operator<<(OutputStream& o_stream, PPToggleTriggerAction& i_value) {
     VEC_SEPARATOR_O
 }
 
-
 #ifdef PP_DEBUG
 void PPToggleTriggerAction::describe() {
     log::info("[PPToggleTriggerAction - describe] pad_1: [{}]", hexStr(pad_1, 20));

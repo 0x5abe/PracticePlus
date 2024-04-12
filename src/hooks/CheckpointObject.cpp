@@ -107,7 +107,7 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	i_stream >> o_value.m_vectorDynamicSaveObjects;
 	VEC_SEPARATOR_I
 
-	i_stream >> o_value.m_vectorActiveSaveObjects1;
+    i_stream >> o_value.m_vectorActiveSaveObjects1;
 	VEC_SEPARATOR_I
 
 	i_stream >> o_value.m_vectorActiveSaveObjects2;

@@ -99,9 +99,7 @@ void PPActiveSaveObject1::describe() {
     log::info("[PPActiveSaveObject1 - describe] m_unkBool1: {}", m_unkBool1);
     log::info("[PPActiveSaveObject1 - describe] m_unkBool2: {}", m_unkBool2);
 }
-#endif
 
-#ifdef PP_DEBUG
 void PPActiveSaveObject2::describe() {
     int l_objectIndex = -1;
     if (!m_gameObject) {

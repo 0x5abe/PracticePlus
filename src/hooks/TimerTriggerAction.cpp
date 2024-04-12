@@ -26,7 +26,6 @@ inline void operator<<(OutputStream& o_stream, PPTimerTriggerAction& i_value) {
     VEC_SEPARATOR_O
 }
 
-
 #ifdef PP_DEBUG
 void PPTimerTriggerAction::describe() {
     log::info("[PPTimerTriggerAction - describe] pad_1: [{}]", hexStr(pad_1, 32));

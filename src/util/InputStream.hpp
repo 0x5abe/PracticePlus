@@ -221,7 +221,6 @@ public:
             *this >> o_value[l_key];
         }
     }
-
     
     //set
 

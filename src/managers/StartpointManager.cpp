@@ -18,40 +18,30 @@ void StartpointManager::reset() {
 }
 
 CheckpointObject* StartpointManager::createStartpoint(CheckpointObject* i_startpoint, CCPoint i_startPosition) {
-	GameObject* l_newPhysicalCPO = GameObject::createWithFrame("square_01_001.png");
-	CC_SAFE_RETAIN(l_newPhysicalCPO);
+    GameObject* l_newPhysicalCPO = GameObject::createWithFrame("square_01_001.png");
+    CC_SAFE_RETAIN(l_newPhysicalCPO);
     l_newPhysicalCPO->m_objectID = 0x2c;
     l_newPhysicalCPO->m_objectType = GameObjectType::Decoration;
     l_newPhysicalCPO->m_glowSprite = nullptr;
     int* l_unkField1 = reinterpret_cast<int*>(reinterpret_cast<unsigned int>(l_newPhysicalCPO)+0x3d4);
     *l_unkField1 = 3;
 
-	CC_SAFE_RELEASE(i_startpoint->m_physicalCheckpointObject);
+    CC_SAFE_RELEASE(i_startpoint->m_physicalCheckpointObject);
     i_startpoint->m_physicalCheckpointObject = l_newPhysicalCPO;
 	
-	i_startpoint->m_physicalCheckpointObject->setStartPos(i_startPosition);
+    i_startpoint->m_physicalCheckpointObject->setStartPos(i_startPosition);
     log::info("sizeof CCDictionary {}", sizeof(cocos2d::CCDictionary));
     log::info("sizeof CCDictElement {}", sizeof(cocos2d::CCDictElement));
     log::info("sizeof CAState {}", sizeof(CAState));
     log::info("sizeof EffectManagerState {}", sizeof(EffectManagerState));
     log::info("sizeof GJGameState {}", sizeof(GJGameState));
-    //TODO: remove
-    //if (m_startpoints->count() > 0) {
-    //    InputStream l_ifstream = InputStream("./testPlayerCheckpoint.bin");
-    //   static_cast<PPPlayerCheckpoint*>(i_startpoint->m_player1Checkpoint)->load(l_ifstream);
-    //}
-    //EndTODO: remove
 
     m_startpoints->addObject(i_startpoint);
 
-	return i_startpoint;
+    return i_startpoint;
 }
 
 void StartpointManager::removeStartpoint(int i_index) {
-    //TODO: remove
-    //OutputStream l_ofstream = OutputStream("./testPlayerCheckpoint.bin");
-    //saveStartpointsToStream(l_ofstream);
-    //EndTODO: remove
     if (i_index == -1) {
         m_startpoints->removeLastObject(true);
     } else {
