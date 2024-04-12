@@ -6,14 +6,14 @@
 
 class $modify(PPToggleTriggerAction, ToggleTriggerAction) {
 protected:
-    friend void operator>>(InputStream& i_stream, PPToggleTriggerAction& o_value);
-    friend void operator<<(OutputStream& o_stream, PPToggleTriggerAction& i_value);
+	friend void operator>>(InputStream& i_stream, PPToggleTriggerAction& o_value);
+	friend void operator<<(OutputStream& o_stream, PPToggleTriggerAction& i_value);
 
 public:
-    void load(InputStream& i_stream);
-    void save(OutputStream& o_stream);
+	void load(InputStream& i_stream);
+	void save(OutputStream& o_stream);
 
 #ifdef PP_DEBUG
-    void describe();
+	void describe();
 #endif
 };
