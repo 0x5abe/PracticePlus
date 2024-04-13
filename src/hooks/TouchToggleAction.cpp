@@ -14,14 +14,14 @@ void PPTouchToggleAction::save(OutputStream& o_stream) {
 }
 
 inline void operator>>(InputStream& i_stream, PPTouchToggleAction& o_value) {
-	i_stream.read(reinterpret_cast<char*>(o_value.pad_1), 32);
+	i_stream.read(reinterpret_cast<char*>(&o_value), 32);
 	VEC_SEPARATOR_I
 	i_stream >> o_value.m_unkVecInt;
 	VEC_SEPARATOR_I
 }
 
 inline void operator<<(OutputStream& o_stream, PPTouchToggleAction& i_value) {
-	o_stream.write(reinterpret_cast<char*>(i_value.pad_1), 32);
+	o_stream.write(reinterpret_cast<char*>(&i_value), 32);
 	VEC_SEPARATOR_O
 	o_stream << i_value.m_unkVecInt;
 	VEC_SEPARATOR_O
@@ -29,7 +29,7 @@ inline void operator<<(OutputStream& o_stream, PPTouchToggleAction& i_value) {
 
 #ifdef PP_DEBUG
 void PPTouchToggleAction::describe() {
-	log::info("[PPTouchToggleAction - describe] pad_1: [{}]", hexStr(pad_1, 32));
+	log::info("[PPTouchToggleAction - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this), 32));
 	int l_size = m_unkVecInt.size();
 	log::info("[PPTouchToggleAction - describe] m_unkVecInt.size(): {}", l_size);
 	for (int i = 0; i < l_size; i++) {

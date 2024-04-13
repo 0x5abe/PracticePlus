@@ -13,7 +13,7 @@ void PPToggleTriggerAction::save(OutputStream& o_stream) {
 }
 
 inline void operator>>(InputStream& i_stream, PPToggleTriggerAction& o_value) {
-	i_stream.read(reinterpret_cast<char*>(o_value.pad_1), 20);
+	i_stream.read(reinterpret_cast<char*>(&o_value), 20);
 	VEC_SEPARATOR_I
 	int l_size = o_value.m_unkVecInt.size();
 	i_stream >> o_value.m_unkVecInt;
@@ -21,7 +21,7 @@ inline void operator>>(InputStream& i_stream, PPToggleTriggerAction& o_value) {
 }
 
 inline void operator<<(OutputStream& o_stream, PPToggleTriggerAction& i_value) {
-	o_stream.write(reinterpret_cast<char*>(i_value.pad_1), 20);
+	o_stream.write(reinterpret_cast<char*>(&i_value), 20);
 	VEC_SEPARATOR_O
 	o_stream << i_value.m_unkVecInt;
 	VEC_SEPARATOR_O
@@ -29,7 +29,7 @@ inline void operator<<(OutputStream& o_stream, PPToggleTriggerAction& i_value) {
 
 #ifdef PP_DEBUG
 void PPToggleTriggerAction::describe() {
-	log::info("[PPToggleTriggerAction - describe] pad_1: [{}]", hexStr(pad_1, 20));
+	log::info("[PPToggleTriggerAction - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this), 20));
 	int l_size = m_unkVecInt.size();
 	log::info("[PPToggleTriggerAction - describe] m_unkVecInt.size(): {}", l_size);
 	for (int i = 0; i < l_size; i++) {

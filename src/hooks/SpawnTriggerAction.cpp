@@ -15,7 +15,7 @@ void PPSpawnTriggerAction::save(OutputStream& o_stream) {
 }
 
 inline void operator>>(InputStream& i_stream, PPSpawnTriggerAction& o_value) {
-	i_stream.read(reinterpret_cast<char*>(o_value.pad_1), 40);
+	i_stream.read(reinterpret_cast<char*>(&o_value), 40);
 	SEPARATOR_I
 	int l_objectIndex;
 	i_stream >> l_objectIndex;
@@ -32,7 +32,7 @@ inline void operator>>(InputStream& i_stream, PPSpawnTriggerAction& o_value) {
 }
 
 inline void operator<<(OutputStream& o_stream, PPSpawnTriggerAction& i_value) {
-	o_stream.write(reinterpret_cast<char*>(i_value.pad_1), 40);
+	o_stream.write(reinterpret_cast<char*>(&i_value), 40);
 	SEPARATOR_O
 	int l_objectIndex = -1;
 	if (i_value.m_gameObject) {
@@ -47,7 +47,7 @@ inline void operator<<(OutputStream& o_stream, PPSpawnTriggerAction& i_value) {
 
 #ifdef PP_DEBUG
 void PPSpawnTriggerAction::describe() {
-	log::info("[PPSpawnTriggerAction - describe] pad_1: [{}]", hexStr(pad_1, 40));
+	log::info("[PPSpawnTriggerAction - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this), 40));
 	int l_objectIndex = -1;
 	if (m_gameObject) {
 		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());

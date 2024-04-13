@@ -20,7 +20,7 @@ inline void operator>>(InputStream& i_stream, PPGJShaderState& o_value) {
 	UMAP_SEPARATOR_I
 	i_stream >> o_value.m_someIntToDoubleMap;
 	UMAP_SEPARATOR_I
-	i_stream.read(reinterpret_cast<char*>(o_value.pad_1), 584);
+	i_stream.read(reinterpret_cast<char*>(&o_value) + offsetof(PPGJShaderState,m_someIntToDoubleMap) + sizeof(gd::unordered_map<int, double>), 584);
 	SEPARATOR_I
 }
 
@@ -30,7 +30,7 @@ inline void operator<<(OutputStream& o_stream, PPGJShaderState& i_value) {
 	UMAP_SEPARATOR_O
 	o_stream << i_value.m_someIntToDoubleMap;
 	UMAP_SEPARATOR_O
-	o_stream.write(reinterpret_cast<char*>(i_value.pad_1), 584);
+	o_stream.write(reinterpret_cast<char*>(&i_value) + offsetof(PPGJShaderState,m_someIntToDoubleMap) + sizeof(gd::unordered_map<int, double>), 584);
 	SEPARATOR_O
 }
 
@@ -51,6 +51,6 @@ void PPGJShaderState::describe() {
 		log::info("[PPGJShaderState - describe] m_someIntToDoubleMap element {} value: [{}]", i, l_pair.second);
 		i++;
 	}
-	log::info("[PPGJShaderState - describe] pad_1: [{}]", hexStr(pad_1, 584));
+	log::info("[PPGJShaderState - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPGJShaderState,m_someIntToDoubleMap) + sizeof(gd::unordered_map<int, double>), 584));
 }
 #endif

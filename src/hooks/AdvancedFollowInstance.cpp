@@ -1,5 +1,7 @@
 #include "AdvancedFollowInstance.hpp"
 #include "Geode/binding/PlayLayer.hpp"
+#include <cstddef>
+#include <cstdint>
 #include <hooks/cocos2d/CCNode.hpp>
 #include <util/debug.hpp>
 #include <hooks/PlayLayer.hpp>
@@ -24,7 +26,7 @@ inline void operator>>(InputStream& i_stream, PPAdvancedFollowInstance& o_value)
 		o_value.m_gameObject = nullptr;
 	}
 	SEPARATOR_I
-	i_stream.read(reinterpret_cast<char*>(o_value.pad_1), 24);
+	i_stream.read(reinterpret_cast<char*>(&o_value) + offsetof(PPAdvancedFollowInstance,m_gameObject) + sizeof(GameObject*), 24);
 	SEPARATOR_I
 }
 
@@ -36,13 +38,13 @@ inline void operator<<(OutputStream& o_stream, PPAdvancedFollowInstance& i_value
 	}
 	o_stream << l_objectIndex;
 	SEPARATOR_O
-	o_stream.write(reinterpret_cast<char*>(i_value.pad_1), 24);
+	o_stream.write(reinterpret_cast<char*>(&i_value) + offsetof(PPAdvancedFollowInstance,m_gameObject) + sizeof(GameObject*), 24);
 	SEPARATOR_O
 }
 
 #ifdef PP_DEBUG
 void PPAdvancedFollowInstance::describe() {
-	log::info("[PPAdvancedFollowInstance - describe] pad_1: [{}]", hexStr(pad_1, 24));
+	log::info("[PPAdvancedFollowInstance - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPAdvancedFollowInstance,m_gameObject) + sizeof(GameObject*), 24));
 	int l_objectIndex = -1;
 	if (m_gameObject) {
 		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());

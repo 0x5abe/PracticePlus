@@ -16,7 +16,7 @@ inline void operator>>(InputStream& i_stream, PPFMODQueuedMusic& o_value) {
 	STR_SEPARATOR_I
 	i_stream >> o_value.m_unkString;
 	STR_SEPARATOR_I
-	i_stream.read(reinterpret_cast<char*>(o_value.pad_1), 56);
+	i_stream.read(reinterpret_cast<char*>(&o_value) + offsetof(PPFMODQueuedMusic,m_unkString) + sizeof(gd::string), 56);
 	SEPARATOR_I
 }
 
@@ -24,13 +24,13 @@ inline void operator<<(OutputStream& o_stream, PPFMODQueuedMusic& i_value) {
 	STR_SEPARATOR_O
 	o_stream << i_value.m_unkString;
 	STR_SEPARATOR_O
-	o_stream.write(reinterpret_cast<char*>(i_value.pad_1), 56);
+	o_stream.write(reinterpret_cast<char*>(&i_value) + offsetof(PPFMODQueuedMusic,m_unkString) + sizeof(gd::string), 56);
 	SEPARATOR_O
 }
 
 #ifdef PP_DEBUG
 void PPFMODQueuedMusic::describe() {
 	log::info("[PPFMODQueuedMusic - describe] m_unkString: {}", m_unkString);
-	log::info("[PPFMODQueuedMusic - describe] pad_1: [{}]", hexStr(pad_1, 56));
+	log::info("[PPFMODQueuedMusic - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPFMODQueuedMusic,m_unkString) + sizeof(gd::string), 56));
 }
 #endif
