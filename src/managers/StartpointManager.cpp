@@ -2,6 +2,7 @@
 #include "StartpointManager.hpp"
 #include "Geode/Enums.hpp"
 #include "Geode/binding/CheckpointObject.hpp"
+#include "Geode/binding/CountTriggerAction.hpp"
 #include "Geode/binding/GJGameState.hpp"
 #include <util/math.hpp>
 #include <util/debug.hpp>
@@ -43,6 +44,10 @@ CheckpointObject* StartpointManager::createStartpoint(CheckpointObject* i_startp
 
 void StartpointManager::removeStartpoint(int i_index) {
 	if (i_index == -1) {
+		PPCheckpointObject* l_startpoint = static_cast<PPCheckpointObject*>(m_startpoints->lastObject());
+		/* Since we are allocating the memory for the startpoints vectors we can't let the game free them (it does it differently)
+		   so we do it ourselves */
+		l_startpoint->clean();
 		m_startpoints->removeLastObject(true);
 	} else {
 		m_startpoints->removeObjectAtIndex(i_index, true);
@@ -119,13 +124,13 @@ void StartpointManager::updatePlusModeVisibility() {
 	for (int i = 0; i < m_startpoints->count(); i++) {
 		l_startpoint = getStartpoint(i);
 		if (l_startpoint) {
-			l_startpoint->m_physicalCheckpointObject->setVisible(m_isPlusMode);
+			l_startpoint->m_physicalCheckpointObject->setVisible(isPlusMode());
 		}
 	}
 }
 
 void StartpointManager::updatePlusModeLogic() {
-	if (!m_isPlusMode) {
+	if (!isPlusMode()) {
 		setActiveStartpointId(-1);
 	}
 }
@@ -141,6 +146,13 @@ void StartpointManager::saveStartpointsToStream(OutputStream& o_stream) {
 		log::info("Saving Startpoints to stream");
 		static_cast<PPCCArray*>(l_intermediate)->save<PPCheckpointObject>(o_stream);
 		log::info("Saved Startpoints to stream");
+	}
+}
+
+void StartpointManager::clean() {
+	for (int i = 0; i < m_startpoints->count(); i++) {
+		PPCheckpointObject* l_startpoint = static_cast<PPCheckpointObject*>(m_startpoints->objectAtIndex(i));
+		l_startpoint->clean();
 	}
 }
 

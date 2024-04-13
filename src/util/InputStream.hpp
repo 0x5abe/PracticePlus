@@ -32,13 +32,12 @@ public:
 	void read(char* o_value, int i_size) { m_stream->read(o_value, i_size); }
 	void ignore(int i_size) { m_stream->ignore(i_size); }
 
-	//custom operators
+	// custom operators
 
-	//vector
+	// vector
 
 	template <class T>
 	void operator>>(gd::vector<T>& o_value) {
-		o_value = gd::vector<T>();
 		unsigned int l_size;
 		m_stream->read(reinterpret_cast<char*>(&l_size), 4);
 		geode::log::info("VECTOR SIZE in: {}", l_size);
@@ -52,7 +51,6 @@ public:
 	
 	template <>
 	void operator>><float>(gd::vector<float>& o_value) {
-		o_value = gd::vector<float>();
 		unsigned int l_size;
 		m_stream->read(reinterpret_cast<char*>(&l_size), 4);
 		geode::log::info("VECTOR SIZE in: {}", l_size);
@@ -111,7 +109,7 @@ public:
 	template <>
 	void operator>><CAState>(gd::vector<CAState>& o_value);
 
-	//unordered_map
+	// unordered_map
 
 	template <class K, class V>
 	void operator>>(gd::unordered_map<K,V>& o_value) {
@@ -164,7 +162,7 @@ public:
 	template <>
 	void operator>><int, EnhancedGameObject*>(gd::unordered_map<int, EnhancedGameObject*>& o_value);
 
-	//unordered_set
+	// unordered_set
 
 	template <class K>
 	void operator>>(gd::unordered_set<K>& o_value) {
@@ -183,7 +181,7 @@ public:
 		}
 	}
 
-	//map
+	// map
 
 	template <class K, class V>
 	void operator>>(gd::map<K,V>& o_value) {
@@ -222,7 +220,7 @@ public:
 		}
 	}
 	
-	//set
+	// set
 
 	template <class K>
 	void operator>>(gd::set<K>& o_value) {
@@ -241,7 +239,7 @@ public:
 		}
 	}
 
-	//gd::string
+	// gd::string
 
 	void operator>>(gd::string& o_value) {
 		if (o_value.size() != 0) {

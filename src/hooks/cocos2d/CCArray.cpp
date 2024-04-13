@@ -2,6 +2,8 @@
 #include "Geode/binding/CheckpointObject.hpp"
 #include "Geode/binding/GradientTriggerObject.hpp"
 #include "Geode/binding/PlayLayer.hpp"
+#include "Geode/cocos/cocoa/CCArray.h"
+#include "managers/StartpointManager.hpp"
 #include <hooks/PlayLayer.hpp>
 #include <hooks/cocos2d/CCObject.hpp>
 #include <hooks/CheckpointObject.hpp>
@@ -34,6 +36,14 @@ CCObject* PPCCArray::lastObject() {
 		}
 	}
 	return l_lastObject;
+}
+
+void PPCCArray::removeAllObjects() {
+	StartpointManager& l_startpointManager = StartpointManager::get();
+	if (this == l_startpointManager.m_startpoints) {
+		l_startpointManager.clean();
+	}
+	CCArray::removeAllObjects();
 }
 
 template <class T>
@@ -88,7 +98,8 @@ void PPCCArray::save<GradientTriggerObject>(OutputStream& o_stream) {
 		if (!objectAtIndex(i)) {
 			log::info(" no game object?? @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		} else {
-			l_objectIndex = static_cast<GameObject*>(objectAtIndex(i))->m_uniqueID-12;
+			PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
+			if (l_playLayer) l_objectIndex = static_cast<GameObject*>(objectAtIndex(i))->m_uniqueID-(l_playLayer->getUniqueIdBase());
 			geode::log::info("CCARRAY GradientTriggerObject ObjectIndex out: {}", l_objectIndex);
 		}
 		o_stream << l_objectIndex;
@@ -145,7 +156,9 @@ void PPCCArray::describe<GradientTriggerObject>() {
 	int l_size = this->count();
 	log::info("[PPCCArray GradientTriggerObject - describe] count(): {}", l_size);
 	for (int i = 0; i < l_size; i++) {
-		int l_objectIndex = static_cast<GameObject*>(objectAtIndex(i))->m_uniqueID-12;
+		int l_objectIndex = -1;
+		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
+		if (l_playLayer) l_objectIndex = static_cast<GameObject*>(objectAtIndex(i))->m_uniqueID-(l_playLayer->getUniqueIdBase());
 		log::info("[PPCCArray GradientTriggerObject - describe] l_objectIndex[{}]: {}", i, l_objectIndex);
 	}
 }

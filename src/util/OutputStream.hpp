@@ -32,9 +32,9 @@ public:
 
 	void write(char* i_value, int i_size) { m_stream->write(i_value, i_size); }
 
-	//custom operators
+	// custom operators
 
-	//vector
+	// vector
 
 	template <class T>
 	void operator<<(gd::vector<T>& i_value) {
@@ -89,7 +89,7 @@ public:
 	template <>
 	void operator<<<CAState>(gd::vector<CAState>& i_value);
 
-	//unordered_map
+	// unordered_map
 
 	template <class K, class V>
 	void operator<<(gd::unordered_map<K,V>& i_value) {
@@ -128,7 +128,7 @@ public:
 	template <>
 	void operator<<<int, EnhancedGameObject*>(gd::unordered_map<int, EnhancedGameObject*>& i_value);
 
-	//unordered_set
+	// unordered_set
 
 	template <class K>
 	void operator<<(gd::unordered_set<K>& i_value) {
@@ -140,7 +140,7 @@ public:
 		}
 	}
 
-	//map
+	// map
 
 	template <class K, class V>
 	void operator<<(gd::map<K,V>& i_value) {
@@ -164,7 +164,7 @@ public:
 		}
 	}
 
-	//set
+	// set
 
 	template <class K>
 	void operator<<(gd::set<K>& i_value) {
@@ -176,7 +176,7 @@ public:
 		}
 	}
 
-	//gd::string
+	// gd::string
 
 	void operator<<(gd::string& i_value) {
 		unsigned int l_size = i_value.size();

@@ -1,6 +1,6 @@
 #include "DynamicSaveObject.hpp"
-#include <stdexcept>
 #include <util/debug.hpp>
+#include <hooks/PlayLayer.hpp>
 
 using namespace geode::prelude;
 
@@ -50,7 +50,8 @@ inline void operator<<(OutputStream& o_stream, PPDynamicSaveObject& i_value) {
 	if (!i_value.m_gameObject) {
 		log::info("no game object??");
 	} else {
-		l_objectIndex = i_value.m_gameObject->m_uniqueID-12;
+		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
+		if (l_playLayer) l_objectIndex = i_value.m_gameObject->m_uniqueID-(l_playLayer->getUniqueIdBase());
 	}
 	o_stream << l_objectIndex;
 	SEPARATOR_O
@@ -80,7 +81,8 @@ void PPDynamicSaveObject::describe() {
 	if (!m_gameObject) {
 		log::info("[PPDynamicSaveObject - describe] no game object?? @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 	} else {
-		l_objectIndex = m_gameObject->m_uniqueID-12;
+		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
+		if (l_playLayer) l_objectIndex = m_gameObject->m_uniqueID-(l_playLayer->getUniqueIdBase());
 	}
 	
 	log::info("[PPDynamicSaveObject - describe] l_objectIndex: {}", l_objectIndex);

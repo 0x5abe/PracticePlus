@@ -12,12 +12,8 @@ protected:
 
 public:
 	bool m_enableArrayHook = false;
-	//Todo: Remove
-	bool m_loggedObjects = false;
-	bool m_autoCreateSp1 = true;
-	bool m_autoCreateSp2 = true;
-	int m_placedCheckpoints = 0;
-	//EndTodo
+	int m_uniqueIdBase = 12;
+	bool m_onQuitCalled = false;
 
 	// overrides
 
@@ -30,10 +26,6 @@ public:
 	$override void updateVisibility(float i_unkFloat);
 
 	$override void onQuit();
-
-	//TodoRemove
-	$override CheckpointObject* createCheckpoint();
-	//EndTodoRemove
 	
 	// custom methods
 
@@ -54,6 +46,11 @@ public:
 	inline bool isPlusMode() { return StartpointManager::get().isPlusMode(); }
 
 	void togglePlusMode(bool i_value);
+	
+	inline int getUniqueIdBase() { 
+		geode::log::info("UniqueId base: {}", m_fields->m_uniqueIdBase);
+		return m_fields->m_uniqueIdBase;
+	}
 
 	void setupKeybinds();
 };

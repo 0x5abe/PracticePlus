@@ -13,6 +13,8 @@ public:
 	void load(InputStream& i_stream);
 	void save(OutputStream& o_stream);
 
+	void clean();
+
 #ifdef PP_DEBUG
 	void describe();
 #endif

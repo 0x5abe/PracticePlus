@@ -2,6 +2,7 @@
 #include "Geode/binding/PlayLayer.hpp"
 #include <hooks/cocos2d/CCNode.hpp>
 #include <util/debug.hpp>
+#include <hooks/PlayLayer.hpp>
 
 using namespace geode::prelude;
 
@@ -30,7 +31,8 @@ inline void operator>>(InputStream& i_stream, PPAdvancedFollowInstance& o_value)
 inline void operator<<(OutputStream& o_stream, PPAdvancedFollowInstance& i_value) {
 	int l_objectIndex = -1;
 	if (i_value.m_gameObject) {
-		l_objectIndex = i_value.m_gameObject->m_uniqueID-12;
+		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
+		if (l_playLayer) l_objectIndex = i_value.m_gameObject->m_uniqueID-(l_playLayer->getUniqueIdBase());
 	}
 	o_stream << l_objectIndex;
 	SEPARATOR_O
@@ -43,7 +45,8 @@ void PPAdvancedFollowInstance::describe() {
 	log::info("[PPAdvancedFollowInstance - describe] pad_1: [{}]", hexStr(pad_1, 24));
 	int l_objectIndex = -1;
 	if (m_gameObject) {
-		l_objectIndex = m_gameObject->m_uniqueID-12;
+		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
+		if (l_playLayer) l_objectIndex = m_gameObject->m_uniqueID-(l_playLayer->getUniqueIdBase());
 	}
 	log::info("[PPAdvancedFollowInstance - describe] m_gameObject l_objectIndex: {}", l_objectIndex);
 }

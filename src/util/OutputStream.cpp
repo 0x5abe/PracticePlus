@@ -20,8 +20,9 @@
 #include <hooks/EnterEffectInstance.hpp>
 #include <hooks/AdvancedFollowInstance.hpp>
 #include <hooks/CAState.hpp>
+#include <hooks/PlayLayer.hpp>
 
-//vector
+// vector
 
 template<class T, class U>
 inline void writeGenericVector(OutputStream* o_stream, gd::vector<T>& i_value) {
@@ -121,7 +122,7 @@ void OutputStream::operator<<<CAState>(gd::vector<CAState>& i_value) {
 	writeGenericVector<CAState, PPCAState>(this, i_value);
 }
 
-//unordered_map
+// unordered_map
 
 template<class K, class V, class W>
 inline void writeGenericUnorderedMap(OutputStream* o_stream, gd::unordered_map<K,V>& i_value) {
@@ -169,7 +170,8 @@ void OutputStream::operator<<<int, EnhancedGameObject*>(gd::unordered_map<int, E
 		if (!l_pair.second) {
 			geode::log::info("no game object??");
 		} else {
-			l_objectIndex = l_pair.second->m_uniqueID-12;
+			PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
+			if (l_playLayer) l_objectIndex = l_pair.second->m_uniqueID-(l_playLayer->getUniqueIdBase());
 		}
 		this->write(reinterpret_cast<char*>(&l_objectIndex), sizeof(int));
 	}

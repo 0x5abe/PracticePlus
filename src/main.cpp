@@ -6,12 +6,6 @@ using namespace geode::prelude;
 void setupKeybinds();
 
 $on_mod(Loaded) {
-	//TodoRemove
-	//gd::string a("test");
-	//gd::string b("aaaa");
-	//a = b;
-	//log::info("!!!!!!!!!!!!!!!!!SIZEOF pair<int,FMODSoundState_padded> {} @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",sizeof(std::pair<int,FMODSoundState_padded>));
-	//EndTodo
 	setupKeybinds();
 }
 
@@ -50,7 +44,7 @@ void setupKeybinds() {
 		Category::PLAY,
 	});
 
-	//TODO REMOVE
+	// TODO REMOVE
 	BindManager::get()->registerBindable({
 		"test-key-1"_spr,
 		"Test 1",
@@ -65,5 +59,5 @@ void setupKeybinds() {
 		{ Keybind::create(KEY_K, Modifier::None) },
 		Category::PLAY,
 	});
-	//ENDTODO
+	// ENDTODO
 }

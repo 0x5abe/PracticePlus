@@ -1,8 +1,5 @@
 #include "EffectManagerState.hpp"
-#include "Geode/binding/CAState.hpp"
-#include "Geode/binding/CollisionTriggerAction.hpp"
 #include "Geode/binding/CountTriggerAction.hpp"
-#include "Geode/binding/GroupCommandObject2.hpp"
 #include "Geode/binding/OpacityEffectAction.hpp"
 #include "Geode/binding/PulseEffectAction.hpp"
 #include "Geode/binding/TimerItem_padded.hpp"
@@ -129,6 +126,44 @@ inline void operator<<(OutputStream& o_stream, PPEffectManagerState& i_value) {
 	UMAP_SEPARATOR_O
 }
 
+void PPEffectManagerState::clean() {
+	m_unkVecCAState.clear();
+	gd::vector<CAState>().swap(m_unkVecCAState);
+
+	m_unkVecPulseEffectAction.clear();
+	gd::vector<PulseEffectAction>().swap(m_unkVecPulseEffectAction);
+
+	for (std::pair<int, gd::vector<PulseEffectAction>> l_pair : m_unorderedMapInt_vectorPulseEffectAction) {
+		l_pair.second.clear();
+		gd::vector<PulseEffectAction>().swap(l_pair.second);
+	}
+
+	for (std::pair<int, gd::vector<CountTriggerAction>> l_pair : m_unorderedMapInt_vectorCountTriggerAction) {
+		l_pair.second.clear();
+		gd::vector<CountTriggerAction>().swap(l_pair.second);
+	}
+
+	m_vectorTouchToggleAction.clear();
+	gd::vector<TouchToggleAction>().swap(m_vectorTouchToggleAction);
+
+	m_vectorCollisionTriggerAction.clear();
+	gd::vector<CollisionTriggerAction>().swap(m_vectorCollisionTriggerAction);
+
+	m_vectorToggleTriggerAction.clear();
+	gd::vector<ToggleTriggerAction>().swap(m_vectorToggleTriggerAction);
+
+	m_vectorSpawnTriggerAction.clear();
+	gd::vector<SpawnTriggerAction>().swap(m_vectorSpawnTriggerAction);
+
+	m_vectorGroupCommandObject2.clear();
+	gd::vector<GroupCommandObject2>().swap(m_vectorGroupCommandObject2);
+
+	for (std::pair<int, gd::vector<TimerTriggerAction>> l_pair : m_unorderedMapInt_vectorTimerTriggerAction) {
+		l_pair.second.clear();
+		gd::vector<TimerTriggerAction>().swap(l_pair.second);
+	}
+}
+
 #ifdef PP_DEBUG
 void PPEffectManagerState::describe() {
 	int l_size = m_unkVecCAState.size();
@@ -151,7 +186,7 @@ void PPEffectManagerState::describe() {
 		l_size = l_pair.second.size();
 		log::info("[PPEffectManagerState - describe] m_unorderedMapInt_vectorPulseEffectAction element {} value.size(): {}", i, l_size);
 		for (int j = 0; j < l_size; j++) {
-			log::info("[PPEffectManagerState - describe] m_unorderedMapInt_vectorPulseEffectAction element {} value[{}]: {}", i, j, hexStr(reinterpret_cast<uint8_t*>(&l_pair.second[i]), sizeof(PulseEffectAction)));
+			log::info("[PPEffectManagerState - describe] m_unorderedMapInt_vectorPulseEffectAction element {} value[{}]: {}", i, j, hexStr(reinterpret_cast<uint8_t*>(&l_pair.second[j]), sizeof(PulseEffectAction)));
 		}
 		i++;
 	}

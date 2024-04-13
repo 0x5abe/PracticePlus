@@ -2,6 +2,7 @@
 #include "Geode/binding/PlayLayer.hpp"
 #include <hooks/cocos2d/CCNode.hpp>
 #include <util/debug.hpp>
+#include <hooks/PlayLayer.hpp>
 
 using namespace geode::prelude;
 
@@ -35,7 +36,8 @@ inline void operator<<(OutputStream& o_stream, PPSpawnTriggerAction& i_value) {
 	SEPARATOR_O
 	int l_objectIndex = -1;
 	if (i_value.m_gameObject) {
-		l_objectIndex = i_value.m_gameObject->m_uniqueID-12;
+		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
+		if (l_playLayer) l_objectIndex = i_value.m_gameObject->m_uniqueID-(l_playLayer->getUniqueIdBase());
 	}
 	o_stream << l_objectIndex;
 	VEC_SEPARATOR_O
@@ -48,7 +50,8 @@ void PPSpawnTriggerAction::describe() {
 	log::info("[PPSpawnTriggerAction - describe] pad_1: [{}]", hexStr(pad_1, 40));
 	int l_objectIndex = -1;
 	if (m_gameObject) {
-		l_objectIndex = m_gameObject->m_uniqueID-12;
+		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
+		if (l_playLayer) l_objectIndex = m_gameObject->m_uniqueID-(l_playLayer->getUniqueIdBase());
 	}
 	log::info("[PPSpawnTriggerAction - describe] m_gameObject l_objectIndex: {}", l_objectIndex);
 	int l_size = m_unkVecInt.size();

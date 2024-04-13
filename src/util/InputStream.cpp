@@ -22,19 +22,24 @@
 #include <hooks/AdvancedFollowInstance.hpp>
 #include <hooks/CAState.hpp>
 
-//vector
+// vector
 
 template<class T, class U>
-inline void readGenericVector(InputStream* i_stream, gd::vector<T>& o_value) {
-	o_value = gd::vector<T>();
+inline void readGenericVector(InputStream* i_stream, gd::vector<T>& o_value, bool ignore = false) {
+	geode::log::info("Vector CustomRead Existing SIZE: {}", o_value.size());
 	unsigned int l_size;
 	i_stream->read(reinterpret_cast<char*>(&l_size), 4);
 	geode::log::info("VECTOR SIZE CustomRead SIZE in: {}", l_size);
 	if (l_size == 0) return;
+	if (ignore) {
+		i_stream->ignore(l_size*sizeof(T) + 4*l_size);
+		return;
+	}
 	o_value.resize(l_size);
 	for (int i = 0; i < l_size; i++) {
 		geode::log::info("VECTOR SIZE CustomRead SIZE in TRYING TO LOAD: {}", l_size);
-		reinterpret_cast<U&>(o_value[i]).load(*i_stream);
+		geode::log::info("VECTOR REAL SIZE CustomRead SIZE in TRYING TO LOAD: {}", o_value.size());
+		reinterpret_cast<U*>((reinterpret_cast<unsigned int>(o_value.data())+(i*sizeof(T))))->load(*i_stream);
 	}
 }
 
@@ -113,7 +118,7 @@ void InputStream::operator>><CAState>(gd::vector<CAState>& o_value) {
 	readGenericVector<CAState, PPCAState>(this, o_value);
 }
 
-//unordered_map
+// unordered_map
 
 template<class K, class V, class W>
 inline void readGenericUnorderedMap(InputStream* i_stream, gd::unordered_map<K,V>& o_value) {

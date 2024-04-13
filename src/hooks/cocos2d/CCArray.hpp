@@ -1,4 +1,5 @@
 #pragma once
+#include "Geode/modify/Modify.hpp"
 #include <Geode/Geode.hpp>
 #include <Geode/modify/CCArray.hpp>
 #include <util/InputStream.hpp>
@@ -7,11 +8,18 @@
 
 class $modify(PPCCArray, cocos2d::CCArray) {
 public:
+	// overrides
+
 	$override
 	unsigned int count();
 
 	$override
 	CCObject* lastObject();
+
+	$override
+	void removeAllObjects();
+
+	// custom methods
 
 	template <typename T>
 	void load(InputStream& i_stream);

@@ -1,18 +1,10 @@
 #include "GJGameState.hpp"
-#include "EnterEffectInstance.hpp"
-#include "Geode/Enums.hpp"
-#include "Geode/binding/EnhancedGameObject.hpp"
-#include "Geode/binding/EnterEffectInstance.hpp"
-#include "Geode/binding/EventTriggerInstance.hpp"
-#include "Geode/binding/GameObjectPhysics.hpp"
 #include "Geode/binding/PlayLayer.hpp"
-#include "Geode/binding/SFXTriggerInstance.hpp"
-#include "Geode/binding/SFXTriggerState.hpp"
-#include "Geode/binding/SongChannelState.hpp"
-#include "Geode/binding/SongTriggerState.hpp"
 #include <hooks/cocos2d/CCNode.hpp>
 #include <util/debug.hpp>
 #include <hooks/EventTriggerInstance.hpp>
+#include <hooks/PlayLayer.hpp>
+#include <hooks/EnterEffectInstance.hpp>
 
 using namespace geode::prelude;
 
@@ -568,13 +560,15 @@ inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
 	SEPARATOR_O
 	int l_objectIndex = -1;
 	if (i_value.m_unkGameObjPtr1) {
-		l_objectIndex = i_value.m_unkGameObjPtr1->m_uniqueID-12;
+		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
+		if (l_playLayer) l_objectIndex = i_value.m_unkGameObjPtr1->m_uniqueID-(l_playLayer->getUniqueIdBase());
 	}
 	o_stream << l_objectIndex;
 	SEPARATOR_O
 	l_objectIndex = -1;
 	if (i_value.m_unkGameObjPtr2) {
-		l_objectIndex = i_value.m_unkGameObjPtr2->m_uniqueID-12;
+		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
+		if (l_playLayer) l_objectIndex = i_value.m_unkGameObjPtr2->m_uniqueID-(l_playLayer->getUniqueIdBase());
 	}
 	o_stream << l_objectIndex;
 	SEPARATOR_O
@@ -758,6 +752,36 @@ inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
 	SEPARATOR_O
 }
 
+void PPGJGameState::clean() {
+	for (std::pair<int, gd::vector<EnterEffectInstance>> l_pair : m_unorderedMapEnterEffectInstanceVectors1) {
+		l_pair.second.clear();
+		gd::vector<EnterEffectInstance>().swap(l_pair.second);
+	}
+
+	for (std::pair<int, gd::vector<EnterEffectInstance>> l_pair : m_unorderedMapEnterEffectInstanceVectors2) {
+		l_pair.second.clear();
+		gd::vector<EnterEffectInstance>().swap(l_pair.second);
+	}
+
+	m_enterEffectInstances1.clear();
+	gd::vector<EnterEffectInstance>().swap(m_enterEffectInstances1);
+
+	m_enterEffectInstances2.clear();
+	gd::vector<EnterEffectInstance>().swap(m_enterEffectInstances2);
+
+	m_enterEffectInstances3.clear();
+	gd::vector<EnterEffectInstance>().swap(m_enterEffectInstances3);
+
+	m_enterEffectInstances4.clear();
+	gd::vector<EnterEffectInstance>().swap(m_enterEffectInstances4);
+
+	m_enterEffectInstances5.clear();
+	gd::vector<EnterEffectInstance>().swap(m_enterEffectInstances5);
+
+	m_advanceFollowInstances.clear();
+	gd::vector<AdvancedFollowInstance>().swap(m_advanceFollowInstances);
+}
+
 #ifdef PP_DEBUG
 void PPGJGameState::describe() {
 	log::info("[PPGJGameState - describe] m_zoom: {}", m_zoom);
@@ -857,12 +881,14 @@ void PPGJGameState::describe() {
 	log::info("[PPGJGameState - describe] m_unkUint7: {}", m_unkUint7);
 	int l_objectIndex = -1;
 	if (m_unkGameObjPtr1) {
-		l_objectIndex = m_unkGameObjPtr1->m_uniqueID-12;
+		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
+		if (l_playLayer) l_objectIndex = m_unkGameObjPtr1->m_uniqueID-(l_playLayer->getUniqueIdBase());
 	}
 	log::info("[PPGJGameState - describe] m_unkGameObjPtr1 objectIndex: {}", l_objectIndex);
 	l_objectIndex = -1;
 	if (m_unkGameObjPtr2) {
-		l_objectIndex = m_unkGameObjPtr2->m_uniqueID-12;
+		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
+		if (l_playLayer) l_objectIndex = m_unkGameObjPtr2->m_uniqueID-(l_playLayer->getUniqueIdBase());
 	}
 	log::info("[PPGJGameState - describe] m_unkGameObjPtr2 objectIndex: {}", l_objectIndex);
 	log::info("[PPGJGameState - describe] m_cameraMove: {}", m_cameraMove);
@@ -942,7 +968,8 @@ void PPGJGameState::describe() {
 		if (!l_pair.second) {
 			log::info("no game object??");
 		} else {
-			l_objectIndex = l_pair.second->m_uniqueID-12;
+			PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
+			if (l_playLayer) l_objectIndex = l_pair.second->m_uniqueID-(l_playLayer->getUniqueIdBase());
 		}
 		log::info("[PPGJGameState - describe] m_stateObjects element {} value (l_objectIndex): {}", i, l_objectIndex);
 		i++;
