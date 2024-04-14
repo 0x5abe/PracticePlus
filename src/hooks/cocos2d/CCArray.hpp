@@ -2,9 +2,9 @@
 #include "Geode/modify/Modify.hpp"
 #include <Geode/Geode.hpp>
 #include <Geode/modify/CCArray.hpp>
+#include <hooks/CheckpointObject.hpp>
 #include <util/InputStream.hpp>
 #include <util/OutputStream.hpp>
-#include <hooks/CheckpointObject.hpp>
 
 class $modify(PPCCArray, cocos2d::CCArray) {
 public:

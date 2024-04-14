@@ -1,11 +1,11 @@
 #include "FMODAudioState.hpp"
-#include "Geode/binding/FMODQueuedMusic.hpp"
-#include "Geode/binding/FMODSoundState_padded.hpp"
-#include "Geode/binding/FMODSoundTween.hpp"
+#include <Geode/binding/FMODQueuedMusic.hpp>
+#include <Geode/binding/FMODSoundState_padded.hpp>
+#include <Geode/binding/FMODSoundTween.hpp>
 #include <hooks/cocos2d/CCNode.hpp>
-#include <util/debug.hpp>
 #include <hooks/FMODQueuedMusic.hpp>
 #include <hooks/FMODSoundState_padded.hpp>
+#include <util/debug.hpp>
 
 using namespace geode::prelude;
 

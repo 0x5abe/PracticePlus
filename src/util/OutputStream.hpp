@@ -1,11 +1,11 @@
 #pragma once
-#include "Geode/binding/AdvancedFollowInstance.hpp"
-#include "Geode/binding/CAState.hpp"
-#include "Geode/binding/EnhancedGameObject.hpp"
-#include "Geode/binding/EnterEffectInstance.hpp"
 #include <iostream>
 #include <Geode/Geode.hpp>
 #include <Geode/loader/Log.hpp>
+#include <Geode/binding/AdvancedFollowInstance.hpp>
+#include <Geode/binding/CAState.hpp>
+#include <Geode/binding/EnhancedGameObject.hpp>
+#include <Geode/binding/EnterEffectInstance.hpp>
 
 #define PP_OPERATOR_WRITE(type) virtual void operator<<(type& i_value) { m_stream->write(reinterpret_cast<char*>(&i_value), sizeof(type)); }
 

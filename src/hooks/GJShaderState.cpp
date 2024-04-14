@@ -1,6 +1,5 @@
 #include "GJShaderState.hpp"
-#include "Geode/binding/GJValueTween.hpp"
-#include <cstdint>
+#include <Geode/binding/GJValueTween.hpp>
 #include <hooks/cocos2d/CCNode.hpp>
 #include <util/debug.hpp>
 

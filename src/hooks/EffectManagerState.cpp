@@ -1,11 +1,10 @@
 #include "EffectManagerState.hpp"
-#include "Geode/binding/CountTriggerAction.hpp"
-#include "Geode/binding/OpacityEffectAction.hpp"
-#include "Geode/binding/PulseEffectAction.hpp"
-#include "Geode/binding/TimerItem_padded.hpp"
-#include "Geode/binding/TimerTriggerAction.hpp"
+#include <Geode/binding/CountTriggerAction.hpp>
+#include <Geode/binding/OpacityEffectAction.hpp>
+#include <Geode/binding/PulseEffectAction.hpp>
+#include <Geode/binding/TimerItem_padded.hpp>
+#include <Geode/binding/TimerTriggerAction.hpp>
 #include <hooks/cocos2d/CCNode.hpp>
-#include <util/debug.hpp>
 #include <hooks/CountTriggerAction.hpp>
 #include <hooks/TouchToggleAction.hpp>
 #include <hooks/CollisionTriggerAction.hpp>
@@ -15,6 +14,7 @@
 #include <hooks/TimerItem_padded.hpp>
 #include <hooks/TimerTriggerAction.hpp>
 #include <hooks/CAState.hpp>
+#include <util/debug.hpp>
 
 using namespace geode::prelude;
 

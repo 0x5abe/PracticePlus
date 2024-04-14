@@ -1,10 +1,8 @@
 #include "AdvancedFollowInstance.hpp"
-#include "Geode/binding/PlayLayer.hpp"
-#include <cstddef>
-#include <cstdint>
+#include <Geode/binding/PlayLayer.hpp>
 #include <hooks/cocos2d/CCNode.hpp>
-#include <util/debug.hpp>
 #include <hooks/PlayLayer.hpp>
+#include <util/debug.hpp>
 
 using namespace geode::prelude;
 

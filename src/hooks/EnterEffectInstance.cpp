@@ -1,8 +1,8 @@
 #include "EnterEffectInstance.hpp"
-#include "Geode/binding/GameObject.hpp"
+#include <Geode/binding/GameObject.hpp>
 #include <hooks/cocos2d/CCNode.hpp>
-#include <util/debug.hpp>
 #include <hooks/PlayLayer.hpp>
+#include <util/debug.hpp>
 
 using namespace geode::prelude;
 

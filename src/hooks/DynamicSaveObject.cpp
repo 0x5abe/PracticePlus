@@ -1,6 +1,6 @@
 #include "DynamicSaveObject.hpp"
-#include <util/debug.hpp>
 #include <hooks/PlayLayer.hpp>
+#include <util/debug.hpp>
 
 using namespace geode::prelude;
 

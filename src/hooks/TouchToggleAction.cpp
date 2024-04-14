@@ -1,5 +1,5 @@
 #include "TouchToggleAction.hpp"
-#include "Geode/loader/Log.hpp"
+#include <Geode/loader/Log.hpp>
 #include <hooks/cocos2d/CCNode.hpp>
 #include <util/debug.hpp>
 

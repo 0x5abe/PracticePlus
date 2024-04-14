@@ -1,35 +1,26 @@
 #include "CheckpointObject.hpp"
-#include "ActiveSaveObject.hpp"
-#include "Geode/binding/ActiveSaveObject1.hpp"
-#include "Geode/binding/CheckpointObject.hpp"
-#include "Geode/binding/CollisionTriggerAction.hpp"
-#include "Geode/binding/DynamicSaveObject.hpp"
-#include "Geode/binding/EffectManagerState.hpp"
-#include "Geode/binding/GJGameState.hpp"
-#include "Geode/binding/GradientTriggerObject.hpp"
-#include "Geode/binding/GroupCommandObject2.hpp"
-#include "Geode/binding/PlayerCheckpoint.hpp"
-#include "Geode/binding/PulseEffectAction.hpp"
-#include "Geode/binding/SequenceTriggerState.hpp"
-#include "Geode/binding/SpawnTriggerAction.hpp"
-#include "Geode/binding/ToggleTriggerAction.hpp"
-#include "Geode/binding/TouchToggleAction.hpp"
-#include "Geode/cocos/cocoa/CCArray.h"
-#include "Geode/cocos/platform/CCPlatformMacros.h"
-#include "Geode/platform/platform.hpp"
-#include "cocos2d/CCObject.hpp"
+#include <Geode/binding/ActiveSaveObject1.hpp>
+#include <Geode/binding/CheckpointObject.hpp>
+#include <Geode/binding/DynamicSaveObject.hpp>
+#include <Geode/binding/GradientTriggerObject.hpp>
+#include <Geode/binding/PlayerCheckpoint.hpp>
+#include <Geode/binding/SequenceTriggerState.hpp>
+#include <Geode/cocos/cocoa/CCArray.h>
+#include <Geode/cocos/platform/CCPlatformMacros.h>
+#include <managers/StartpointManager.hpp>
+#include <hooks/cocos2d/CCObject.hpp>
 #include <hooks/cocos2d/CCNode.hpp>
 #include <hooks/PlayerCheckpoint.hpp>
 #include <hooks/DynamicSaveObject.hpp>
 #include <hooks/cocos2d/CCArray.hpp>
 #include <hooks/GJShaderState.hpp>
-#include <util/debug.hpp>
-#include <managers/StartpointManager.hpp>
 #include <hooks/PlayLayer.hpp>
 #include <hooks/SequenceTriggerState.hpp>
 #include <hooks/FMODAudioState.hpp>
 #include <hooks/EffectManagerState.hpp>
 #include <hooks/GJGameState.hpp>
+#include <hooks/ActiveSaveObject.hpp>
+#include <util/debug.hpp>
 
 using namespace geode::prelude;
 

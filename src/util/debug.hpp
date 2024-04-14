@@ -1,10 +1,11 @@
 #pragma once
 #ifdef PP_DEBUG
-#include <util/InputStream.hpp>
-#include <util/OutputStream.hpp>
 #include <iomanip>
 #include <sstream>
 #include <string>
+#include <util/InputStream.hpp>
+#include <util/OutputStream.hpp>
+
 	static char l_testSeparator[] = { 'T', 'E', 'S', 'T' };
 	static char l_vecSeparator[] = { 'V', 'E', 'C', 'T' };
 	static char l_endSeparator[] = { 'E', 'N', 'D', 'E' };

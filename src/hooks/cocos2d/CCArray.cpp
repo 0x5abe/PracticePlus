@@ -3,7 +3,6 @@
 #include "Geode/binding/GradientTriggerObject.hpp"
 #include "Geode/binding/PlayLayer.hpp"
 #include "Geode/cocos/cocoa/CCArray.h"
-#include "managers/StartpointManager.hpp"
 #include <hooks/PlayLayer.hpp>
 #include <hooks/cocos2d/CCObject.hpp>
 #include <hooks/CheckpointObject.hpp>

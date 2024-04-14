@@ -1,8 +1,8 @@
 
 #include "InputStream.hpp"
-#include "Geode/binding/AdvancedFollowInstance.hpp"
-#include "Geode/binding/CAState.hpp"
-#include "Geode/binding/EventTriggerInstance.hpp"
+#include <Geode/binding/AdvancedFollowInstance.hpp>
+#include <Geode/binding/CAState.hpp>
+#include <Geode/binding/EventTriggerInstance.hpp>
 #include <hooks/DynamicSaveObject.hpp>
 #include <hooks/ActiveSaveObject.hpp>
 #include <hooks/SequenceTriggerState.hpp>

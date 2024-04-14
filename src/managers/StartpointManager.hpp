@@ -1,9 +1,9 @@
 #pragma once
 #include "Geode/binding/PlayLayer.hpp"
 #include <Geode/Geode.hpp>
+#include <hooks/cocos2d/CCArray.hpp>
 #include <util/InputStream.hpp>
 #include <util/OutputStream.hpp>
-#include <hooks/cocos2d/CCArray.hpp>
 
 class StartpointManager {
 	friend class PPCCArray;

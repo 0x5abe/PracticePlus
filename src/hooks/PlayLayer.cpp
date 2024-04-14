@@ -1,9 +1,9 @@
 #include "PlayLayer.hpp"
-#include "Geode/binding/CheckpointObject.hpp"
+#include <Geode/binding/CheckpointObject.hpp>
+#include <geode.custom-keybinds/include/Keybinds.hpp>
+#include <managers/StartpointManager.hpp>
 #include <util/InputStream.hpp>
 #include <util/OutputStream.hpp>
-#include <managers/StartpointManager.hpp>
-#include <geode.custom-keybinds/include/Keybinds.hpp>
 
 using namespace geode::prelude;
 

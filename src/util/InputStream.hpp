@@ -1,11 +1,11 @@
 #pragma once
-#include "Geode/binding/AdvancedFollowInstance.hpp"
-#include "Geode/binding/EnhancedGameObject.hpp"
-#include "Geode/binding/EnterEffectInstance.hpp"
-#include "Geode/binding/EventTriggerInstance.hpp"
 #include <iostream>
 #include <Geode/Geode.hpp>
 #include <Geode/loader/Log.hpp>
+#include <Geode/binding/AdvancedFollowInstance.hpp>
+#include <Geode/binding/EnhancedGameObject.hpp>
+#include <Geode/binding/EnterEffectInstance.hpp>
+#include <Geode/binding/EventTriggerInstance.hpp>
 
 #define PP_OPERATOR_READ(type) virtual void operator>>(type& o_value) { m_stream->read(reinterpret_cast<char*>(&o_value), sizeof(type)); }
 class InputStream {

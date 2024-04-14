@@ -1,9 +1,8 @@
 #include "GroupCommandObject2.hpp"
-#include "Geode/binding/KeyframeObject.hpp"
+#include <Geode/binding/KeyframeObject.hpp>
 #include <hooks/KeyframeObject.hpp>
 #include <hooks/cocos2d/CCNode.hpp>
 #include <util/debug.hpp>
-#include <vector>
 
 using namespace geode::prelude;
 

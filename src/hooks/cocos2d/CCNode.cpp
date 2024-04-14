@@ -1,5 +1,4 @@
 #include "CCNode.hpp"
-#include "Geode/cocos/base_nodes/CCNode.h"
 #include <hooks/cocos2d/CCObject.hpp>
 #include <util/debug.hpp>
 

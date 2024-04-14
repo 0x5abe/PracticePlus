@@ -1,14 +1,13 @@
 
 #include "StartpointManager.hpp"
-#include "Geode/Enums.hpp"
-#include "Geode/binding/CheckpointObject.hpp"
-#include "Geode/binding/CountTriggerAction.hpp"
-#include "Geode/binding/GJGameState.hpp"
-#include <util/math.hpp>
-#include <util/debug.hpp>
+#include <Geode/Enums.hpp>
+#include <Geode/binding/CheckpointObject.hpp>
+#include <Geode/binding/GJGameState.hpp>
 #include <hooks/PlayerCheckpoint.hpp>
 #include <hooks/cocos2d/CCArray.hpp>
 #include <hooks/CheckpointObject.hpp>
+#include <util/math.hpp>
+#include <util/debug.hpp>
 
 using namespace geode::prelude;
 

@@ -1,10 +1,10 @@
 #include "GJGameState.hpp"
-#include "Geode/binding/PlayLayer.hpp"
+#include <Geode/binding/PlayLayer.hpp>
 #include <hooks/cocos2d/CCNode.hpp>
-#include <util/debug.hpp>
 #include <hooks/EventTriggerInstance.hpp>
 #include <hooks/PlayLayer.hpp>
 #include <hooks/EnterEffectInstance.hpp>
+#include <util/debug.hpp>
 
 using namespace geode::prelude;
 
