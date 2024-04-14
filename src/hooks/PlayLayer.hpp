@@ -17,15 +17,20 @@ public:
 
 	// overrides
 
-	$override bool init(GJGameLevel* i_level, bool i_useReplay, bool i_dontCreateObjects);
+	$override
+	bool init(GJGameLevel* i_level, bool i_useReplay, bool i_dontCreateObjects);
 
-	$override void resetLevel();
+	$override
+	void resetLevel();
 
-	$override void togglePracticeMode(bool i_value);
+	$override
+	void togglePracticeMode(bool i_value);
 
-	$override void updateVisibility(float i_unkFloat);
+	$override
+	void updateVisibility(float i_unkFloat);
 
-	$override void onQuit();
+	$override
+	void onQuit();
 	
 	// custom methods
 

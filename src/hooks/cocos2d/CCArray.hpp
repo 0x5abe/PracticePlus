@@ -16,9 +16,6 @@ public:
 	$override
 	CCObject* lastObject();
 
-	$override
-	void removeAllObjects();
-
 	// custom methods
 
 	template <typename T>

@@ -38,14 +38,6 @@ CCObject* PPCCArray::lastObject() {
 	return l_lastObject;
 }
 
-void PPCCArray::removeAllObjects() {
-	StartpointManager& l_startpointManager = StartpointManager::get();
-	if (this == l_startpointManager.m_startpoints) {
-		l_startpointManager.clean();
-	}
-	CCArray::removeAllObjects();
-}
-
 template <class T>
 void PPCCArray::load(InputStream& i_stream) {
 	removeAllObjects();

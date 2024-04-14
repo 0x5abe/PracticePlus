@@ -15,6 +15,7 @@ using namespace geode::prelude;
 void StartpointManager::reset() {
 	m_isPlusMode = false;
 	m_activeStartpointId = -1;
+	clean();
 	m_startpoints->removeAllObjects();
 }
 

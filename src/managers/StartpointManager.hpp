@@ -17,6 +17,11 @@ protected:
 	StartpointManager() {
 		m_startpoints = cocos2d::CCArray::create();
 	}
+
+	~StartpointManager() {
+		clean();
+	}
+
 	StartpointManager(const StartpointManager&) = delete;
 	StartpointManager& operator=(const StartpointManager&) = delete;
 	StartpointManager(StartpointManager&&) = delete;
