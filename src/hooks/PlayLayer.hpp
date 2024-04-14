@@ -1,5 +1,6 @@
 #pragma once
 #include "Geode/binding/CheckpointObject.hpp"
+#include "Geode/binding/GameObject.hpp"
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <managers/StartpointManager.hpp>
@@ -52,9 +53,8 @@ public:
 
 	void togglePlusMode(bool i_value);
 	
-	inline int getUniqueIdBase() { 
-		geode::log::info("UniqueId base: {}", m_fields->m_uniqueIdBase);
-		return m_fields->m_uniqueIdBase;
+	inline int getGameObjectIndex(GameObject* i_object) {
+		return i_object->m_uniqueID-m_fields->m_uniqueIdBase;
 	}
 
 	void setupKeybinds();

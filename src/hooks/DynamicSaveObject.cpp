@@ -51,7 +51,7 @@ inline void operator<<(OutputStream& o_stream, PPDynamicSaveObject& i_value) {
 		log::info("no game object??");
 	} else {
 		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-		if (l_playLayer) l_objectIndex = i_value.m_gameObject->m_uniqueID-(l_playLayer->getUniqueIdBase());
+		if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(i_value.m_gameObject);
 	}
 	o_stream << l_objectIndex;
 	SEPARATOR_O
@@ -82,7 +82,7 @@ void PPDynamicSaveObject::describe() {
 		log::info("[PPDynamicSaveObject - describe] no game object?? @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 	} else {
 		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-		if (l_playLayer) l_objectIndex = m_gameObject->m_uniqueID-(l_playLayer->getUniqueIdBase());
+		if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(m_gameObject);
 	}
 	
 	log::info("[PPDynamicSaveObject - describe] l_objectIndex: {}", l_objectIndex);

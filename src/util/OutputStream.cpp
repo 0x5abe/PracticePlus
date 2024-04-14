@@ -171,7 +171,7 @@ void OutputStream::operator<<<int, EnhancedGameObject*>(gd::unordered_map<int, E
 			geode::log::info("no game object??");
 		} else {
 			PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-			if (l_playLayer) l_objectIndex = l_pair.second->m_uniqueID-(l_playLayer->getUniqueIdBase());
+			if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(l_pair.second);
 		}
 		this->write(reinterpret_cast<char*>(&l_objectIndex), sizeof(int));
 	}

@@ -38,7 +38,7 @@ inline void operator<<(OutputStream& o_stream, PPActiveSaveObject1& i_value) {
 		log::info("no game object??");
 	} else {
 		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-		if (l_playLayer) l_objectIndex = i_value.m_gameObject->m_uniqueID-(l_playLayer->getUniqueIdBase());
+		if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(i_value.m_gameObject);
 	}
 	o_stream << l_objectIndex;
 	SEPARATOR_O
@@ -81,7 +81,7 @@ inline void operator<<(OutputStream& o_stream, PPActiveSaveObject2& i_value) {
 		log::info("no game object??");
 	} else {
 		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-		if (l_playLayer) l_objectIndex = i_value.m_gameObject->m_uniqueID-(l_playLayer->getUniqueIdBase());
+		if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(i_value.m_gameObject);
 	}
 	o_stream << l_objectIndex;
 	SEPARATOR_O
@@ -97,7 +97,7 @@ void PPActiveSaveObject1::describe() {
 		log::info("[PPActiveSaveObject1 - describe] no game object?? @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 	} else {
 		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-		if (l_playLayer) l_objectIndex = m_gameObject->m_uniqueID-(l_playLayer->getUniqueIdBase());
+		if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(m_gameObject);
 	}
 	log::info("[PPActiveSaveObject1 - describe] l_objectIndex: {}", l_objectIndex);
 	log::info("[PPActiveSaveObject1 - describe] m_unkBool1: {}", m_unkBool1);
@@ -110,7 +110,7 @@ void PPActiveSaveObject2::describe() {
 		log::info("no game object??");
 	} else {
 		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-		if (l_playLayer) l_objectIndex = m_gameObject->m_uniqueID-(l_playLayer->getUniqueIdBase());
+		if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(m_gameObject);
 	}
 	log::info("[PPActiveSaveObject2 - describe] l_objectIndex: {}", l_objectIndex);
 	log::info("[PPActiveSaveObject2 - describe] m_easingType: {}", static_cast<unsigned int>(m_easingType));

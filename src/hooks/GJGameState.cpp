@@ -561,14 +561,14 @@ inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
 	int l_objectIndex = -1;
 	if (i_value.m_unkGameObjPtr1) {
 		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-		if (l_playLayer) l_objectIndex = i_value.m_unkGameObjPtr1->m_uniqueID-(l_playLayer->getUniqueIdBase());
+		if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(i_value.m_unkGameObjPtr1);
 	}
 	o_stream << l_objectIndex;
 	SEPARATOR_O
 	l_objectIndex = -1;
 	if (i_value.m_unkGameObjPtr2) {
 		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-		if (l_playLayer) l_objectIndex = i_value.m_unkGameObjPtr2->m_uniqueID-(l_playLayer->getUniqueIdBase());
+		if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(i_value.m_unkGameObjPtr2);
 	}
 	o_stream << l_objectIndex;
 	SEPARATOR_O
@@ -882,13 +882,13 @@ void PPGJGameState::describe() {
 	int l_objectIndex = -1;
 	if (m_unkGameObjPtr1) {
 		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-		if (l_playLayer) l_objectIndex = m_unkGameObjPtr1->m_uniqueID-(l_playLayer->getUniqueIdBase());
+		if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(m_unkGameObjPtr1);
 	}
 	log::info("[PPGJGameState - describe] m_unkGameObjPtr1 objectIndex: {}", l_objectIndex);
 	l_objectIndex = -1;
 	if (m_unkGameObjPtr2) {
 		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-		if (l_playLayer) l_objectIndex = m_unkGameObjPtr2->m_uniqueID-(l_playLayer->getUniqueIdBase());
+		if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(m_unkGameObjPtr2);
 	}
 	log::info("[PPGJGameState - describe] m_unkGameObjPtr2 objectIndex: {}", l_objectIndex);
 	log::info("[PPGJGameState - describe] m_cameraMove: {}", m_cameraMove);
@@ -969,7 +969,7 @@ void PPGJGameState::describe() {
 			log::info("no game object??");
 		} else {
 			PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-			if (l_playLayer) l_objectIndex = l_pair.second->m_uniqueID-(l_playLayer->getUniqueIdBase());
+			if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(l_pair.second);
 		}
 		log::info("[PPGJGameState - describe] m_stateObjects element {} value (l_objectIndex): {}", i, l_objectIndex);
 		i++;

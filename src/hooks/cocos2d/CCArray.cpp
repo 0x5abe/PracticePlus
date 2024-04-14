@@ -90,7 +90,7 @@ void PPCCArray::save<GradientTriggerObject>(OutputStream& o_stream) {
 			log::info(" no game object?? @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		} else {
 			PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-			if (l_playLayer) l_objectIndex = static_cast<GameObject*>(objectAtIndex(i))->m_uniqueID-(l_playLayer->getUniqueIdBase());
+			if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(static_cast<GameObject*>(objectAtIndex(i)));
 			geode::log::info("CCARRAY GradientTriggerObject ObjectIndex out: {}", l_objectIndex);
 		}
 		o_stream << l_objectIndex;
@@ -149,7 +149,7 @@ void PPCCArray::describe<GradientTriggerObject>() {
 	for (int i = 0; i < l_size; i++) {
 		int l_objectIndex = -1;
 		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-		if (l_playLayer) l_objectIndex = static_cast<GameObject*>(objectAtIndex(i))->m_uniqueID-(l_playLayer->getUniqueIdBase());
+		if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(static_cast<GameObject*>(objectAtIndex(i)));
 		log::info("[PPCCArray GradientTriggerObject - describe] l_objectIndex[{}]: {}", i, l_objectIndex);
 	}
 }

@@ -10,15 +10,15 @@ using namespace geode::prelude;
 // overrides
 
 bool PPPlayLayer::init(GJGameLevel* i_level, bool i_useReplay, bool i_dontCreateObjects) {
-	// store uniqueID global to save/load GameObjects
+	// reset uniqueID global to save/load GameObjects correctly using their index
+	// should look into not having to do this but it's harder than it looks since there's 
+	// probably maps with object id as keys, it's not just us saving pointers so I'd have to find those.
 	*reinterpret_cast<int*>(geode::base::get()+0x4ea028) = 10;
 	m_fields->m_uniqueIdBase = *reinterpret_cast<int*>(geode::base::get()+0x4ea028) + 2;
 
 	if (!PlayLayer::init(i_level, i_useReplay, i_dontCreateObjects)) return false;
-	
-	setupKeybinds();
-	log::info("Object id max: {}",*reinterpret_cast<unsigned int*>(geode::base::get()+0x4ea028));
 
+	setupKeybinds();
 	return true;
 }
 
@@ -44,11 +44,11 @@ void PPPlayLayer::updateVisibility(float i_unkFloat) {
 }
 
 void PPPlayLayer::onQuit() {
-	PlayLayer::onQuit();
 	if (!m_fields->m_onQuitCalled) {
 		StartpointManager::get().reset();
 		m_fields->m_onQuitCalled = true;
 	}
+	PlayLayer::onQuit();
 }
 
 // custom methods
