@@ -6,6 +6,7 @@
 #include <Geode/binding/CAState.hpp>
 #include <Geode/binding/EnhancedGameObject.hpp>
 #include <Geode/binding/EnterEffectInstance.hpp>
+#include <Geode/binding/SongChannelState.hpp>
 
 #define PP_OPERATOR_WRITE(type) virtual void operator<<(type& i_value) { m_stream->write(reinterpret_cast<char*>(&i_value), sizeof(type)); }
 
@@ -127,6 +128,9 @@ public:
 
 	template <>
 	void operator<<<int, EnhancedGameObject*>(gd::unordered_map<int, EnhancedGameObject*>& i_value);
+
+	template <>
+	void operator<<<int, SongChannelState>(gd::unordered_map<int, SongChannelState>& i_value);
 
 	// unordered_set
 

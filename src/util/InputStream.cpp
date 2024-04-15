@@ -1,8 +1,5 @@
 
 #include "InputStream.hpp"
-#include <Geode/binding/AdvancedFollowInstance.hpp>
-#include <Geode/binding/CAState.hpp>
-#include <Geode/binding/EventTriggerInstance.hpp>
 #include <hooks/DynamicSaveObject.hpp>
 #include <hooks/ActiveSaveObject.hpp>
 #include <hooks/SequenceTriggerState.hpp>
@@ -21,6 +18,7 @@
 #include <hooks/EnterEffectInstance.hpp>
 #include <hooks/AdvancedFollowInstance.hpp>
 #include <hooks/CAState.hpp>
+#include <hooks/SongChannelState.hpp>
 
 // vector
 
@@ -154,6 +152,11 @@ void InputStream::operator>><int, FMODSoundState_padded>(gd::unordered_map<int, 
 template <>
 void InputStream::operator>><int, TimerItem_padded>(gd::unordered_map<int, TimerItem_padded>& o_value) {
 	readGenericUnorderedMap<int, TimerItem_padded, PPTimerItem_padded>(this, o_value);
+}
+
+template <>
+void InputStream::operator>><int, SongChannelState>(gd::unordered_map<int, SongChannelState>& o_value) {
+	readGenericUnorderedMap<int, SongChannelState, PPSongChannelState>(this, o_value);
 }
 
 template <>

@@ -6,6 +6,7 @@
 #include <Geode/binding/EnhancedGameObject.hpp>
 #include <Geode/binding/EnterEffectInstance.hpp>
 #include <Geode/binding/EventTriggerInstance.hpp>
+#include <Geode/binding/SongChannelState.hpp>
 
 #define PP_OPERATOR_READ(type) virtual void operator>>(type& o_value) { m_stream->read(reinterpret_cast<char*>(&o_value), sizeof(type)); }
 class InputStream {
@@ -161,6 +162,9 @@ public:
 
 	template <>
 	void operator>><int, EnhancedGameObject*>(gd::unordered_map<int, EnhancedGameObject*>& o_value);
+
+	template <>
+	void operator>><int, SongChannelState>(gd::unordered_map<int, SongChannelState>& o_value);
 
 	// unordered_set
 

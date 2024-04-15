@@ -1,7 +1,5 @@
 
 #include "OutputStream.hpp"
-#include <Geode/binding/AdvancedFollowInstance.hpp>
-#include <Geode/binding/CAState.hpp>
 #include <hooks/DynamicSaveObject.hpp>
 #include <hooks/ActiveSaveObject.hpp>
 #include <hooks/SequenceTriggerState.hpp>
@@ -21,6 +19,7 @@
 #include <hooks/AdvancedFollowInstance.hpp>
 #include <hooks/CAState.hpp>
 #include <hooks/PlayLayer.hpp>
+#include <hooks/SongChannelState.hpp>
 
 // vector
 
@@ -155,6 +154,12 @@ template <>
 void OutputStream::operator<<<int, TimerItem_padded>(gd::unordered_map<int, TimerItem_padded>& i_value) {
 	geode::log::info("999999999999999999999 Unordered Map CustomWrite TimerItem_padded");
 	writeGenericUnorderedMap<int, TimerItem_padded, PPTimerItem_padded>(this, i_value);
+}
+
+template <>
+void OutputStream::operator<<<int, SongChannelState>(gd::unordered_map<int, SongChannelState>& i_value) {
+	geode::log::info("jjjjjjjjjjjjjjjjjjjjj Unordered Map CustomWrite SongChannelState");
+	writeGenericUnorderedMap<int, SongChannelState, PPSongChannelState>(this, i_value);
 }
 
 template <>
