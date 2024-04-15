@@ -98,7 +98,9 @@ void PPPlayLayer::togglePlusMode(bool i_value) {
 void PPPlayLayer::setupKeybinds() {
 	addEventListener<keybinds::InvokeBindFilter>(
 		[this](keybinds::InvokeBindEvent* event) {
-			if (event->isDown() && isPlusMode()) {
+			bool l_player1IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player1)+0x81a);
+			bool l_player2IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player2)+0x81a);
+			if (event->isDown() && !l_player1IsLocked && !l_player2IsLocked && !m_player1->m_isDead && isPlusMode()) {
 				createStartpoint();
 			}
 			return ListenerResult::Propagate;
@@ -108,7 +110,9 @@ void PPPlayLayer::setupKeybinds() {
 
 	addEventListener<keybinds::InvokeBindFilter>(
 		[this](keybinds::InvokeBindEvent* event) {
-			if (event->isDown() && isPlusMode()) {
+			bool l_player1IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player1)+0x81a);
+			bool l_player2IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player2)+0x81a);
+			if (event->isDown() && !l_player1IsLocked && !l_player2IsLocked && isPlusMode()) {
 				removeStartpoint();
 			}
 			return ListenerResult::Propagate;
@@ -118,7 +122,9 @@ void PPPlayLayer::setupKeybinds() {
 
 	addEventListener<keybinds::InvokeBindFilter>(
 		[this](keybinds::InvokeBindEvent* event) {
-			if (event->isDown() && isPlusMode()) {
+			bool l_player1IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player1)+0x81a);
+			bool l_player2IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player2)+0x81a);
+			if (event->isDown() && !l_player1IsLocked && !l_player2IsLocked && isPlusMode()) {
 				if (StartpointManager::get().prevStartpoint()) {
 					reloadFromActiveStartpoint();
 				}
@@ -130,7 +136,9 @@ void PPPlayLayer::setupKeybinds() {
 
 	addEventListener<keybinds::InvokeBindFilter>(
 		[this](keybinds::InvokeBindEvent* event) {
-			if (event->isDown() && isPlusMode()) {
+			bool l_player1IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player1)+0x81a);
+			bool l_player2IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player2)+0x81a);
+			if (event->isDown() && !l_player1IsLocked && !l_player2IsLocked && isPlusMode()) {
 				if (StartpointManager::get().nextStartpoint()) {
 					reloadFromActiveStartpoint();
 				}
