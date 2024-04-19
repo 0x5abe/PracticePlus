@@ -22,7 +22,7 @@ inline void operator<<(OutputStream& o_stream, PPCAState& i_value) {
 	SEPARATOR_O;
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPCAState::describe() {
 }
 #endif

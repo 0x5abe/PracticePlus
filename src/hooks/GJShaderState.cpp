@@ -33,7 +33,7 @@ inline void operator<<(OutputStream& o_stream, PPGJShaderState& i_value) {
 	SEPARATOR_O
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPGJShaderState::describe() {
 	int l_size = m_someIntToValueTweenMap.size();
 	log::info("[PPGJShaderState - describe] m_someIntToValueTweenMap.size(): {}", l_size);

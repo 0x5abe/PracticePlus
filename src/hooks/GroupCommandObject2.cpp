@@ -40,7 +40,7 @@ inline void operator<<(OutputStream& o_stream, PPGroupCommandObject2& i_value) {
 	SEPARATOR_O
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPGroupCommandObject2::describe() {
 	log::info("[PPGroupCommandObject2 - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this), 436));
 	int l_size = m_unkVecKeyframeObject.size();
@@ -53,7 +53,7 @@ void PPGroupCommandObject2::describe() {
 	l_size = m_unkVecInt.size();
 	log::info("[PPGroupCommandObject2 - describe] m_unkVecInt.size(): {}", l_size);
 	for (int i = 0; i < l_size; i++) {
-		log::info("[PPKeyframeObject - describe] m_unkVecInt[{}]: {}", i, m_unkVecInt[i]);
+		log::info("[PPGroupCommandObject2 - describe] m_unkVecInt[{}]: {}", i, m_unkVecInt[i]);
 	}
 	log::info("[PPGroupCommandObject2 - describe] pad_3: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPGroupCommandObject2,m_unkVecInt) + sizeof(gd::vector<int>), 12));
 }

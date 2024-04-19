@@ -29,7 +29,7 @@ inline void operator<<(OutputStream& o_stream, PPCCObject& i_value) {
 	SEPARATOR_O
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPCCObject::describe() {
 	log::info("[PPCCObject - describe] m_eObjType: {}", static_cast<int>(m_eObjType));
 	log::info("[PPCCObject - describe] m_nZOrder: {}", m_nZOrder);

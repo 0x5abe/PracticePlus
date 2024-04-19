@@ -28,7 +28,7 @@ inline void operator<<(OutputStream& o_stream, PPSequenceTriggerState& i_value) 
 	UMAP_SEPARATOR_O
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPSequenceTriggerState::describe() {
 	int l_size = m_unkUnorderedMap1.size();
 	log::info("[PPSequenceTriggerState - describe] m_unkUnorderedMap1.size(): {}", l_size);

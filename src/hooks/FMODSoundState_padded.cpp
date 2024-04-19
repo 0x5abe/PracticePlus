@@ -24,7 +24,7 @@ inline void operator>>(InputStream& i_stream, PPFMODSoundState_padded& o_value) 
 
 inline void operator<<(OutputStream& o_stream, PPFMODSoundState_padded& i_value) {
 	o_stream.write(reinterpret_cast<char*>(&i_value), 4);
-	log::info("INSIDE WRITE SoundState");
+	//log::info("INSIDE WRITE SoundState");
 	SEPARATOR_O
 	STR_SEPARATOR_O
 	o_stream << i_value.m_unkString;
@@ -33,7 +33,7 @@ inline void operator<<(OutputStream& o_stream, PPFMODSoundState_padded& i_value)
 	SEPARATOR_O
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPFMODSoundState_padded::describe() {
 	log::info("[PPFMODSoundState_padded - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this), 4));
 	log::info("[PPFMODSoundState_padded - describe] m_unkString: {}", m_unkString);

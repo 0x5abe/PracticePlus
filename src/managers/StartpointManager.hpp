@@ -76,7 +76,7 @@ public:
 
 	void clean();
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 	geode::Ref<cocos2d::CCArray> getStartpointArray();
 #endif
 };

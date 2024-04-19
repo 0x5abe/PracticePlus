@@ -103,7 +103,7 @@ inline void operator<<(OutputStream& o_stream, PPFMODAudioState& i_value) {
 	SEPARATOR_O
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPFMODAudioState::describe() {
 	log::info("[PPFMODAudioState - describe] m_unkFloat1", m_unkFloat1);
 	log::info("[PPFMODAudioState - describe] m_unkFloat2", m_unkFloat2);

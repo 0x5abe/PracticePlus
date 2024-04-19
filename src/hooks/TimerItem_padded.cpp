@@ -30,7 +30,7 @@ inline void operator<<(OutputStream& o_stream, PPTimerItem_padded& i_value) {
 	SEPARATOR_O
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPTimerItem_padded::describe() {
 	log::info("[PPTimerItem_padded - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this), 60));
 	int l_size = m_unkVecInt.size();

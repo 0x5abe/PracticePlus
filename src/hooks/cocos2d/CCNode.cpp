@@ -112,7 +112,7 @@ inline void operator<<(OutputStream& o_stream, PPCCNode& i_value) {
 	SEPARATOR_O
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPCCNode::describe() {
 	log::info("[PPCCNode - describe] m_fRotationX: {}", m_fRotationX);
 	log::info("[PPCCNode - describe] m_fRotationY: {}", m_fRotationY);

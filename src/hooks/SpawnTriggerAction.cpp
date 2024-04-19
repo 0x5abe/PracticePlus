@@ -45,7 +45,7 @@ inline void operator<<(OutputStream& o_stream, PPSpawnTriggerAction& i_value) {
 	VEC_SEPARATOR_O
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPSpawnTriggerAction::describe() {
 	log::info("[PPSpawnTriggerAction - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this), 40));
 	int l_objectIndex = -1;

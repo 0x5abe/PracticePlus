@@ -30,7 +30,7 @@ public:
 	template <>
 	void save<GradientTriggerObject>(OutputStream& o_stream);
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 	template <class T>
 	void describe();
 

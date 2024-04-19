@@ -116,7 +116,7 @@ inline void operator<<(OutputStream& o_stream, PPPlayerCheckpoint& i_value) {
 	SEPARATOR_O
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPPlayerCheckpoint::describe() {
 	log::info("[PPPlayerCheckpoint - describe] m_position: {}", m_position);
 	log::info("[PPPlayerCheckpoint - describe] m_lastPosition: {}", m_lastPosition);

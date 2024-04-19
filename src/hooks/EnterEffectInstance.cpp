@@ -58,7 +58,7 @@ inline void operator<<(OutputStream& o_stream, PPEnterEffectInstance& i_value) {
 	SEPARATOR_O
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPEnterEffectInstance::describe() {
 	int i = 0;
 	for (std::pair<int, EnterEffectAnimValue> l_pair : m_enterEffectAnimMap) {

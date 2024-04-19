@@ -40,7 +40,7 @@ inline void operator<<(OutputStream& o_stream, PPAdvancedFollowInstance& i_value
 	SEPARATOR_O
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPAdvancedFollowInstance::describe() {
 	log::info("[PPAdvancedFollowInstance - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPAdvancedFollowInstance,m_gameObject) + sizeof(GameObject*), 24));
 	int l_objectIndex = -1;

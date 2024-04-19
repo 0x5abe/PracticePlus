@@ -48,7 +48,7 @@ inline void operator>>(InputStream& i_stream, PPDynamicSaveObject& o_value) {
 inline void operator<<(OutputStream& o_stream, PPDynamicSaveObject& i_value) {
 	int l_objectIndex = -1;
 	if (!i_value.m_gameObject) {
-		log::info("no game object??");
+		//log::info("no game object??");
 	} else {
 		PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
 		if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(i_value.m_gameObject);
@@ -75,7 +75,7 @@ inline void operator<<(OutputStream& o_stream, PPDynamicSaveObject& i_value) {
 	SEPARATOR_O_END
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPDynamicSaveObject::describe() {
 	int l_objectIndex = -1;
 	if (!m_gameObject) {

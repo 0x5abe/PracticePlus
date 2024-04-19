@@ -782,7 +782,7 @@ void PPGJGameState::clean() {
 	gd::vector<AdvancedFollowInstance>().swap(m_advanceFollowInstances);
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPGJGameState::describe() {
 	log::info("[PPGJGameState - describe] m_zoom: {}", m_zoom);
 	log::info("[PPGJGameState - describe] m_cameraOffset: {}", m_cameraOffset);
@@ -966,7 +966,7 @@ void PPGJGameState::describe() {
 		log::info("[PPGJGameState - describe] m_stateObjects element {} key: {}", i, l_pair.first);
 		int l_objectIndex = -1;
 		if (!l_pair.second) {
-			log::info("no game object??");
+			//log::info("no game object??");
 		} else {
 			PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
 			if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(l_pair.second);

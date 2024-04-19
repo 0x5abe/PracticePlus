@@ -31,11 +31,11 @@ CheckpointObject* StartpointManager::createStartpoint(CheckpointObject* i_startp
 	i_startpoint->m_physicalCheckpointObject = l_newPhysicalCPO;
 	
 	i_startpoint->m_physicalCheckpointObject->setStartPos(i_startPosition);
-	log::info("sizeof CCDictionary {}", sizeof(cocos2d::CCDictionary));
-	log::info("sizeof CCDictElement {}", sizeof(cocos2d::CCDictElement));
-	log::info("sizeof CAState {}", sizeof(CAState));
-	log::info("sizeof EffectManagerState {}", sizeof(EffectManagerState));
-	log::info("sizeof GJGameState {}", sizeof(GJGameState));
+	//log::info("sizeof CCDictionary {}", sizeof(cocos2d::CCDictionary));
+	//log::info("sizeof CCDictElement {}", sizeof(cocos2d::CCDictElement));
+	//log::info("sizeof CAState {}", sizeof(CAState));
+	//log::info("sizeof EffectManagerState {}", sizeof(EffectManagerState));
+	//log::info("sizeof GJGameState {}", sizeof(GJGameState));
 
 	m_startpoints->addObject(i_startpoint);
 
@@ -136,8 +136,11 @@ void StartpointManager::updatePlusModeLogic() {
 }
 
 void StartpointManager::loadStartpointsFromStream(InputStream& i_stream) {
+	clean();
 	cocos2d::CCArray* l_intermediate = m_startpoints;
+	log::info("Loading Startpoints from stream");
 	static_cast<PPCCArray*>(l_intermediate)->load<PPCheckpointObject>(i_stream);
+	log::info("Loaded Startpoints from stream");
 }
 
 void StartpointManager::saveStartpointsToStream(OutputStream& o_stream) {
@@ -156,7 +159,7 @@ void StartpointManager::clean() {
 	}
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 Ref<CCArray> StartpointManager::getStartpointArray() {
 	return m_startpoints;
 }

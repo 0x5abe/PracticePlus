@@ -24,10 +24,10 @@
 
 template<class T, class U>
 inline void readGenericVector(InputStream* i_stream, gd::vector<T>& o_value, bool ignore = false) {
-	geode::log::info("Vector CustomRead Existing SIZE: {}", o_value.size());
+	//geode::log::info("Vector CustomRead Existing SIZE: {}", o_value.size());
 	unsigned int l_size;
 	i_stream->read(reinterpret_cast<char*>(&l_size), 4);
-	geode::log::info("VECTOR SIZE CustomRead SIZE in: {}", l_size);
+	//geode::log::info("VECTOR SIZE CustomRead SIZE in: {}", l_size);
 	if (l_size == 0) return;
 	if (ignore) {
 		i_stream->ignore(l_size*sizeof(T) + 4*l_size);
@@ -35,8 +35,8 @@ inline void readGenericVector(InputStream* i_stream, gd::vector<T>& o_value, boo
 	}
 	o_value.resize(l_size);
 	for (int i = 0; i < l_size; i++) {
-		geode::log::info("VECTOR SIZE CustomRead SIZE in TRYING TO LOAD: {}", l_size);
-		geode::log::info("VECTOR REAL SIZE CustomRead SIZE in TRYING TO LOAD: {}", o_value.size());
+		//geode::log::info("VECTOR SIZE CustomRead SIZE in TRYING TO LOAD: {}", l_size);
+		//geode::log::info("VECTOR REAL SIZE CustomRead SIZE in TRYING TO LOAD: {}", o_value.size());
 		reinterpret_cast<U*>((reinterpret_cast<unsigned int>(o_value.data())+(i*sizeof(T))))->load(*i_stream);
 	}
 }
@@ -121,12 +121,12 @@ void InputStream::operator>><CAState>(gd::vector<CAState>& o_value) {
 template<class K, class V, class W>
 inline void readGenericUnorderedMap(InputStream* i_stream, gd::unordered_map<K,V>& o_value) {
 	if (o_value.size() != 0) {
-		geode::log::info("VECTOR SIZE SHOULD NOT BE HERE AGRIA: {}", o_value.size());
+		//geode::log::info("VECTOR SIZE SHOULD NOT BE HERE AGRIA: {}", o_value.size());
 		o_value.clear();
 	}
 	unsigned int l_size;
 	i_stream->read(reinterpret_cast<char*>(&l_size), 4);
-	geode::log::info("Unordered Map CustomRead SIZE in: {}", l_size);
+	//geode::log::info("Unordered Map CustomRead SIZE in: {}", l_size);
 	for (int i = 0; i < l_size; i++) {
 		K l_key;
 		i_stream->read(reinterpret_cast<char*>(&l_key), sizeof(K));
@@ -163,7 +163,7 @@ template <>
 void InputStream::operator>><int, EnhancedGameObject*>(gd::unordered_map<int, EnhancedGameObject*>& o_value) {
 	unsigned int l_size;
 	this->read(reinterpret_cast<char*>(&l_size), 4);
-	geode::log::info("Unordered Map EnhancedGameObject* CustomRead SIZE in: {}", l_size);
+	//geode::log::info("Unordered Map EnhancedGameObject* CustomRead SIZE in: {}", l_size);
 	for (int i = 0; i < l_size; i++) {
 		int l_key;
 		int l_objectIndex;

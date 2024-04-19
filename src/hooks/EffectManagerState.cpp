@@ -164,7 +164,7 @@ void PPEffectManagerState::clean() {
 	}
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPEffectManagerState::describe() {
 	int l_size = m_unkVecCAState.size();
 	log::info("[PPEffectManagerState - describe] m_unkVecCAState.size(): {}", l_size);

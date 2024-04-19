@@ -1,4 +1,4 @@
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 #include "debug.hpp"
 
 void writeSeparator(std::string i_string, OutputStream& o_stream) {

@@ -13,7 +13,7 @@ void PPKeyframeObject::save(OutputStream& o_stream) {
 }
 
 inline void operator>>(InputStream& i_stream, PPKeyframeObject& o_value) {
-	log::info("INSIDE KeyframeObject save");
+	//log::info("INSIDE KeyframeObject save");
 	i_stream.read(reinterpret_cast<char*>(&o_value), 32);
 	VEC_SEPARATOR_I
 	i_stream >> o_value.m_unkVecDouble1;
@@ -75,7 +75,7 @@ inline void operator<<(OutputStream& o_stream, PPKeyframeObject& i_value) {
 	SEPARATOR_O
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPKeyframeObject::describe() {
 	log::info("[PPKeyframeObject - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this), 32));
 	int l_size = m_unkVecDouble1.size();

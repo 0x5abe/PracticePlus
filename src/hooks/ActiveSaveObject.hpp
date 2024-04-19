@@ -15,7 +15,7 @@ public:
 	void load(InputStream& i_stream);
 	void save(OutputStream& o_stream);
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 	void describe();
 #endif
 };
@@ -29,7 +29,7 @@ public:
 	void load(InputStream& i_stream);
 	void save(OutputStream& o_stream);
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 	void describe();
 #endif
 };

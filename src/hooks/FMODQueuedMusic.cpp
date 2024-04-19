@@ -28,7 +28,7 @@ inline void operator<<(OutputStream& o_stream, PPFMODQueuedMusic& i_value) {
 	SEPARATOR_O
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPFMODQueuedMusic::describe() {
 	log::info("[PPFMODQueuedMusic - describe] m_unkString: {}", m_unkString);
 	log::info("[PPFMODQueuedMusic - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPFMODQueuedMusic,m_unkString) + sizeof(gd::string), 56));

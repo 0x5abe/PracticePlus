@@ -36,9 +36,9 @@ void PPCheckpointObject::save(OutputStream& o_stream) {
 
 inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	// GJGameState m_gameState;
-	log::info("INPUT CCNODE uid: {}", o_value.m_uID);
-	log::info("INPUT CCNODE frotationx: {}", o_value.m_fRotationX);
-	log::info("INPUT CCNODE scale y: {}", o_value.m_fScaleY);
+	//log::info("INPUT CCNODE uid: {}", o_value.m_uID);
+	//log::info("INPUT CCNODE frotationx: {}", o_value.m_fRotationX);
+	//log::info("INPUT CCNODE scale y: {}", o_value.m_fScaleY);
 	SEPARATOR_I_C(GAME)
 	reinterpret_cast<PPGJGameState*>(&o_value.m_gameState)->load(i_stream);
 	SEPARATOR_I_C(GAME)
@@ -65,7 +65,7 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	// PlayerCheckpoint* m_player2Checkpoint;
 	bool l_hasPlayer2;
 	i_stream >> l_hasPlayer2;
-	log::info("Has player 2 in: {}", l_hasPlayer2);
+	//log::info("Has player 2 in: {}", l_hasPlayer2);
 	SEPARATOR_I
 	if (l_hasPlayer2) {
 		o_value.m_player2Checkpoint = PlayerCheckpoint::create();
@@ -75,22 +75,22 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	
 	// int m_unkInt1;
 	i_stream >> o_value.m_unkInt1;
-	log::info("o_value.m_unkInt1 in: {}", o_value.m_unkInt1);
+	//log::info("o_value.m_unkInt1 in: {}", o_value.m_unkInt1);
 	SEPARATOR_I
 
 	// int m_unkInt2;
 	i_stream >> o_value.m_unkInt2;
-	log::info("o_value.m_unkInt2 in: {}", o_value.m_unkInt2);
+	//log::info("o_value.m_unkInt2 in: {}", o_value.m_unkInt2);
 	SEPARATOR_I
 
 	// int m_unkInt3;
 	i_stream >> o_value.m_unkInt3;
-	log::info("o_value.m_unkInt3 in: {}", o_value.m_unkInt3);
+	//log::info("o_value.m_unkInt3 in: {}", o_value.m_unkInt3);
 	SEPARATOR_I
 
 	// short m_unkShort1;
 	i_stream >> o_value.m_unkShort1;
-	log::info("o_value.m_unkShort1 in: {}", o_value.m_unkShort1);
+	//log::info("o_value.m_unkShort1 in: {}", o_value.m_unkShort1);
 	SEPARATOR_I
 
 	// int m_unkInt4;
@@ -148,9 +148,9 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 }
 
 inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
-	log::info("OUTPUT CCNODE uid: {}", i_value.m_uID);
-	log::info("OUTPUT CCNODE frotationx: {}", i_value.m_fRotationX);
-	log::info("OUTPUT CCNODE scale y: {}", i_value.m_fScaleY);
+	//log::info("OUTPUT CCNODE uid: {}", i_value.m_uID);
+	//log::info("OUTPUT CCNODE frotationx: {}", i_value.m_fRotationX);
+	//log::info("OUTPUT CCNODE scale y: {}", i_value.m_fScaleY);
 	// GJGameState m_gameState;
 	SEPARATOR_O_C(GAME)
 	reinterpret_cast<PPGJGameState*>(&i_value.m_gameState)->save(o_stream);
@@ -178,7 +178,7 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
 	if (i_value.m_player2Checkpoint) {
 		l_hasPlayer2 = true;
 	}
-	log::info("Has player 2 out: {}", l_hasPlayer2);
+	//log::info("Has player 2 out: {}", l_hasPlayer2);
 	o_stream << l_hasPlayer2;
 	SEPARATOR_O
 	if (l_hasPlayer2) {
@@ -186,22 +186,22 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
 	}
 	
 	// int m_unkInt1;
-	log::info("i_value.m_unkInt1 in: {}", i_value.m_unkInt1);
+	//log::info("i_value.m_unkInt1 in: {}", i_value.m_unkInt1);
 	o_stream << i_value.m_unkInt1;
 	SEPARATOR_O
 
 	// int m_unkInt2;
-	log::info("i_value.m_unkInt2 in: {}", i_value.m_unkInt2);
+	//log::info("i_value.m_unkInt2 in: {}", i_value.m_unkInt2);
 	o_stream << i_value.m_unkInt2;
 	SEPARATOR_O
 
 	// int m_unkInt3;
-	log::info("i_value.m_unkInt3 in: {}", i_value.m_unkInt3);
+	//log::info("i_value.m_unkInt3 in: {}", i_value.m_unkInt3);
 	o_stream << i_value.m_unkInt3;
 	SEPARATOR_O
 
 	// short m_unkShort1;
-	log::info("i_value.m_unkShort1 in: {}", i_value.m_unkShort1);
+	//log::info("i_value.m_unkShort1 in: {}", i_value.m_unkShort1);
 	o_stream << i_value.m_unkShort1;
 	SEPARATOR_O
 
@@ -272,7 +272,7 @@ void PPCheckpointObject::clean() {
 	gd::vector<ActiveSaveObject2>().swap(m_vectorActiveSaveObjects2);
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPCheckpointObject::describe() {
 	log::info("[PPCheckpointObject - describe] start");
 	reinterpret_cast<PPCCObject*>(this)->describe();

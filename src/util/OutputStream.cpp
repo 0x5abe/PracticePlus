@@ -27,7 +27,7 @@ template<class T, class U>
 inline void writeGenericVector(OutputStream* o_stream, gd::vector<T>& i_value) {
 	unsigned int l_size = i_value.size();
 	o_stream->write(reinterpret_cast<char*>(&l_size), 4);
-	geode::log::info("VECTOR SIZE CustomWrite SIZE out: {}", l_size);
+	//geode::log::info("VECTOR SIZE CustomWrite SIZE out: {}", l_size);
 	if (l_size == 0) return;
 	for (int i = 0; i < l_size; i++) {
 		reinterpret_cast<U&>(i_value[i]).save(*o_stream); 
@@ -51,73 +51,73 @@ void OutputStream::operator<<<ActiveSaveObject2>(gd::vector<ActiveSaveObject2>& 
 
 template <>
 void OutputStream::operator<<<CountTriggerAction>(gd::vector<CountTriggerAction>& i_value) {
-	geode::log::info("1111111111111111111 VECTOR CustomWrite CountTriggerAction");
+	//geode::log::info("1111111111111111111 VECTOR CustomWrite CountTriggerAction");
 	writeGenericVector<CountTriggerAction, PPCountTriggerAction>(this, i_value);
 }
 
 template <>
 void OutputStream::operator<<<TouchToggleAction>(gd::vector<TouchToggleAction>& i_value) {
-	geode::log::info("22222222222222222222 VECTOR CustomWrite TouchToggleAction");
+	//geode::log::info("22222222222222222222 VECTOR CustomWrite TouchToggleAction");
 	writeGenericVector<TouchToggleAction, PPTouchToggleAction>(this, i_value);
 }
 
 template <>
 void OutputStream::operator<<<CollisionTriggerAction>(gd::vector<CollisionTriggerAction>& i_value) {
-	geode::log::info("33333333333333333333 VECTOR CustomWrite CollisionTriggerAction");
+	//geode::log::info("33333333333333333333 VECTOR CustomWrite CollisionTriggerAction");
 	writeGenericVector<CollisionTriggerAction, PPCollisionTriggerAction>(this, i_value);
 }
 
 template <>
 void OutputStream::operator<<<ToggleTriggerAction>(gd::vector<ToggleTriggerAction>& i_value) {
-	geode::log::info("4444444444444444444 VECTOR CustomWrite ToggleTriggerAction");
+	//geode::log::info("4444444444444444444 VECTOR CustomWrite ToggleTriggerAction");
 	writeGenericVector<ToggleTriggerAction, PPToggleTriggerAction>(this, i_value);
 }
 
 template <>
 void OutputStream::operator<<<SpawnTriggerAction>(gd::vector<SpawnTriggerAction>& i_value) {
-	geode::log::info("55555555555555555555 VECTOR CustomWrite SpawnTriggerAction");
+	//geode::log::info("55555555555555555555 VECTOR CustomWrite SpawnTriggerAction");
 	writeGenericVector<SpawnTriggerAction, PPSpawnTriggerAction>(this, i_value);
 }
 
 template <>
 void OutputStream::operator<<<GroupCommandObject2>(gd::vector<GroupCommandObject2>& i_value) {
-	geode::log::info("666666666666666666666 VECTOR CustomWrite GroupCommandObject2");
+	//geode::log::info("666666666666666666666 VECTOR CustomWrite GroupCommandObject2");
 	writeGenericVector<GroupCommandObject2, PPGroupCommandObject2>(this, i_value);
 }
 
 template <>
 void OutputStream::operator<<<KeyframeObject>(gd::vector<KeyframeObject>& i_value) {
-	geode::log::info("777777777777777777 VECTOR CustomWrite KeyframeObject");
+	//geode::log::info("777777777777777777 VECTOR CustomWrite KeyframeObject");
 	writeGenericVector<KeyframeObject, PPKeyframeObject>(this, i_value);
 }
 
 template <>
 void OutputStream::operator<<<TimerTriggerAction>(gd::vector<TimerTriggerAction>& i_value) {
-	geode::log::info("8888888888888888888 VECTOR CustomWrite TimerTriggerAction");
+	//geode::log::info("8888888888888888888 VECTOR CustomWrite TimerTriggerAction");
 	writeGenericVector<TimerTriggerAction, PPTimerTriggerAction>(this, i_value);
 }
 
 template <>
 void OutputStream::operator<<<EventTriggerInstance>(gd::vector<EventTriggerInstance>& i_value) {
-	geode::log::info("00000000000 VECTOR CustomWrite EventTriggerInstance");
+	//geode::log::info("00000000000 VECTOR CustomWrite EventTriggerInstance");
 	writeGenericVector<EventTriggerInstance, PPEventTriggerInstance>(this, i_value);
 }
 
 template <>
 void OutputStream::operator<<<EnterEffectInstance>(gd::vector<EnterEffectInstance>& i_value) {
-	geode::log::info("00232353000064545@@@@00003 VECTOR CustomWrite EnterEffectInstance");
+	//geode::log::info("00232353000064545@@@@00003 VECTOR CustomWrite EnterEffectInstance");
 	writeGenericVector<EnterEffectInstance, PPEnterEffectInstance>(this, i_value);
 }
 
 template <>
 void OutputStream::operator<<<AdvancedFollowInstance>(gd::vector<AdvancedFollowInstance>& i_value) {
-	geode::log::info("UWUWUWUWUWUWUWUUWUWUWUWW VECTOR CustomWrite AdvancedFollowInstance");
+	//geode::log::info("UWUWUWUWUWUWUWUUWUWUWUWW VECTOR CustomWrite AdvancedFollowInstance");
 	writeGenericVector<AdvancedFollowInstance, PPAdvancedFollowInstance>(this, i_value);
 }
 
 template <>
 void OutputStream::operator<<<CAState>(gd::vector<CAState>& i_value) {
-	geode::log::info("OWOWOWOWOOWOWOW VECTOR CustomWrite CAState");
+	//geode::log::info("OWOWOWOWOOWOWOW VECTOR CustomWrite CAState");
 	writeGenericVector<CAState, PPCAState>(this, i_value);
 }
 
@@ -127,7 +127,7 @@ template<class K, class V, class W>
 inline void writeGenericUnorderedMap(OutputStream* o_stream, gd::unordered_map<K,V>& i_value) {
 	unsigned int l_size = i_value.size();
 	o_stream->write(reinterpret_cast<char*>(&l_size), 4);
-	geode::log::info("Unordered Map CustomWrite SIZE out: {}", l_size);
+	//geode::log::info("Unordered Map CustomWrite SIZE out: {}", l_size);
 	if (l_size == 0) return;
 	for (std::pair<K,V> l_pair : i_value) {
 		o_stream->write(reinterpret_cast<char*>(&l_pair.first), sizeof(K));
@@ -152,13 +152,13 @@ void OutputStream::operator<<<int, FMODSoundState_padded>(gd::unordered_map<int,
 
 template <>
 void OutputStream::operator<<<int, TimerItem_padded>(gd::unordered_map<int, TimerItem_padded>& i_value) {
-	geode::log::info("999999999999999999999 Unordered Map CustomWrite TimerItem_padded");
+	//geode::log::info("999999999999999999999 Unordered Map CustomWrite TimerItem_padded");
 	writeGenericUnorderedMap<int, TimerItem_padded, PPTimerItem_padded>(this, i_value);
 }
 
 template <>
 void OutputStream::operator<<<int, SongChannelState>(gd::unordered_map<int, SongChannelState>& i_value) {
-	geode::log::info("jjjjjjjjjjjjjjjjjjjjj Unordered Map CustomWrite SongChannelState");
+	//geode::log::info("jjjjjjjjjjjjjjjjjjjjj Unordered Map CustomWrite SongChannelState");
 	writeGenericUnorderedMap<int, SongChannelState, PPSongChannelState>(this, i_value);
 }
 
@@ -166,14 +166,14 @@ template <>
 void OutputStream::operator<<<int, EnhancedGameObject*>(gd::unordered_map<int, EnhancedGameObject*>& i_value) {
 	unsigned int l_size = i_value.size();
 	this->write(reinterpret_cast<char*>(&l_size), 4);
-	geode::log::info("Unordered Map CustomWrite EnhancedGameObject* SIZE out: {}", l_size);
+	//geode::log::info("Unordered Map CustomWrite EnhancedGameObject* SIZE out: {}", l_size);
 	if (l_size == 0) return;
 	int l_objectIndex;
 	for (std::pair<int, EnhancedGameObject*> l_pair : i_value) {
 		this->write(reinterpret_cast<char*>(&l_pair.first), sizeof(int));
 		int l_objectIndex = -1;
 		if (!l_pair.second) {
-			geode::log::info("no game object??");
+			//geode::log::info("no game object??");
 		} else {
 			PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
 			if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(l_pair.second);

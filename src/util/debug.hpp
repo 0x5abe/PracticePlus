@@ -1,5 +1,5 @@
 #pragma once
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 #include <iomanip>
 #include <sstream>
 #include <string>

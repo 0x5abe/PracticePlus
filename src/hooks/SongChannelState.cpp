@@ -63,7 +63,7 @@ inline void operator<<(OutputStream& o_stream, PPSongChannelState& i_value) {
 	SEPARATOR_O
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPSongChannelState::describe() {
 	log::info("[PPSongChannelState - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this), 4));
 	int l_objectIndex = -1;

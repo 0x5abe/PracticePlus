@@ -27,7 +27,7 @@ inline void operator<<(OutputStream& o_stream, PPCountTriggerAction& i_value) {
 	VEC_SEPARATOR_O
 }
 
-#ifdef PP_DEBUG
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPCountTriggerAction::describe() {
 	log::info("[PPCountTriggerAction - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this), 36));
 	int l_size = m_unkVecInt.size();
