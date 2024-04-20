@@ -8,16 +8,6 @@
 
 class $modify(PPCCArray, cocos2d::CCArray) {
 public:
-	// overrides
-
-	$override
-	unsigned int count();
-
-	$override
-	CCObject* lastObject();
-
-	// custom methods
-
 	template <typename T>
 	void load(InputStream& i_stream);
 

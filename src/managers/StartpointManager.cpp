@@ -5,7 +5,6 @@
 #include <Geode/binding/GJGameState.hpp>
 #include <hooks/PlayerCheckpoint.hpp>
 #include <hooks/cocos2d/CCArray.hpp>
-#include <hooks/CheckpointObject.hpp>
 #include <util/math.hpp>
 #include <util/debug.hpp>
 
@@ -18,7 +17,7 @@ void StartpointManager::reset() {
 	m_startpoints->removeAllObjects();
 }
 
-CheckpointObject* StartpointManager::createStartpoint(CheckpointObject* i_startpoint, CCPoint i_startPosition) {
+PPCheckpointObject* StartpointManager::createStartpoint(PPCheckpointObject* i_startpoint, CCPoint i_startPosition) {
 	GameObject* l_newPhysicalCPO = GameObject::createWithFrame("square_01_001.png");
 	CC_SAFE_RETAIN(l_newPhysicalCPO);
 	l_newPhysicalCPO->m_objectID = 0x2c;
@@ -37,7 +36,19 @@ CheckpointObject* StartpointManager::createStartpoint(CheckpointObject* i_startp
 	//log::info("sizeof EffectManagerState {}", sizeof(EffectManagerState));
 	//log::info("sizeof GJGameState {}", sizeof(GJGameState));
 
-	m_startpoints->addObject(i_startpoint);
+	PPCheckpointObject* l_curStartpoint;
+	bool l_wasAdded = false;
+	for (unsigned int i = 0; i < m_startpoints->count(); i++) {
+		l_curStartpoint = static_cast<PPCheckpointObject*>(m_startpoints->objectAtIndex(i));
+		if (l_curStartpoint->m_fields->m_percentage > i_startpoint->m_fields->m_percentage) {
+			m_startpoints->insertObject(i_startpoint, i);
+			l_wasAdded = true;
+			break;
+		}
+	}
+	if (!l_wasAdded) {
+		m_startpoints->addObject(i_startpoint);
+	}
 
 	return i_startpoint;
 }
@@ -54,18 +65,18 @@ void StartpointManager::removeStartpoint(int i_index) {
 	}
 }
 
-CheckpointObject* StartpointManager::getStartpoint(int i_index) {
+PPCheckpointObject* StartpointManager::getStartpoint(int i_index) {
 	if (m_startpoints->count() == 0) return nullptr;
 	if ((-1 > i_index) || (static_cast<int>(m_startpoints->count()) <= i_index)) {
 		return nullptr;
 	}
 	if (i_index == -1) {
-		return static_cast<CheckpointObject*>(m_startpoints->lastObject());
+		return static_cast<PPCheckpointObject*>(m_startpoints->lastObject());
 	}
-	return static_cast<CheckpointObject*>(m_startpoints->objectAtIndex(i_index));
+	return static_cast<PPCheckpointObject*>(m_startpoints->objectAtIndex(i_index));
 }
 
-CheckpointObject* StartpointManager::getActiveStartpoint() {
+PPCheckpointObject* StartpointManager::getActiveStartpoint() {
 	return getStartpoint(m_activeStartpointId);
 }
 
@@ -117,7 +128,7 @@ bool StartpointManager::nextStartpoint() {
 }
 
 void StartpointManager::updatePlusModeVisibility() {
-	CheckpointObject* l_startpoint;
+	PPCheckpointObject* l_startpoint;
 	if (!m_startpoints) {
 		return;
 	}
@@ -159,7 +170,7 @@ void StartpointManager::clean() {
 	}
 }
 
-#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
+#if defined(PP_DEBUG)
 Ref<CCArray> StartpointManager::getStartpointArray() {
 	return m_startpoints;
 }

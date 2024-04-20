@@ -138,12 +138,17 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	i_stream >> o_value.m_unkGetsCopiedFromGameState;
 	SEPARATOR_I
 
+	// custom members
+
+	i_stream >> o_value.m_fields->m_percentage;
+	SEPARATOR_I
+
 	// add the loaded startpoint to the list
 	PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
 	if (l_playLayer) {
 		// set the checkpoint as loaded so we can clean it up properly on remove
 		o_value.m_fields->m_wasLoaded = true;
-		l_playLayer->addStartpoint(StartpointManager::get().createStartpoint(reinterpret_cast<CheckpointObject*>(&o_value), l_physicalCheckpointObjectStartPos));
+		l_playLayer->addStartpoint(StartpointManager::get().createStartpoint(&o_value, l_physicalCheckpointObjectStartPos));
 	}
 }
 
@@ -252,6 +257,11 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
 
 	// int m_unkGetsCopiedFromGameState;
 	o_stream << i_value.m_unkGetsCopiedFromGameState;
+	SEPARATOR_O
+
+	// custom members
+
+	o_stream << i_value.m_fields->m_percentage;
 	SEPARATOR_O
 }
 

@@ -1,8 +1,8 @@
 #pragma once
-#include "Geode/binding/CheckpointObject.hpp"
 #include "Geode/binding/GameObject.hpp"
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PlayLayer.hpp>
+#include <hooks/CheckpointObject.hpp>
 #include <managers/StartpointManager.hpp>
 
 class $modify(PPPlayLayer, PlayLayer) {
@@ -12,7 +12,6 @@ protected:
 	void updatePlusModeLogic(bool i_isPlusMode);
 
 public:
-	bool m_enableArrayHook = false;
 	int m_uniqueIdBase = 12;
 	bool m_onQuitCalled = false;
 
@@ -35,13 +34,13 @@ public:
 	
 	// custom methods
 
-	void addStartpoint(CheckpointObject* i_startpoint, int i_index = -1);
+	void addStartpoint(PPCheckpointObject* i_startpoint, int i_index = -1);
 
 	void createStartpoint();
 
 	bool removeStartpoint(int i_index = -1);
 
-	inline CheckpointObject* getActiveStartpoint() { return StartpointManager::get().getActiveStartpoint(); }
+	inline PPCheckpointObject* getActiveStartpoint() { return StartpointManager::get().getActiveStartpoint(); }
 
 	inline int getActiveStartpointId() { return StartpointManager::get().getActiveStartpointId(); }
 

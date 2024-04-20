@@ -2,11 +2,14 @@
 #include "Geode/binding/PlayLayer.hpp"
 #include <Geode/Geode.hpp>
 #include <hooks/cocos2d/CCArray.hpp>
+#include <hooks/CheckpointObject.hpp>
 #include <util/InputStream.hpp>
 #include <util/OutputStream.hpp>
 
+class PPPlayLayer;
+
 class StartpointManager {
-	friend class PPCCArray;
+	friend class PPPlayLayer;
 protected:
 	geode::Ref<cocos2d::CCArray> m_startpoints = nullptr;
 	int m_activeStartpointId = -1;
@@ -35,13 +38,13 @@ public:
 
 	void reset();
 
-	CheckpointObject* createStartpoint(CheckpointObject* i_checkpointObject, cocos2d::CCPoint i_startPosition);
+	PPCheckpointObject* createStartpoint(PPCheckpointObject* i_checkpointObject, cocos2d::CCPoint i_startPosition);
 
 	void removeStartpoint(int i_index);
 
-	CheckpointObject* getStartpoint(int i_index = -1);
+	PPCheckpointObject* getStartpoint(int i_index = -1);
 
-	CheckpointObject* getActiveStartpoint();
+	PPCheckpointObject* getActiveStartpoint();
 
 	inline int getActiveStartpointId() { return m_activeStartpointId; }
 
@@ -76,7 +79,7 @@ public:
 
 	void clean();
 
-#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
+#if defined(PP_DEBUG)
 	geode::Ref<cocos2d::CCArray> getStartpointArray();
 #endif
 };

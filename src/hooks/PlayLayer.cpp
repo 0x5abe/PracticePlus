@@ -23,10 +23,16 @@ bool PPPlayLayer::init(GJGameLevel* i_level, bool i_useReplay, bool i_dontCreate
 }
 
 void PPPlayLayer::resetLevel() {
-	m_fields->m_enableArrayHook = true;
- 
+	CCObject* l_checkpoint = m_checkpointArray->lastObject();
+	if (!l_checkpoint && isPlusMode() && getActiveStartpointId() != -1) {
+		m_checkpointArray->addObject(StartpointManager::get().m_startpoints->objectAtIndex(getActiveStartpointId()));
+	}
+
 	PlayLayer::resetLevel();
-	m_fields->m_enableArrayHook = false;
+
+	if (!l_checkpoint && isPlusMode() && getActiveStartpointId() != -1) {
+		m_checkpointArray->removeLastObject();
+	}
 }
 
 void PPPlayLayer::togglePracticeMode(bool i_value) {
@@ -54,10 +60,12 @@ void PPPlayLayer::onQuit() {
 // custom methods
 
 void PPPlayLayer::createStartpoint() {
-	addStartpoint(StartpointManager::get().createStartpoint(createCheckpoint(), m_player1->getPosition()));
+	PPCheckpointObject* l_startpoint =  static_cast<PPCheckpointObject*>(PlayLayer::createCheckpoint());
+	l_startpoint->m_fields->m_percentage = PlayLayer::getCurrentPercent();
+	addStartpoint(StartpointManager::get().createStartpoint(l_startpoint, m_player1->getPosition()));
 }
 
-void PPPlayLayer::addStartpoint(CheckpointObject* i_startpoint, int i_index) {
+void PPPlayLayer::addStartpoint(PPCheckpointObject* i_startpoint, int i_index) {
 	PlayLayer::addToSection(i_startpoint->m_physicalCheckpointObject);
 	i_startpoint->m_physicalCheckpointObject->activateObject();
 }
