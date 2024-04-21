@@ -51,7 +51,7 @@ void PPPlayLayer::updateVisibility(float i_unkFloat) {
 
 void PPPlayLayer::onQuit() {
 	if (!m_fields->m_onQuitCalled) {
-		StartpointManager::get().reset();
+		removeAllStartpoints(true);
 		m_fields->m_onQuitCalled = true;
 	}
 	PlayLayer::onQuit();
@@ -81,6 +81,18 @@ bool PPPlayLayer::removeStartpoint(int i_index) {
 	}
 	l_startpointManager.removeStartpoint(i_index);
 	return true;
+}
+
+void PPPlayLayer::removeAllStartpoints(bool i_reset) {
+	StartpointManager& l_startpointManager = StartpointManager::get();
+	CheckpointObject* l_startpoint;
+	for (int i = 0; i < l_startpointManager.getStartpointCount(); i++) {
+		l_startpoint = l_startpointManager.getStartpoint(i);
+		if (!l_startpoint) continue;
+		PlayLayer::removeObjectFromSection(l_startpoint->m_physicalCheckpointObject);
+		l_startpoint->m_physicalCheckpointObject->removeMeAndCleanup();
+	}
+	l_startpointManager.removeAllStartpoints(i_reset);
 }
 
 bool PPPlayLayer::setActiveStartpointAndReload(int i_index) {
@@ -160,6 +172,8 @@ void PPPlayLayer::setupKeybinds() {
 	addEventListener<keybinds::InvokeBindFilter>(
 		[this](keybinds::InvokeBindEvent* event) {
 			if (event->isDown() && isPlusMode()) {
+				removeAllStartpoints(false);
+
 				InputStream l_ifstream = InputStream("./testPlayerCheckpoint.spf");
 				StartpointManager::get().loadStartpointsFromStream(l_ifstream);
 			}

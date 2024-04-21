@@ -10,13 +10,6 @@
 
 using namespace geode::prelude;
 
-void StartpointManager::reset() {
-	m_isPlusMode = false;
-	m_activeStartpointId = -1;
-	clean();
-	m_startpoints->removeAllObjects();
-}
-
 PPCheckpointObject* StartpointManager::createStartpoint(PPCheckpointObject* i_startpoint, CCPoint i_startPosition) {
 	GameObject* l_newPhysicalCPO = GameObject::createWithFrame("square_01_001.png");
 	CC_SAFE_RETAIN(l_newPhysicalCPO);
@@ -62,6 +55,15 @@ void StartpointManager::removeStartpoint(int i_index) {
 		m_startpoints->removeLastObject(true);
 	} else {
 		m_startpoints->removeObjectAtIndex(i_index, true);
+	}
+}
+
+void StartpointManager::removeAllStartpoints(bool i_reset) {
+	clean();
+	m_startpoints->removeAllObjects();
+	if (i_reset) {
+		m_isPlusMode = false;
+		m_activeStartpointId = -1;
 	}
 }
 
@@ -147,7 +149,6 @@ void StartpointManager::updatePlusModeLogic() {
 }
 
 void StartpointManager::loadStartpointsFromStream(InputStream& i_stream) {
-	clean();
 	cocos2d::CCArray* l_intermediate = m_startpoints;
 	log::info("Loading Startpoints from stream");
 	static_cast<PPCCArray*>(l_intermediate)->load<PPCheckpointObject>(i_stream);

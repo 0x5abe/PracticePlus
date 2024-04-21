@@ -40,6 +40,8 @@ public:
 
 	bool removeStartpoint(int i_index = -1);
 
+	void removeAllStartpoints(bool i_reset);
+
 	inline PPCheckpointObject* getActiveStartpoint() { return StartpointManager::get().getActiveStartpoint(); }
 
 	inline int getActiveStartpointId() { return StartpointManager::get().getActiveStartpointId(); }
