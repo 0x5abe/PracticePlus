@@ -33,6 +33,8 @@ public:
 
 	void write(char* i_value, int i_size) { m_stream->write(i_value, i_size); }
 
+	inline bool good() { return m_stream->good(); }
+
 	// custom operators
 
 	// vector

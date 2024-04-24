@@ -1,7 +1,9 @@
 #pragma once
 #include "Geode/binding/GameObject.hpp"
+#include "Geode/modify/Modify.hpp"
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PlayLayer.hpp>
+#include <condition_variable>
 #include <hooks/CheckpointObject.hpp>
 #include <managers/StartpointManager.hpp>
 
@@ -11,14 +13,31 @@ protected:
 
 	void updatePlusModeLogic(bool i_isPlusMode);
 
+	std::string getStartpointFilePath();
+
 public:
-	int m_uniqueIdBase = 12;
-	bool m_onQuitCalled = false;
+	struct Fields {
+		int m_uniqueIdBase = 12;
+		bool m_onQuitCalled = false;
+		bool m_startedLoadingStartpoints = false;
+		bool m_finishedLoadingStartpoints = false;
+		float m_startpointLoadingProgress = 0.0f;
+		bool m_startedSavingStartpoints = false;
+		bool m_finishedSavingStartpoints = false;
+		unsigned int m_bytesToRead = 0;
+		unsigned int m_bytesRead = 0;
+	};
 
 	// overrides
 
 	$override
 	bool init(GJGameLevel* i_level, bool i_useReplay, bool i_dontCreateObjects);
+
+	$override 
+	void createObjectsFromSetupFinished();
+
+	$override
+	void setupHasCompleted();
 
 	$override
 	void resetLevel();
@@ -42,6 +61,10 @@ public:
 
 	void removeAllStartpoints(bool i_reset);
 
+	void loadStartpoints();
+
+	void saveStartpoints();
+
 	inline PPCheckpointObject* getActiveStartpoint() { return StartpointManager::get().getActiveStartpoint(); }
 
 	inline int getActiveStartpointId() { return StartpointManager::get().getActiveStartpointId(); }
@@ -57,6 +80,8 @@ public:
 	inline int getGameObjectIndex(GameObject* i_object) {
 		return i_object->m_uniqueID-m_fields->m_uniqueIdBase;
 	}
+
+	static void ioThreadUpdate();
 
 	void setupKeybinds();
 };

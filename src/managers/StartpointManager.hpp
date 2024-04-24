@@ -10,6 +10,7 @@ class PPPlayLayer;
 
 class StartpointManager {
 	friend class PPPlayLayer;
+
 protected:
 	geode::Ref<cocos2d::CCArray> m_startpoints = nullptr;
 	int m_activeStartpointId = -1;
@@ -32,8 +33,8 @@ protected:
 
 public:
 	static StartpointManager& get() {
-		static StartpointManager l_instance;
-		return l_instance;
+		static StartpointManager s_instance;
+		return s_instance;
 	}
 
 	PPCheckpointObject* createStartpoint(PPCheckpointObject* i_checkpointObject, cocos2d::CCPoint i_startPosition);

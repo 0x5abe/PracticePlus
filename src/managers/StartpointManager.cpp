@@ -5,7 +5,7 @@
 #include <Geode/binding/GJGameState.hpp>
 #include <hooks/PlayerCheckpoint.hpp>
 #include <hooks/cocos2d/CCArray.hpp>
-#include <util/math.hpp>
+#include <util/algorithm.hpp>
 #include <util/debug.hpp>
 
 using namespace geode::prelude;
@@ -106,7 +106,7 @@ bool StartpointManager::prevStartpoint() {
 	} else {
 		l_nextActiveStartpointId = m_activeStartpointId - 1;
 		if (l_nextActiveStartpointId != -1) {
-			l_nextActiveStartpointId = util::math::mod(l_nextActiveStartpointId, m_startpoints->count());
+			l_nextActiveStartpointId = util::algorithm::mod(l_nextActiveStartpointId, m_startpoints->count());
 		}
 	}
 	setActiveStartpointId(l_nextActiveStartpointId);
@@ -122,7 +122,7 @@ bool StartpointManager::nextStartpoint() {
 		if (m_activeStartpointId + 1 == m_startpoints->count()) {
 			l_nextActiveStartpointId = -1;
 		} else {
-			l_nextActiveStartpointId = util::math::mod(m_activeStartpointId + 1, m_startpoints->count());
+			l_nextActiveStartpointId = util::algorithm::mod(m_activeStartpointId + 1, m_startpoints->count());
 		}
 	}
 	setActiveStartpointId(l_nextActiveStartpointId);

@@ -8,12 +8,21 @@
 #include <Geode/binding/EventTriggerInstance.hpp>
 #include <Geode/binding/SongChannelState.hpp>
 
-#define PP_OPERATOR_READ(type) virtual void operator>>(type& o_value) { m_stream->read(reinterpret_cast<char*>(&o_value), sizeof(type)); }
+#define PP_OPERATOR_READ(type) virtual void operator>>(type& o_value) {\
+	read(reinterpret_cast<char*>(&o_value), sizeof(type));\
+	if (m_bytesRead) *m_bytesRead += sizeof(type);\
+}
+
 class InputStream {
 protected:
 	std::istream* m_stream;
+	unsigned int* m_bytesRead;
 public:
 	InputStream(std::string i_filePath) { m_stream = new std::ifstream(i_filePath, std::ios_base::binary); }
+	InputStream(std::string i_filePath, unsigned int* i_bytesRead) {
+		m_stream = new std::ifstream(i_filePath, std::ios_base::binary);
+		m_bytesRead = i_bytesRead;
+	}
 	~InputStream() { delete m_stream; }
 
 	PP_OPERATOR_READ(bool)
@@ -30,8 +39,16 @@ public:
 	PP_OPERATOR_READ(cocos2d::CCAffineTransform)
 	PP_OPERATOR_READ(uint64_t)
 	
-	void read(char* o_value, int i_size) { m_stream->read(o_value, i_size); }
-	void ignore(int i_size) { m_stream->ignore(i_size); }
+	void read(char* o_value, int i_size) { 
+		m_stream->read(o_value, i_size); 
+		if (m_bytesRead) *m_bytesRead += i_size;
+	}
+	void ignore(int i_size) {
+		m_stream->ignore(i_size);
+		if (m_bytesRead) *m_bytesRead += i_size;
+	}
+
+	inline bool good() { return m_stream->good(); }
 
 	// custom operators
 
@@ -40,12 +57,13 @@ public:
 	template <class T>
 	void operator>>(gd::vector<T>& o_value) {
 		unsigned int l_size;
-		m_stream->read(reinterpret_cast<char*>(&l_size), 4);
+		read(reinterpret_cast<char*>(&l_size), 4);
 		//geode::log::info("VECTOR SIZE in: {}", l_size);
 		if (l_size == 0) return;
 		T value;
 		for (int i=0; i < l_size; i++) {
-			m_stream->read(reinterpret_cast<char*>(&value), sizeof(T));
+			read(reinterpret_cast<char*>(&value), sizeof(T));
+			if (m_bytesRead) *m_bytesRead += sizeof(T);
 			o_value.push_back(value);
 		}
 	}
@@ -53,13 +71,13 @@ public:
 	template <>
 	void operator>><float>(gd::vector<float>& o_value) {
 		unsigned int l_size;
-		m_stream->read(reinterpret_cast<char*>(&l_size), 4);
+		read(reinterpret_cast<char*>(&l_size), 4);
 		//geode::log::info("VECTOR SIZE in: {}", l_size);
 		if (l_size == 0) return;
 		o_value.reserve(l_size);
 		float value;
 		for (int i=0; i < l_size; i++) {
-			m_stream->read(reinterpret_cast<char*>(&value), sizeof(float));
+			read(reinterpret_cast<char*>(&value), sizeof(float));
 			//geode::log::info("VALUE VEC READ FLOAT: {}", value);
 			o_value.push_back(value);
 		}
@@ -118,14 +136,14 @@ public:
 			o_value.clear();
 		}
 		unsigned int l_size;
-		m_stream->read(reinterpret_cast<char*>(&l_size), 4);
+		read(reinterpret_cast<char*>(&l_size), 4);
 		//geode::log::info("Unordered Map SIZE in: {}", l_size);
 		if (l_size == 0) return;
 		K l_key;
 		V l_value;
 		for (int i = 0; i < l_size; i++) {
-			m_stream->read(reinterpret_cast<char*>(&l_key), sizeof(K));
-			m_stream->read(reinterpret_cast<char*>(&l_value), sizeof(V));
+			read(reinterpret_cast<char*>(&l_key), sizeof(K));
+			read(reinterpret_cast<char*>(&l_value), sizeof(V));
 			o_value[l_key] = l_value;
 		}
 	}
@@ -137,13 +155,13 @@ public:
 			o_value.clear();
 		}
 		unsigned int l_size;
-		m_stream->read(reinterpret_cast<char*>(&l_size), 4);
+		read(reinterpret_cast<char*>(&l_size), 4);
 		//geode::log::info("Unordered Map key->vector<T> SIZE in: {}", l_size);
 		if (l_size == 0) return;
 		K l_key;
 		V l_value;
 		for (int i = 0; i < l_size; i++) {
-			m_stream->read(reinterpret_cast<char*>(&l_key), sizeof(K));
+			read(reinterpret_cast<char*>(&l_key), sizeof(K));
 			*this >> o_value[l_key];
 		}
 	}
@@ -175,12 +193,12 @@ public:
 			o_value.clear();
 		}
 		unsigned int l_size;
-		m_stream->read(reinterpret_cast<char*>(&l_size), 4);
+		read(reinterpret_cast<char*>(&l_size), 4);
 		//geode::log::info("Unordered Set SIZE in: {}", l_size);
 		if (l_size == 0) return;
 		K l_key;
 		for (int i = 0; i < l_size; i++) {
-			m_stream->read(reinterpret_cast<char*>(&l_key), sizeof(K));
+			read(reinterpret_cast<char*>(&l_key), sizeof(K));
 			o_value.insert(l_key);
 		}
 	}
@@ -194,14 +212,14 @@ public:
 			o_value.clear();
 		}
 		unsigned int l_size;
-		m_stream->read(reinterpret_cast<char*>(&l_size), 4);
+		read(reinterpret_cast<char*>(&l_size), 4);
 		//geode::log::info("Map SIZE in: {}", l_size);
 		if (l_size == 0) return;
 		K l_key;
 		V l_value;
 		for (int i = 0; i < l_size; i++) {
-			m_stream->read(reinterpret_cast<char*>(&l_key), sizeof(K));
-			m_stream->read(reinterpret_cast<char*>(&l_value), sizeof(V));
+			read(reinterpret_cast<char*>(&l_key), sizeof(K));
+			read(reinterpret_cast<char*>(&l_value), sizeof(V));
 			o_value[l_key] = l_value;
 		}
 	}
@@ -213,13 +231,13 @@ public:
 			o_value.clear();
 		}
 		unsigned int l_size;
-		m_stream->read(reinterpret_cast<char*>(&l_size), 4);
+		read(reinterpret_cast<char*>(&l_size), 4);
 		//geode::log::info("Map key->vector<T> SIZE in: {}", l_size);
 		if (l_size == 0) return;
 		K l_key;
 		V l_value;
 		for (int i = 0; i < l_size; i++) {
-			m_stream->read(reinterpret_cast<char*>(&l_key), sizeof(K));
+			read(reinterpret_cast<char*>(&l_key), sizeof(K));
 			*this >> o_value[l_key];
 		}
 	}
@@ -233,12 +251,12 @@ public:
 			o_value.clear();
 		}
 		unsigned int l_size;
-		m_stream->read(reinterpret_cast<char*>(&l_size), 4);
+		read(reinterpret_cast<char*>(&l_size), 4);
 		//geode::log::info("Set SIZE in: {}", l_size);
 		if (l_size == 0) return;
 		K l_key;
 		for (int i = 0; i < l_size; i++) {
-			m_stream->read(reinterpret_cast<char*>(&l_key), sizeof(K));
+			read(reinterpret_cast<char*>(&l_key), sizeof(K));
 			o_value.insert(l_key);
 		}
 	}
@@ -251,11 +269,11 @@ public:
 			o_value.clear();
 		}
 		unsigned int l_size;
-		m_stream->read(reinterpret_cast<char*>(&l_size), 4);
+		read(reinterpret_cast<char*>(&l_size), 4);
 		//geode::log::info("String SIZE in: {}", l_size);
 		if (l_size == 0) return;
 		char* l_buf = new char[l_size+1];
-		m_stream->read(l_buf, l_size);
+		read(l_buf, l_size);
 		l_buf[l_size] = '\0';
 		o_value = l_buf;
 		delete[] l_buf;
