@@ -4,12 +4,15 @@
 #include "Geode/c++stl/string.hpp"
 #include "Geode/cocos/platform/CCFileUtils.h"
 #include <Geode/binding/CheckpointObject.hpp>
+#include <chrono>
 #include <filesystem>
 #include <geode.custom-keybinds/include/Keybinds.hpp>
 #include <ghc/filesystem.hpp>
 #include <managers/StartpointManager.hpp>
 #include <hooks/GJGameLevel.hpp>
 #include <mutex>
+#include <processthreadsapi.h>
+#include <thread>
 #include <util/InputStream.hpp>
 #include <util/OutputStream.hpp>
 #include <util/algorithm.hpp>
@@ -52,6 +55,11 @@ void PPPlayLayer::setupHasCompleted() {
 		log::info("[setupHasCompleted] hasnt finished loading SP");
 		if (!m_fields->m_startedLoadingStartpoints) {
 			log::info("[setupHasCompleted] starting SP load");
+			if (s_ioThread.joinable()) {
+				//SetThreadPriority(s_ioThread.native_handle(), THREAD_PRIORITY_ABOVE_NORMAL);
+				s_ioThread.detach();
+			}
+
 			m_fields->m_startedLoadingStartpoints = true;
 			m_fields->m_startpointLoadingProgress = 0.0f;
 			s_ioConditionVar.notify_one();
@@ -68,9 +76,15 @@ void PPPlayLayer::setupHasCompleted() {
 		if (m_fields->m_bytesToRead > 0) {
 			m_fields->m_startpointLoadingProgress = (static_cast<float>(m_fields->m_bytesRead)/static_cast<float>(m_fields->m_bytesToRead));
 		}
-		m_loadingProgress = m_fields->m_startpointLoadingProgress;
+		if (m_fields->m_startpointLoadingProgress != 1.0f) {
+			m_loadingProgress = m_fields->m_startpointLoadingProgress;
+		} else {
+			m_loadingProgress = 0.99f;
+		}
 		log::info("[setupHasCompleted] m_loadingProgress: {}", m_loadingProgress);
 
+		std::this_thread::sleep_for(std::chrono::milliseconds(16));
+		//ResumeThread(s_ioThread.native_handle());
 		// if (m_fields->m_startpointLoadingProgress >= 1.0f) {
 		// 	m_fields->m_finishedLoadingStartpoints = true;
 		// }
@@ -80,6 +94,7 @@ void PPPlayLayer::setupHasCompleted() {
 		m_loadingProgress = 1.0f;
 		PlayLayer::setupHasCompleted();
 
+		StartpointManager::get().fetchStartpointsFromTempStorage();
 		m_fields->m_startedLoadingStartpoints = false;
 		m_fields->m_finishedLoadingStartpoints = false;
 		m_fields->m_startpointLoadingProgress = 0.0f;
@@ -155,8 +170,10 @@ void PPPlayLayer::removeAllStartpoints(bool i_reset) {
 	for (int i = 0; i < l_startpointManager.getStartpointCount(); i++) {
 		l_startpoint = l_startpointManager.getStartpoint(i);
 		if (!l_startpoint) continue;
-		PlayLayer::removeObjectFromSection(l_startpoint->m_physicalCheckpointObject);
-		l_startpoint->m_physicalCheckpointObject->removeMeAndCleanup();
+		//PlayLayer::removeObjectFromSection(l_startpoint->m_physicalCheckpointObject);
+		//if (l_startpoint->m_physicalCheckpointObject) {
+			l_startpoint->m_physicalCheckpointObject->removeMeAndCleanup();
+		//}
 	}
 	l_startpointManager.removeAllStartpoints(i_reset);
 }
@@ -189,7 +206,7 @@ void PPPlayLayer::loadStartpoints() {
 	}
 	//EndTodo
 
-	removeAllStartpoints(false);
+	//removeAllStartpoints(false);
 	log::info("about to load startpoints from stream");
 	StartpointManager::get().loadStartpointsFromStream(l_ifstream);
 }
@@ -269,9 +286,9 @@ void PPPlayLayer::ioThreadUpdate() {
 			l_thisPtr->m_fields->m_finishedLoadingStartpoints = true;
 		} else if (l_thisPtr->m_fields->m_startedSavingStartpoints) {
 			//Todo save
-			//l_thisPtr->saveStartpoints();
+			l_thisPtr->saveStartpoints();
 
-			//l_thisPtr->m_fields->m_finishedSavingStartpoints = true;
+			l_thisPtr->m_fields->m_finishedSavingStartpoints = true;
 			//EndTodo
 		}
 	}
@@ -353,7 +370,9 @@ void PPPlayLayer::setupKeybinds() {
 			if (event->isDown() && isPlusMode()) {
 				//OutputStream l_ofstream = OutputStream("./testPlayerCheckpoint.spf");
 				//StartpointManager::get().saveStartpointsToStream(l_ofstream);
-				saveStartpoints();
+				StartpointManager::get().commitStartpointsToTempStorage();
+				m_fields->m_startedSavingStartpoints = true;
+				s_ioConditionVar.notify_one();
 			}
 			return ListenerResult::Propagate;
 		},

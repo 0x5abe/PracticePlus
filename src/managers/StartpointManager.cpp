@@ -1,5 +1,7 @@
 
 #include "StartpointManager.hpp"
+#include "Geode/cocos/platform/CCPlatformMacros.h"
+#include "hooks/CheckpointObject.hpp"
 #include <Geode/Enums.hpp>
 #include <Geode/binding/CheckpointObject.hpp>
 #include <Geode/binding/GJGameState.hpp>
@@ -149,18 +151,40 @@ void StartpointManager::updatePlusModeLogic() {
 }
 
 void StartpointManager::loadStartpointsFromStream(InputStream& i_stream) {
-	cocos2d::CCArray* l_intermediate = m_startpoints;
+	//cocos2d::CCArray* l_intermediate = m_startpoints;
 	log::info("Loading Startpoints from stream");
-	static_cast<PPCCArray*>(l_intermediate)->load<PPCheckpointObject>(i_stream);
+	//static_cast<PPCCArray*>(l_intermediate)->load<PPCheckpointObject>(i_stream);
+	log::info("tempStartpoint size: {}", m_tempStartpoints.size());
+	m_tempStartpoints.clear();
+	i_stream >> m_tempStartpoints;
 	log::info("Loaded Startpoints from stream");
 }
 
 void StartpointManager::saveStartpointsToStream(OutputStream& o_stream) {
-	if (m_startpoints->count() > 0) {
-		cocos2d::CCArray* l_intermediate = m_startpoints;
+	if (m_tempStartpoints.size() > 0) {
+		//cocos2d::CCArray* l_intermediate = m_startpoints;
 		log::info("Saving Startpoints to stream");
-		static_cast<PPCCArray*>(l_intermediate)->save<PPCheckpointObject>(o_stream);
+		o_stream << m_tempStartpoints;
+		//static_cast<PPCCArray*>(l_intermediate)->save<PPCheckpointObject>(o_stream);
 		log::info("Saved Startpoints to stream");
+	}
+}
+
+void StartpointManager::fetchStartpointsFromTempStorage() {
+	for (int i = 0; i < m_tempStartpoints.size(); i++) {
+		log::info("Startpoint {}", (unsigned int)m_tempStartpoints[i]);
+		log::info("Startpoint retain count: {}", m_tempStartpoints[i]->retainCount());
+		log::info("Startpoint percentage: {}", static_cast<PPCheckpointObject*>(m_tempStartpoints[i])->m_fields->m_percentage);
+		m_startpoints->addObject(static_cast<PPCheckpointObject*>(m_tempStartpoints[i]));
+		CC_SAFE_RELEASE(m_tempStartpoints[i]);
+	}
+	m_tempStartpoints.clear();
+}
+
+void StartpointManager::commitStartpointsToTempStorage() {
+	m_tempStartpoints.clear();
+	for (int i = 0; i < m_startpoints->count(); i++) {
+		m_tempStartpoints.push_back(static_cast<CheckpointObject*>(m_startpoints->objectAtIndex(i)));
 	}
 }
 

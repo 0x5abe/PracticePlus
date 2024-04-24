@@ -8,7 +8,7 @@
 #include <Geode/binding/EnterEffectInstance.hpp>
 #include <Geode/binding/SongChannelState.hpp>
 
-#define PP_OPERATOR_WRITE(type) virtual void operator<<(type& i_value) { m_stream->write(reinterpret_cast<char*>(&i_value), sizeof(type)); }
+#define PP_OPERATOR_WRITE(type) virtual void operator<<(type& i_value) { write(reinterpret_cast<char*>(&i_value), sizeof(type)); }
 
 class OutputStream {
 protected:
@@ -43,8 +43,8 @@ public:
 	void operator<<(gd::vector<T>& i_value) {
 		unsigned int l_size = i_value.size();
 		//geode::log::info("VECTOR SIZE out: {}", l_size);
-		m_stream->write(reinterpret_cast<char*>(&l_size), 4);
-		m_stream->write(reinterpret_cast<char*>(i_value.data()), l_size*sizeof(T));
+		write(reinterpret_cast<char*>(&l_size), 4);
+		write(reinterpret_cast<char*>(i_value.data()), l_size*sizeof(T));
 	}
 
 	template <>
@@ -92,16 +92,19 @@ public:
 	template <>
 	void operator<<<CAState>(gd::vector<CAState>& i_value);
 
+	template <>
+	void operator<<<CheckpointObject*>(gd::vector<CheckpointObject*>& i_value);
+
 	// unordered_map
 
 	template <class K, class V>
 	void operator<<(gd::unordered_map<K,V>& i_value) {
 		unsigned int l_size = i_value.size();
 		//geode::log::info("Unordered Map SIZE out: {}", l_size);
-		m_stream->write(reinterpret_cast<char*>(&l_size), 4);
+		write(reinterpret_cast<char*>(&l_size), 4);
 		for (std::pair<K,V> l_pair : i_value) {
-			m_stream->write(reinterpret_cast<char*>(&l_pair.first), sizeof(K));
-			m_stream->write(reinterpret_cast<char*>(&l_pair.second), sizeof(V));
+			write(reinterpret_cast<char*>(&l_pair.first), sizeof(K));
+			write(reinterpret_cast<char*>(&l_pair.second), sizeof(V));
 		}
 	}
 
@@ -109,9 +112,9 @@ public:
 	void operator<<(gd::unordered_map<K,gd::vector<V>>& i_value) {
 		unsigned int l_size = i_value.size();
 		//geode::log::info("Unordered Map key->vector<T> SIZE out: {}", l_size);
-		m_stream->write(reinterpret_cast<char*>(&l_size), 4);
+		write(reinterpret_cast<char*>(&l_size), 4);
 		for (std::pair<K,gd::vector<V>> l_pair : i_value) {
-			m_stream->write(reinterpret_cast<char*>(&l_pair.first), sizeof(K));
+			write(reinterpret_cast<char*>(&l_pair.first), sizeof(K));
 			*this << l_pair.second; 
 		}
 	}
@@ -140,9 +143,9 @@ public:
 	void operator<<(gd::unordered_set<K>& i_value) {
 		unsigned int l_size = i_value.size();
 		//geode::log::info("Unordered Set SIZE out: {}", l_size);
-		m_stream->write(reinterpret_cast<char*>(&l_size), 4);
+		write(reinterpret_cast<char*>(&l_size), 4);
 		for (K l_key : i_value) {
-			m_stream->write(reinterpret_cast<char*>(&l_key), sizeof(K));
+			write(reinterpret_cast<char*>(&l_key), sizeof(K));
 		}
 	}
 
@@ -152,10 +155,10 @@ public:
 	void operator<<(gd::map<K,V>& i_value) {
 		unsigned int l_size = i_value.size();
 		//geode::log::info("Map SIZE out: {}", l_size);
-		m_stream->write(reinterpret_cast<char*>(&l_size), 4);
+		write(reinterpret_cast<char*>(&l_size), 4);
 		for (std::pair<K,V> l_pair : i_value) {
-			m_stream->write(reinterpret_cast<char*>(&l_pair.first), sizeof(K));
-			m_stream->write(reinterpret_cast<char*>(&l_pair.second), sizeof(V));
+			write(reinterpret_cast<char*>(&l_pair.first), sizeof(K));
+			write(reinterpret_cast<char*>(&l_pair.second), sizeof(V));
 		}
 	}
 
@@ -163,9 +166,9 @@ public:
 	void operator<<(gd::map<K,gd::vector<V>>& i_value) {
 		unsigned int l_size = i_value.size();
 		//geode::log::info("Unordered Map key->vector<T> SIZE out: {}", l_size);
-		m_stream->write(reinterpret_cast<char*>(&l_size), 4);
+		write(reinterpret_cast<char*>(&l_size), 4);
 		for (std::pair<K,gd::vector<V>> l_pair : i_value) {
-			m_stream->write(reinterpret_cast<char*>(&l_pair.first), sizeof(K));
+			write(reinterpret_cast<char*>(&l_pair.first), sizeof(K));
 			*this << l_pair.second; 
 		}
 	}
@@ -176,9 +179,9 @@ public:
 	void operator<<(gd::set<K>& i_value) {
 		unsigned int l_size = i_value.size();
 		//geode::log::info("Set SIZE out: {}", l_size);
-		m_stream->write(reinterpret_cast<char*>(&l_size), 4);
+		write(reinterpret_cast<char*>(&l_size), 4);
 		for (K l_key : i_value) {
-			m_stream->write(reinterpret_cast<char*>(&l_key), sizeof(K));
+			write(reinterpret_cast<char*>(&l_key), sizeof(K));
 		}
 	}
 
@@ -186,9 +189,9 @@ public:
 
 	void operator<<(gd::string& i_value) {
 		unsigned int l_size = i_value.size();
-		m_stream->write(reinterpret_cast<char*>(&l_size), 4);
+		write(reinterpret_cast<char*>(&l_size), 4);
 		//geode::log::info("String SIZE in: {}", l_size);
 		if (l_size == 0) return;
-		m_stream->write(i_value.data(), l_size);
+		write(i_value.data(), l_size);
 	}
 };

@@ -69,50 +69,50 @@ void PPCCArray::save<GradientTriggerObject>(OutputStream& o_stream) {
 	}
 }
 
-template <>
-void PPCCArray::load<PPCheckpointObject>(InputStream& i_stream) {
-	removeAllObjects();
-	unsigned int l_size;
-	i_stream >> l_size;
-	//geode::log::info("CCARRAY CheckpointObject SIZE in: {}", l_size);
-	PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-	if (!l_playLayer) return;
-	CheckpointObject* l_object;
-	for (int i = 0; i < l_size; i++) {
-		l_object = CheckpointObject::create();
-		reinterpret_cast<PPCheckpointObject*>(l_object)->load(i_stream); 
-	}
-#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
-	geode::log::info("Loaded startpoints:");
-	this->describe<PPCheckpointObject>();
-#endif
-}
+// template <>
+// void PPCCArray::load<PPCheckpointObject>(InputStream& i_stream) {
+// 	removeAllObjects();
+// 	unsigned int l_size;
+// 	i_stream >> l_size;
+// 	//geode::log::info("CCARRAY CheckpointObject SIZE in: {}", l_size);
+// 	PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
+// 	if (!l_playLayer) return;
+// 	CheckpointObject* l_object;
+// 	for (int i = 0; i < l_size; i++) {
+// 		l_object = CheckpointObject::create();
+// 		reinterpret_cast<PPCheckpointObject*>(l_object)->load(i_stream); 
+// 	}
+// #if defined(PP_DEBUG) && defined(PP_DESCRIBE)
+// 	geode::log::info("Loaded startpoints:");
+// 	this->describe<PPCheckpointObject>();
+// #endif
+// }
 
-template <>
-void PPCCArray::save<PPCheckpointObject>(OutputStream& o_stream) {
-	unsigned int l_size = count();
-	o_stream << l_size;
-	if (l_size == 0) return;
-#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
-	geode::log::info("Startpoints to be saved:");
-	this->describe<PPCheckpointObject>();
-#endif
-	//geode::log::info("CCARRAY CheckpointObject SIZE out: {}", l_size);
-	for (int i = 0; i < l_size; i++) {
-		reinterpret_cast<PPCheckpointObject*>(objectAtIndex(i))->save(o_stream); 
-	}
-}
+// template <>
+// void PPCCArray::save<PPCheckpointObject>(OutputStream& o_stream) {
+// 	unsigned int l_size = count();
+// 	o_stream << l_size;
+// 	if (l_size == 0) return;
+// #if defined(PP_DEBUG) && defined(PP_DESCRIBE)
+// 	geode::log::info("Startpoints to be saved:");
+// 	this->describe<PPCheckpointObject>();
+// #endif
+// 	//geode::log::info("CCARRAY CheckpointObject SIZE out: {}", l_size);
+// 	for (int i = 0; i < l_size; i++) {
+// 		reinterpret_cast<PPCheckpointObject*>(objectAtIndex(i))->save(o_stream); 
+// 	}
+// }
 
 #if defined(PP_DEBUG) && defined(PP_DESCRIBE)
-template <>
-void PPCCArray::describe<PPCheckpointObject>() {
-	int l_size = this->count();
-	log::info("[PPCCArray CheckpointObject - describe] count(): {}", l_size);
-	for (int i = 0; i < l_size; i++) {
-		log::info("[PPCCArray CheckpointObject - describe] this[{}]:", i);
-		reinterpret_cast<PPCheckpointObject*>(objectAtIndex(i))->describe();
-	}
-} 
+// template <>
+// void PPCCArray::describe<PPCheckpointObject>() {
+// 	int l_size = this->count();
+// 	log::info("[PPCCArray CheckpointObject - describe] count(): {}", l_size);
+// 	for (int i = 0; i < l_size; i++) {
+// 		log::info("[PPCCArray CheckpointObject - describe] this[{}]:", i);
+// 		reinterpret_cast<PPCheckpointObject*>(objectAtIndex(i))->describe();
+// 	}
+// } 
 
 template <>
 void PPCCArray::describe<GradientTriggerObject>() {

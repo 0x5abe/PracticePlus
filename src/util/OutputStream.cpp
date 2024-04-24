@@ -1,5 +1,7 @@
 
 #include "OutputStream.hpp"
+#include "Geode/binding/CheckpointObject.hpp"
+#include "hooks/CheckpointObject.hpp"
 #include <hooks/DynamicSaveObject.hpp>
 #include <hooks/ActiveSaveObject.hpp>
 #include <hooks/SequenceTriggerState.hpp>
@@ -119,6 +121,21 @@ template <>
 void OutputStream::operator<<<CAState>(gd::vector<CAState>& i_value) {
 	//geode::log::info("OWOWOWOWOOWOWOW VECTOR CustomWrite CAState");
 	writeGenericVector<CAState, PPCAState>(this, i_value);
+}
+
+template <>
+void OutputStream::operator<<<CheckpointObject*>(gd::vector<CheckpointObject*>& i_value) {
+	//geode::log::info("OWOWOWOWOOWOWOW VECTOR CustomWrite CAState");
+	unsigned int l_size = i_value.size();
+	write(reinterpret_cast<char*>(&l_size), 4);
+	//geode::log::info("VECTOR SIZE CustomWrite SIZE out: {}", l_size);
+	if (l_size == 0) return;
+	for (int i = 0; i < l_size; i++) {
+		#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
+		reinterpret_cast<PPCheckpointObject*>(i_value[i])->describe();
+		#endif
+		reinterpret_cast<PPCheckpointObject*>(i_value[i])->save(*this); 
+	}
 }
 
 // unordered_map

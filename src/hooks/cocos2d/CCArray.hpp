@@ -24,8 +24,8 @@ public:
 	template <class T>
 	void describe();
 
-	template <>
-	void describe<PPCheckpointObject>();
+	// template <>
+	// void describe<PPCheckpointObject>();
 
 	template <>
 	void describe<GradientTriggerObject>();

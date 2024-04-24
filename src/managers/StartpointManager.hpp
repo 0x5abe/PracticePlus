@@ -13,6 +13,7 @@ class StartpointManager {
 
 protected:
 	geode::Ref<cocos2d::CCArray> m_startpoints = nullptr;
+	std::vector<CheckpointObject*> m_tempStartpoints;
 	int m_activeStartpointId = -1;
 	bool m_isPlusMode = false;
 	bool m_prevPlusMode = false;
@@ -79,6 +80,10 @@ public:
 	void loadStartpointsFromStream(InputStream& i_stream);
 
 	void saveStartpointsToStream(OutputStream& o_stream);
+
+	void fetchStartpointsFromTempStorage();
+
+	void commitStartpointsToTempStorage();
 
 	void clean();
 
