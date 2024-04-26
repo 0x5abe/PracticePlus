@@ -1,5 +1,5 @@
 #include "SongChannelState.hpp"
-#include "Geode/binding/SongTriggerGameObject.hpp"
+#include <Geode/binding/SongTriggerGameObject.hpp>
 #include <Geode/binding/PlayLayer.hpp>
 #include <hooks/cocos2d/CCNode.hpp>
 #include <hooks/PlayLayer.hpp>

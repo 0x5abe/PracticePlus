@@ -1,5 +1,4 @@
 #pragma once
-#include "Geode/binding/CheckpointGameObject.hpp"
 #include <iostream>
 #include <Geode/Geode.hpp>
 #include <Geode/loader/Log.hpp>
@@ -13,34 +12,19 @@
 
 class InputStream {
 protected:
-	std::istream* m_stream;
+	std::ifstream* m_stream;
 	unsigned int* m_bytesRead;
 public:
+	InputStream() {
+		m_stream = nullptr;
+		m_bytesRead = nullptr;
+	};
 	InputStream(std::string i_filePath) { m_stream = new std::ifstream(i_filePath, std::ios_base::binary); }
 	InputStream(std::string i_filePath, unsigned int* i_bytesRead) {
 		m_stream = new std::ifstream(i_filePath, std::ios_base::binary);
 		m_bytesRead = i_bytesRead;
 	}
 	~InputStream() { delete m_stream; }
-
-	void read(char* o_value, int i_size) { 
-		m_stream->read(o_value, i_size); 
-		
-		if (m_bytesRead) {
-			*m_bytesRead += i_size;
-			if ((int)m_stream->tellg() != *m_bytesRead) {
-				geode::log::info("DIFFERENCE IN POS AND BYTESREAD");
-				geode::log::info("pos in stream: {}", (int)m_stream->tellg());
-				geode::log::info("bytes read: {}", *m_bytesRead);
-			}
-		}
-	}
-	void ignore(int i_size) {
-		m_stream->ignore(i_size);
-		if (m_bytesRead) *m_bytesRead += i_size;
-	}
-
-	inline bool good() { return m_stream->good(); }
 
 	PP_OPERATOR_READ(bool)
 	PP_OPERATOR_READ(char)
@@ -55,6 +39,31 @@ public:
 	PP_OPERATOR_READ(cocos2d::CCSize)
 	PP_OPERATOR_READ(cocos2d::CCAffineTransform)
 	PP_OPERATOR_READ(uint64_t)
+
+	bool setFileToRead(std::string i_filePath, unsigned int* i_bytesRead = nullptr) {
+		if (m_stream) {
+			delete m_stream;
+		}
+		m_stream = new std::ifstream(i_filePath, std::ios_base::binary);
+		if (!m_stream->good()) {
+			geode::log::info("!!!!!!!!!!!!!!! Failed to open file path: {} !!!!!!!!!!!!!!!!", i_filePath);
+		}
+		m_bytesRead = i_bytesRead;
+		return true;
+	}
+
+	void read(char* o_value, int i_size) { 
+		m_stream->read(o_value, i_size); 
+		
+		if (m_bytesRead) {
+			*m_bytesRead += i_size;
+		}
+	}
+
+	void ignore(int i_size) {
+		m_stream->ignore(i_size);
+		if (m_bytesRead) *m_bytesRead += i_size;
+	}
 
 	// custom operators
 

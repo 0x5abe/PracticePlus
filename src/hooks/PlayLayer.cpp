@@ -1,18 +1,8 @@
 #include "PlayLayer.hpp"
-#include "Geode/Enums.hpp"
-#include "Geode/binding/PlayLayer.hpp"
-#include "Geode/c++stl/string.hpp"
-#include "Geode/cocos/platform/CCFileUtils.h"
-#include <Geode/binding/CheckpointObject.hpp>
-#include <chrono>
 #include <filesystem>
 #include <geode.custom-keybinds/include/Keybinds.hpp>
-#include <ghc/filesystem.hpp>
 #include <managers/StartpointManager.hpp>
 #include <hooks/GJGameLevel.hpp>
-#include <mutex>
-#include <processthreadsapi.h>
-#include <thread>
 #include <util/InputStream.hpp>
 #include <util/OutputStream.hpp>
 #include <util/algorithm.hpp>
@@ -22,9 +12,6 @@ using namespace geode::prelude;
 #define SPF_EXT ".spf"
 
 static char s_spfMagicAndVer[] = "SPF v0.0.1 lol ";
-static std::thread s_ioThread = std::thread(&PPPlayLayer::ioThreadUpdate);
-static std::mutex s_ioMutex;
-static std::condition_variable s_ioConditionVar;
 
 // overrides
 
@@ -49,26 +36,11 @@ void PPPlayLayer::createObjectsFromSetupFinished() {
 }
 
 void PPPlayLayer::setupHasCompleted() {
-	//std::unique_lock<std::mutex> l_ul(s_ioMutex);
-	log::info("[setupHasCompleted] begin");
+	//log::info("[setupHasCompleted] begin");
 	if (!m_fields->m_finishedLoadingStartpoints) {
-		log::info("[setupHasCompleted] hasnt finished loading SP");
-		if (!m_fields->m_startedLoadingStartpoints) {
-			log::info("[setupHasCompleted] starting SP load");
-			if (s_ioThread.joinable()) {
-				//SetThreadPriority(s_ioThread.native_handle(), THREAD_PRIORITY_ABOVE_NORMAL);
-				s_ioThread.detach();
-			}
+		//log::info("[setupHasCompleted] hasnt finished loading SP");
 
-			m_fields->m_startedLoadingStartpoints = true;
-			m_fields->m_startpointLoadingProgress = 0.0f;
-			s_ioConditionVar.notify_one();
-
-			log::info("[setupHasCompleted] unlocked ioThread");
-			//Todo send signal to load startpoints and update accordingly
-			//loadStartpoints();
-			//EndTodo
-		}
+		loadStartpoints();
 		
 		//m_fields->m_startpointLoadingProgress += (m_fields->m_startpointLoadingProgress/8.0f);
 		log::info("[setupHasCompleted] m_bytesRead: {}", m_fields->m_bytesRead);
@@ -76,25 +48,19 @@ void PPPlayLayer::setupHasCompleted() {
 		if (m_fields->m_bytesToRead > 0) {
 			m_fields->m_startpointLoadingProgress = (static_cast<float>(m_fields->m_bytesRead)/static_cast<float>(m_fields->m_bytesToRead));
 		}
-		if (m_fields->m_startpointLoadingProgress != 1.0f) {
-			m_loadingProgress = m_fields->m_startpointLoadingProgress;
-		} else {
-			m_loadingProgress = 0.99f;
-		}
-		log::info("[setupHasCompleted] m_loadingProgress: {}", m_loadingProgress);
-
-		std::this_thread::sleep_for(std::chrono::milliseconds(16));
-		//ResumeThread(s_ioThread.native_handle());
-		// if (m_fields->m_startpointLoadingProgress >= 1.0f) {
-		// 	m_fields->m_finishedLoadingStartpoints = true;
+		// if (m_fields->m_startpointLoadingProgress != 1.0f) {
+		m_loadingProgress = m_fields->m_startpointLoadingProgress;
+		// } else {
+		// 	m_loadingProgress = 0.99f;
 		// }
+		log::info("[setupHasCompleted] m_loadingProgress: {}", m_loadingProgress);
 	}
 	if (m_fields->m_finishedLoadingStartpoints) {
 		log::info("[setupHasCompleted] finished loading SP");
 		m_loadingProgress = 1.0f;
 		PlayLayer::setupHasCompleted();
 
-		StartpointManager::get().fetchStartpointsFromTempStorage();
+		//StartpointManager::get().fetchStartpointsFromTempStorage();
 		m_fields->m_startedLoadingStartpoints = false;
 		m_fields->m_finishedLoadingStartpoints = false;
 		m_fields->m_startpointLoadingProgress = 0.0f;
@@ -144,6 +110,9 @@ void PPPlayLayer::createStartpoint() {
 	PPCheckpointObject* l_startpoint =  static_cast<PPCheckpointObject*>(PlayLayer::createCheckpoint());
 	l_startpoint->m_fields->m_percentage = PlayLayer::getCurrentPercent();
 	addStartpoint(StartpointManager::get().createStartpoint(l_startpoint, m_player1->getPosition()));
+
+	//Todo: see if we want to save to file here, make it so it only saves the changes instead of the whole thing
+	// probably better to use Actions than threading, save one SP per tick of the action
 }
 
 void PPPlayLayer::addStartpoint(PPCheckpointObject* i_startpoint, int i_index) {
@@ -161,6 +130,9 @@ bool PPPlayLayer::removeStartpoint(int i_index) {
 		StartpointManager::get().setActiveStartpointId(l_startpointManager.getActiveStartpointId()-1);
 	}
 	l_startpointManager.removeStartpoint(i_index);
+
+	//Todo: see if we want to save to file here, make it so it only saves the changes instead of the whole thing
+	// probably better to use Actions than threading, save one SP per tick of the action
 	return true;
 }
 
@@ -170,63 +142,99 @@ void PPPlayLayer::removeAllStartpoints(bool i_reset) {
 	for (int i = 0; i < l_startpointManager.getStartpointCount(); i++) {
 		l_startpoint = l_startpointManager.getStartpoint(i);
 		if (!l_startpoint) continue;
-		//PlayLayer::removeObjectFromSection(l_startpoint->m_physicalCheckpointObject);
-		//if (l_startpoint->m_physicalCheckpointObject) {
-			l_startpoint->m_physicalCheckpointObject->removeMeAndCleanup();
-		//}
+		//Todo: see wth happens here (has crashed before)
+		PlayLayer::removeObjectFromSection(l_startpoint->m_physicalCheckpointObject);
+		l_startpoint->m_physicalCheckpointObject->removeMeAndCleanup();
+		//EndTodo
 	}
 	l_startpointManager.removeAllStartpoints(i_reset);
 }
 
-void PPPlayLayer::loadStartpoints() {
-	//reinterpret_cast<PPGJGameLevel*>(m_level)->describe();
+bool PPPlayLayer::checkLevelStringHash() {
 	unsigned int l_savedLevelStringHash;
-	std::string l_filePath = getStartpointFilePath();
+	InputStream& l_inputStream = StartpointManager::get().m_inputStream;
 
-	log::info("Filepath: \"{}\"", l_filePath);
-	if (!std::filesystem::exists(l_filePath)) {
-		log::info("File doesnt exist: {}", l_filePath);
-		return;
-	}
-	m_fields->m_bytesToRead = std::filesystem::file_size(l_filePath);
-	m_fields->m_bytesRead = 0;
-
-	InputStream l_ifstream = InputStream(l_filePath, &m_fields->m_bytesRead);
-	if (!l_ifstream.good()) {
-		log::info("!!!!!!!!!!!!!!! Failed to open file path: {} !!!!!!!!!!!!!!!!", l_filePath);
-		return;
-	}
-
-	//Todo: Alert player and let them choose what to do
-	l_ifstream.ignore(sizeof(s_spfMagicAndVer));
-	l_ifstream >> l_savedLevelStringHash;
+	l_inputStream >> l_savedLevelStringHash;
+	
 	if (l_savedLevelStringHash != util::algorithm::hash_string(m_level->m_levelString.c_str())) {
+		//Todo: let user decide what to do with a warning
 		log::info("!!!!!!!!!!!!! Mismatch LevelString HASH !!!!!!!!!!!!!!!");
-		//return;
+		return false;
+		//EndTodo
 	}
-	//EndTodo
+	return true;
+}
 
-	//removeAllStartpoints(false);
-	log::info("about to load startpoints from stream");
-	StartpointManager::get().loadStartpointsFromStream(l_ifstream);
+bool PPPlayLayer::readSpfHeader() {
+	InputStream& l_inputStream = StartpointManager::get().m_inputStream;
+	l_inputStream.ignore(sizeof(s_spfMagicAndVer));
+	return checkLevelStringHash();
+}
+
+void PPPlayLayer::loadStartpoints() {
+	StartpointManager& l_startpointManager = StartpointManager::get();
+
+	if (!m_fields->m_startedLoadingStartpoints) {
+		log::info("[setupHasCompleted] started loading SP");
+		m_fields->m_startedLoadingStartpoints = true;
+		m_fields->m_startpointLoadingProgress = 0.0f;
+
+		std::string l_filePath = getStartpointFilePath(true);
+		if (l_filePath == "") {
+			goto finishedLoading;
+		}
+
+		m_fields->m_bytesToRead = std::filesystem::file_size(l_filePath);
+		m_fields->m_bytesRead = 0;
+		InputStream& l_inputStream = StartpointManager::get().m_inputStream;
+		if(!l_inputStream.setFileToRead(l_filePath, &m_fields->m_bytesRead)) {
+			goto finishedLoading;
+		}
+		
+		if (!readSpfHeader()) {
+			goto finishedLoading;
+		}
+
+		l_inputStream >> m_fields->m_remainingStartpointLoadCount;
+		log::info("Remaining startpoints: {}", m_fields->m_remainingStartpointLoadCount);
+	}
+	log::info("Remaining startpoints: {}", m_fields->m_remainingStartpointLoadCount);
+	if (m_fields->m_remainingStartpointLoadCount > 0) {
+		l_startpointManager.loadOneStartpointFromStream();
+		m_fields->m_remainingStartpointLoadCount--;
+	}
+	if (m_fields->m_remainingStartpointLoadCount == 0) {
+		finishedLoading:
+			m_fields->m_finishedLoadingStartpoints = true;
+			return;
+	}
+}
+
+void PPPlayLayer::writeSpfHeader() {
+	OutputStream& l_outputStream = StartpointManager::get().m_outputStream;
+	l_outputStream.write(s_spfMagicAndVer,sizeof(s_spfMagicAndVer));
+	unsigned int l_levelStringHash = util::algorithm::hash_string(m_level->m_levelString.c_str());
+	l_outputStream << l_levelStringHash;
 }
 
 void PPPlayLayer::saveStartpoints() {
 	reinterpret_cast<PPGJGameLevel*>(m_level)->describe();
-	unsigned int l_levelStringHash;
+	
 	std::string l_filePath = getStartpointFilePath();
-	log::info("Filepath: \"{}\"", l_filePath);
-
-	OutputStream l_ofstream = OutputStream(l_filePath);
-	if (!l_ofstream.good()) {
-		log::info("Failed to open file path: {}", l_filePath);
-		return;
+	
+	OutputStream& l_outputStream = StartpointManager::get().m_outputStream;
+	if (!l_outputStream.setFileToWrite(l_filePath)) {
+		goto finishedSaving;
 	}
-	l_ofstream.write(s_spfMagicAndVer,sizeof(s_spfMagicAndVer));
-	l_levelStringHash = util::algorithm::hash_string(m_level->m_levelString.c_str());
-	l_ofstream << l_levelStringHash;
+	
+	writeSpfHeader();
 
-	StartpointManager::get().saveStartpointsToStream(l_ofstream);
+	StartpointManager::get().saveStartpointsToStream();
+
+	finishedSaving:
+		m_fields->m_startedLoadingStartpoints = false;
+		m_fields->m_finishedSavingStartpoints = true;
+		return;
 }
 
 bool PPPlayLayer::setActiveStartpointAndReload(int i_index) {
@@ -249,7 +257,7 @@ void PPPlayLayer::togglePlusMode(bool i_value) {
 	l_startpointManager.updatePlusModeVisibility();
 }
 
-inline std::string PPPlayLayer::getStartpointFilePath() {
+inline std::string PPPlayLayer::getStartpointFilePath(bool i_checkExists) {
 	std::string l_filePath = Mod::get()->getSaveDir().generic_string();
 	
 	switch(m_level->m_levelType) {
@@ -264,34 +272,12 @@ inline std::string PPPlayLayer::getStartpointFilePath() {
 			l_filePath.append(std::format("/online_{}{}", m_level->m_levelID.value(), SPF_EXT));
 			break;
 	}
-	return l_filePath;
-}
-
-void PPPlayLayer::ioThreadUpdate() {
-	while (true) {
-		log::info("[ioThreadUpdate] begin");
-		std::unique_lock<std::mutex> l_ul(s_ioMutex);
-
-		log::info("[ioThreadUpdate] wait condVar");
-		s_ioConditionVar.wait(l_ul);
-		log::info("[ioThreadUpdate] unpaused condVar");
-
-		PPPlayLayer* l_thisPtr = static_cast<PPPlayLayer*>(PlayLayer::get());
-		if (!l_thisPtr) continue;
-		
-		if (l_thisPtr->m_fields->m_startedLoadingStartpoints) {
-			log::info("[ioThreadUpdate] loading startpoints");
-			l_thisPtr->loadStartpoints();
-			log::info("[ioThreadUpdate] loaded startpoints");
-			l_thisPtr->m_fields->m_finishedLoadingStartpoints = true;
-		} else if (l_thisPtr->m_fields->m_startedSavingStartpoints) {
-			//Todo save
-			l_thisPtr->saveStartpoints();
-
-			l_thisPtr->m_fields->m_finishedSavingStartpoints = true;
-			//EndTodo
-		}
+	log::info("Filepath: \"{}\"", l_filePath);
+	if (i_checkExists && !std::filesystem::exists(l_filePath)) {
+		log::info("File doesnt exist: {}", l_filePath);
+		return "";
 	}
+	return l_filePath;
 }
 
 void PPPlayLayer::setupKeybinds() {
@@ -300,9 +286,9 @@ void PPPlayLayer::setupKeybinds() {
 			bool l_player1IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player1)+0x81a);
 			bool l_player2IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player2)+0x81a);
 			if (event->isDown() && !l_player1IsLocked && !l_player2IsLocked && !m_player1->m_isDead && isPlusMode()) {
-				std::unique_lock<std::mutex> l_ul(s_ioMutex);
-
-				createStartpoint();
+				if (!m_fields->m_startedSavingStartpoints) {
+					createStartpoint();
+				}
 			}
 			return ListenerResult::Propagate;
 		},
@@ -314,9 +300,9 @@ void PPPlayLayer::setupKeybinds() {
 			bool l_player1IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player1)+0x81a);
 			bool l_player2IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player2)+0x81a);
 			if (event->isDown() && !l_player1IsLocked && !l_player2IsLocked && isPlusMode()) {
-				std::unique_lock<std::mutex> l_ul(s_ioMutex);
-
-				removeStartpoint();
+				if (!m_fields->m_startedSavingStartpoints) {
+					removeStartpoint();
+				}
 			}
 			return ListenerResult::Propagate;
 		},
@@ -368,11 +354,9 @@ void PPPlayLayer::setupKeybinds() {
 	addEventListener<keybinds::InvokeBindFilter>(
 		[this](keybinds::InvokeBindEvent* event) {
 			if (event->isDown() && isPlusMode()) {
-				//OutputStream l_ofstream = OutputStream("./testPlayerCheckpoint.spf");
-				//StartpointManager::get().saveStartpointsToStream(l_ofstream);
-				StartpointManager::get().commitStartpointsToTempStorage();
-				m_fields->m_startedSavingStartpoints = true;
-				s_ioConditionVar.notify_one();
+				m_fields->m_startedLoadingStartpoints = true;
+				m_fields->m_finishedSavingStartpoints = false;
+				saveStartpoints();
 			}
 			return ListenerResult::Propagate;
 		},

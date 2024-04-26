@@ -19,6 +19,8 @@ void PPGJGameState::save(OutputStream& o_stream) {
 inline void operator>>(InputStream& i_stream, PPGJGameState& o_value) {
 	i_stream >> o_value.m_zoom;
 	SEPARATOR_I
+	i_stream >> o_value.m_unkFloat1;
+	SEPARATOR_I
 	i_stream >> o_value.m_cameraOffset;
 	SEPARATOR_I
 	i_stream >> o_value.m_unkPoint1;
@@ -387,6 +389,8 @@ inline void operator>>(InputStream& i_stream, PPGJGameState& o_value) {
 
 inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
 	o_stream << i_value.m_zoom;
+	SEPARATOR_O
+	o_stream << i_value.m_unkFloat1;
 	SEPARATOR_O
 	o_stream << i_value.m_cameraOffset;
 	SEPARATOR_O
@@ -785,6 +789,7 @@ void PPGJGameState::clean() {
 #if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPGJGameState::describe() {
 	log::info("[PPGJGameState - describe] m_zoom: {}", m_zoom);
+	log::info("[PPGJGameState - describe] m_unkFloat1: {}", m_unkFloat1);
 	log::info("[PPGJGameState - describe] m_cameraOffset: {}", m_cameraOffset);
 	log::info("[PPGJGameState - describe] m_unkPoint1: {}", m_unkPoint1);
 	log::info("[PPGJGameState - describe] m_unkPoint2: {}", m_unkPoint2);

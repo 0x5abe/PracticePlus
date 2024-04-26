@@ -1,4 +1,5 @@
 #pragma once
+#include <fstream>
 #include <iostream>
 #include <Geode/Geode.hpp>
 #include <Geode/loader/Log.hpp>
@@ -10,10 +11,15 @@
 
 #define PP_OPERATOR_WRITE(type) virtual void operator<<(type& i_value) { write(reinterpret_cast<char*>(&i_value), sizeof(type)); }
 
+class PPCheckpointObject;
+
 class OutputStream {
 protected:
-	std::ostream* m_stream;
+	std::ofstream* m_stream;
 public:
+	OutputStream() {
+		m_stream = nullptr;
+	};
 	OutputStream(std::string i_filePath) { m_stream = new std::ofstream(i_filePath, std::ios_base::binary); }
 	~OutputStream() { delete m_stream; }
 	
@@ -31,9 +37,26 @@ public:
 	PP_OPERATOR_WRITE(cocos2d::CCAffineTransform)
 	PP_OPERATOR_WRITE(uint64_t)
 
+	bool setFileToWrite(std::string i_filePath) {
+		if (m_stream) {
+			delete m_stream;
+		}
+		m_stream = new std::ofstream(i_filePath, std::ios_base::binary);
+		if (!m_stream->good()) {
+			geode::log::info("Failed to open file path: {}", i_filePath);
+			return false;
+		}
+		return true;
+	}
+
 	void write(char* i_value, int i_size) { m_stream->write(i_value, i_size); }
 
-	inline bool good() { return m_stream->good(); }
+	void end() {
+		m_stream->flush();
+		m_stream->close();
+		delete m_stream;
+		m_stream = nullptr;
+	}
 
 	// custom operators
 
@@ -93,7 +116,7 @@ public:
 	void operator<<<CAState>(gd::vector<CAState>& i_value);
 
 	template <>
-	void operator<<<CheckpointObject*>(gd::vector<CheckpointObject*>& i_value);
+	void operator<<<PPCheckpointObject*>(gd::vector<PPCheckpointObject*>& i_value);
 
 	// unordered_map
 

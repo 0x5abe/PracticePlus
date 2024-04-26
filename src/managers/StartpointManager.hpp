@@ -1,5 +1,4 @@
 #pragma once
-#include "Geode/binding/PlayLayer.hpp"
 #include <Geode/Geode.hpp>
 #include <hooks/cocos2d/CCArray.hpp>
 #include <hooks/CheckpointObject.hpp>
@@ -13,11 +12,12 @@ class StartpointManager {
 
 protected:
 	geode::Ref<cocos2d::CCArray> m_startpoints = nullptr;
-	std::vector<CheckpointObject*> m_tempStartpoints;
 	int m_activeStartpointId = -1;
 	bool m_isPlusMode = false;
 	bool m_prevPlusMode = false;
 	bool m_practiceModeIsPlusMode = true;
+	InputStream m_inputStream;
+	OutputStream m_outputStream;
 
 	StartpointManager() {
 		m_startpoints = cocos2d::CCArray::create();
@@ -77,13 +77,9 @@ public:
 
 	void setupKeybinds();
 
-	void loadStartpointsFromStream(InputStream& i_stream);
+	void loadOneStartpointFromStream();
 
-	void saveStartpointsToStream(OutputStream& o_stream);
-
-	void fetchStartpointsFromTempStorage();
-
-	void commitStartpointsToTempStorage();
+	void saveStartpointsToStream();
 
 	void clean();
 

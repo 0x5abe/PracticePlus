@@ -1,10 +1,9 @@
 
 #include "StartpointManager.hpp"
-#include "Geode/cocos/platform/CCPlatformMacros.h"
-#include "hooks/CheckpointObject.hpp"
 #include <Geode/Enums.hpp>
 #include <Geode/binding/CheckpointObject.hpp>
 #include <Geode/binding/GJGameState.hpp>
+#include <hooks/CheckpointObject.hpp>
 #include <hooks/PlayerCheckpoint.hpp>
 #include <hooks/cocos2d/CCArray.hpp>
 #include <util/algorithm.hpp>
@@ -150,41 +149,20 @@ void StartpointManager::updatePlusModeLogic() {
 	}
 }
 
-void StartpointManager::loadStartpointsFromStream(InputStream& i_stream) {
-	//cocos2d::CCArray* l_intermediate = m_startpoints;
-	log::info("Loading Startpoints from stream");
-	//static_cast<PPCCArray*>(l_intermediate)->load<PPCheckpointObject>(i_stream);
-	log::info("tempStartpoint size: {}", m_tempStartpoints.size());
-	m_tempStartpoints.clear();
-	i_stream >> m_tempStartpoints;
-	log::info("Loaded Startpoints from stream");
+void StartpointManager::loadOneStartpointFromStream() {
+	log::info("start load one");
+	cocos2d::CCArray* l_intermediate = m_startpoints;
+	static_cast<PPCCArray*>(l_intermediate)->loadOne<PPCheckpointObject>(m_inputStream);
 }
 
-void StartpointManager::saveStartpointsToStream(OutputStream& o_stream) {
-	if (m_tempStartpoints.size() > 0) {
-		//cocos2d::CCArray* l_intermediate = m_startpoints;
+//Todo saveOne with looping CCAction (same idea as load)
+void StartpointManager::saveStartpointsToStream() {
+	if (m_startpoints->count() > 0) {
 		log::info("Saving Startpoints to stream");
-		o_stream << m_tempStartpoints;
-		//static_cast<PPCCArray*>(l_intermediate)->save<PPCheckpointObject>(o_stream);
+		cocos2d::CCArray* l_intermediate = m_startpoints;
+		static_cast<PPCCArray*>(l_intermediate)->save<PPCheckpointObject>(m_outputStream);
+		m_outputStream.end();
 		log::info("Saved Startpoints to stream");
-	}
-}
-
-void StartpointManager::fetchStartpointsFromTempStorage() {
-	for (int i = 0; i < m_tempStartpoints.size(); i++) {
-		log::info("Startpoint {}", (unsigned int)m_tempStartpoints[i]);
-		log::info("Startpoint retain count: {}", m_tempStartpoints[i]->retainCount());
-		log::info("Startpoint percentage: {}", static_cast<PPCheckpointObject*>(m_tempStartpoints[i])->m_fields->m_percentage);
-		m_startpoints->addObject(static_cast<PPCheckpointObject*>(m_tempStartpoints[i]));
-		CC_SAFE_RELEASE(m_tempStartpoints[i]);
-	}
-	m_tempStartpoints.clear();
-}
-
-void StartpointManager::commitStartpointsToTempStorage() {
-	m_tempStartpoints.clear();
-	for (int i = 0; i < m_startpoints->count(); i++) {
-		m_tempStartpoints.push_back(static_cast<CheckpointObject*>(m_startpoints->objectAtIndex(i)));
 	}
 }
 

@@ -1,5 +1,4 @@
 #pragma once
-#include "Geode/binding/CheckpointObject.hpp"
 #include <Geode/Geode.hpp>
 #include <Geode/modify/CheckpointObject.hpp>
 #include <util/InputStream.hpp>

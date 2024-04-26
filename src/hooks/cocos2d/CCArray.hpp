@@ -1,5 +1,4 @@
 #pragma once
-#include "Geode/modify/Modify.hpp"
 #include <Geode/Geode.hpp>
 #include <Geode/modify/CCArray.hpp>
 #include <hooks/CheckpointObject.hpp>
@@ -14,11 +13,20 @@ public:
 	template <typename T>
 	void save(OutputStream& o_stream);
 
+	template <typename T>
+	void loadOne(InputStream& o_stream);
+
 	template <>
 	void load<GradientTriggerObject>(InputStream& i_stream);
 
 	template <>
 	void save<GradientTriggerObject>(OutputStream& o_stream);
+
+	template <>
+	void loadOne<PPCheckpointObject>(InputStream& o_stream);
+
+	template <>
+	void save<PPCheckpointObject>(OutputStream& o_stream);
 
 #if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 	template <class T>

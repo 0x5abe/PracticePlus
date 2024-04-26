@@ -1,7 +1,6 @@
 
 #include "OutputStream.hpp"
-#include "Geode/binding/CheckpointObject.hpp"
-#include "hooks/CheckpointObject.hpp"
+#include <hooks/CheckpointObject.hpp>
 #include <hooks/DynamicSaveObject.hpp>
 #include <hooks/ActiveSaveObject.hpp>
 #include <hooks/SequenceTriggerState.hpp>
@@ -124,8 +123,8 @@ void OutputStream::operator<<<CAState>(gd::vector<CAState>& i_value) {
 }
 
 template <>
-void OutputStream::operator<<<CheckpointObject*>(gd::vector<CheckpointObject*>& i_value) {
-	//geode::log::info("OWOWOWOWOOWOWOW VECTOR CustomWrite CAState");
+void OutputStream::operator<<<PPCheckpointObject*>(gd::vector<PPCheckpointObject*>& i_value) {
+	//geode::log::info("OWOWOWOWOOWOWOW VECTOR CustomWrite PPCheckpointobject");
 	unsigned int l_size = i_value.size();
 	write(reinterpret_cast<char*>(&l_size), 4);
 	//geode::log::info("VECTOR SIZE CustomWrite SIZE out: {}", l_size);

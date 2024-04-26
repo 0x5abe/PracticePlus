@@ -30,6 +30,7 @@ void PPCheckpointObject::load(InputStream& i_stream) {
 }
 
 void PPCheckpointObject::save(OutputStream& o_stream) {
+	log::info("SAVING CHECKPOINT OBJECT");
 	reinterpret_cast<PPCCNode*>(this)->save(o_stream);
 	o_stream << *this;
 }

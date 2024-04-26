@@ -1,9 +1,6 @@
 
 #include "InputStream.hpp"
-#include "Geode/binding/CheckpointObject.hpp"
-#include "Geode/cocos/platform/CCPlatformMacros.h"
-#include "hooks/CheckpointObject.hpp"
-#include <chrono>
+#include <hooks/CheckpointObject.hpp>
 #include <hooks/DynamicSaveObject.hpp>
 #include <hooks/ActiveSaveObject.hpp>
 #include <hooks/SequenceTriggerState.hpp>
@@ -27,16 +24,12 @@
 // vector
 
 template<class T, class U>
-inline void readGenericVector(InputStream* i_stream, gd::vector<T>& o_value, bool ignore = false) {
+inline void readGenericVector(InputStream* i_stream, gd::vector<T>& o_value) {
 	//geode::log::info("Vector CustomRead Existing SIZE: {}", o_value.size());
 	unsigned int l_size;
 	i_stream->read(reinterpret_cast<char*>(&l_size), 4);
 	//geode::log::info("VECTOR SIZE CustomRead SIZE in: {}", l_size);
 	if (l_size == 0) return;
-	if (ignore) {
-		i_stream->ignore(l_size*sizeof(T) + 4*l_size);
-		return;
-	}
 	o_value.resize(l_size);
 	for (int i = 0; i < l_size; i++) {
 		//geode::log::info("VECTOR SIZE CustomRead SIZE in TRYING TO LOAD: {}", l_size);

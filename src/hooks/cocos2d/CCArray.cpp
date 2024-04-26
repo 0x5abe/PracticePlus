@@ -1,8 +1,4 @@
 #include "CCArray.hpp"
-#include "Geode/binding/CheckpointObject.hpp"
-#include "Geode/binding/GradientTriggerObject.hpp"
-#include "Geode/binding/PlayLayer.hpp"
-#include "Geode/cocos/cocoa/CCArray.h"
 #include <hooks/PlayLayer.hpp>
 #include <hooks/cocos2d/CCObject.hpp>
 #include <hooks/CheckpointObject.hpp>
@@ -69,6 +65,23 @@ void PPCCArray::save<GradientTriggerObject>(OutputStream& o_stream) {
 	}
 }
 
+template <class T>
+void PPCCArray::loadOne(InputStream& i_stream) {
+	T* l_object = reinterpret_cast<T*>(malloc(sizeof(T)));
+	reinterpret_cast<T*>(l_object)->load(i_stream); 
+	addObject(l_object);
+}
+
+template <>
+void PPCCArray::loadOne<PPCheckpointObject>(InputStream& i_stream) {
+	CheckpointObject* l_object = CheckpointObject::create();
+	reinterpret_cast<PPCheckpointObject*>(l_object)->load(i_stream); 
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
+	geode::log::info("Loaded startpoints:");
+	reinterpret_cast<PPCheckpointObject*>(l_object)->describe();
+#endif
+}
+
 // template <>
 // void PPCCArray::load<PPCheckpointObject>(InputStream& i_stream) {
 // 	removeAllObjects();
@@ -88,20 +101,21 @@ void PPCCArray::save<GradientTriggerObject>(OutputStream& o_stream) {
 // #endif
 // }
 
-// template <>
-// void PPCCArray::save<PPCheckpointObject>(OutputStream& o_stream) {
-// 	unsigned int l_size = count();
-// 	o_stream << l_size;
-// 	if (l_size == 0) return;
-// #if defined(PP_DEBUG) && defined(PP_DESCRIBE)
-// 	geode::log::info("Startpoints to be saved:");
-// 	this->describe<PPCheckpointObject>();
-// #endif
-// 	//geode::log::info("CCARRAY CheckpointObject SIZE out: {}", l_size);
-// 	for (int i = 0; i < l_size; i++) {
-// 		reinterpret_cast<PPCheckpointObject*>(objectAtIndex(i))->save(o_stream); 
-// 	}
-// }
+template <>
+void PPCCArray::save<PPCheckpointObject>(OutputStream& o_stream) {
+	unsigned int l_size = count();
+	geode::log::info("SIZE SPS: {}", l_size);
+	o_stream << l_size;
+	if (l_size == 0) return;
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
+	geode::log::info("Startpoints to be saved:");
+	this->describe<PPCheckpointObject>();
+#endif
+	//geode::log::info("CCARRAY CheckpointObject SIZE out: {}", l_size);
+	for (int i = 0; i < l_size; i++) {
+		reinterpret_cast<PPCheckpointObject*>(objectAtIndex(i))->save(o_stream); 
+	}
+}
 
 #if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 // template <>

@@ -1,9 +1,6 @@
 #pragma once
-#include "Geode/binding/GameObject.hpp"
-#include "Geode/modify/Modify.hpp"
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PlayLayer.hpp>
-#include <condition_variable>
 #include <hooks/CheckpointObject.hpp>
 #include <managers/StartpointManager.hpp>
 
@@ -13,7 +10,7 @@ protected:
 
 	void updatePlusModeLogic(bool i_isPlusMode);
 
-	std::string getStartpointFilePath();
+	std::string getStartpointFilePath(bool i_checkExists = false);
 
 public:
 	struct Fields {
@@ -22,6 +19,7 @@ public:
 		bool m_startedLoadingStartpoints = false;
 		bool m_finishedLoadingStartpoints = false;
 		float m_startpointLoadingProgress = 0.0f;
+		unsigned int m_remainingStartpointLoadCount = 0;
 		bool m_startedSavingStartpoints = false;
 		bool m_finishedSavingStartpoints = false;
 		unsigned int m_bytesToRead = 0;
@@ -61,7 +59,13 @@ public:
 
 	void removeAllStartpoints(bool i_reset);
 
+	bool checkLevelStringHash();
+
+	bool readSpfHeader();
+
 	void loadStartpoints();
+
+	void writeSpfHeader();
 
 	void saveStartpoints();
 
