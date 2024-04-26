@@ -20,6 +20,8 @@
 #include <hooks/AdvancedFollowInstance.hpp>
 #include <hooks/CAState.hpp>
 #include <hooks/SongChannelState.hpp>
+#include <hooks/SongTriggerState.hpp>
+#include <hooks/SFXTriggerState.hpp>
 
 // vector
 
@@ -135,6 +137,18 @@ void InputStream::operator>><CheckpointObject*>(gd::vector<CheckpointObject*>& o
 	}
 	geode::log::info("vector size after: {}", o_value.size());
 }
+
+template <>
+void InputStream::operator>><SongTriggerState>(gd::vector<SongTriggerState>& o_value) {
+	readGenericVector<SongTriggerState, PPSongTriggerState>(this, o_value);
+}
+
+template <>
+void InputStream::operator>><SFXTriggerState>(gd::vector<SFXTriggerState>& o_value) {
+	readGenericVector<SFXTriggerState, PPSFXTriggerState>(this, o_value);
+}
+
+// unordered_map
 
 template<class K, class V, class W>
 inline void readGenericUnorderedMap(InputStream* i_stream, gd::unordered_map<K,V>& o_value) {

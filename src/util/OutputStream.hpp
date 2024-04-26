@@ -8,6 +8,8 @@
 #include <Geode/binding/EnhancedGameObject.hpp>
 #include <Geode/binding/EnterEffectInstance.hpp>
 #include <Geode/binding/SongChannelState.hpp>
+#include <Geode/binding/SongTriggerState.hpp>
+#include <Geode/binding/SFXTriggerState.hpp>
 
 #define PP_OPERATOR_WRITE(type) virtual void operator<<(type& i_value) { write(reinterpret_cast<char*>(&i_value), sizeof(type)); }
 
@@ -117,6 +119,12 @@ public:
 
 	template <>
 	void operator<<<PPCheckpointObject*>(gd::vector<PPCheckpointObject*>& i_value);
+
+	template <>
+	void operator<<<SongTriggerState>(gd::vector<SongTriggerState>& i_value);
+
+	template <>
+	void operator<<<SFXTriggerState>(gd::vector<SFXTriggerState>& i_value);
 
 	// unordered_map
 

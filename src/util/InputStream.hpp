@@ -7,6 +7,8 @@
 #include <Geode/binding/EnterEffectInstance.hpp>
 #include <Geode/binding/EventTriggerInstance.hpp>
 #include <Geode/binding/SongChannelState.hpp>
+#include <Geode/binding/SongTriggerState.hpp>
+#include <Geode/binding/SFXTriggerState.hpp>
 
 #define PP_OPERATOR_READ(type) virtual void operator>>(type& o_value) { read(reinterpret_cast<char*>(&o_value), sizeof(type)); }
 
@@ -144,6 +146,12 @@ public:
 
 	template <>
 	void operator>><CheckpointObject*>(gd::vector<CheckpointObject*>& o_value);
+
+	template <>
+	void operator>><SongTriggerState>(gd::vector<SongTriggerState>& o_value);
+
+	template <>
+	void operator>><SFXTriggerState>(gd::vector<SFXTriggerState>& o_value);
 
 	// unordered_map
 

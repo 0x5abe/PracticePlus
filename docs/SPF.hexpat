@@ -214,6 +214,10 @@ struct SongTriggerGameObjectPtr {
     u32 m_index;
 };
 
+struct SFXTriggerGameObjectPtr {
+    u32 m_index;
+}; 
+
 struct SongChannelState {
     u8 m_unk[4];
     SongTriggerGameObjectPtr m_songTriggerGameObject1;
@@ -223,11 +227,13 @@ struct SongChannelState {
 };
 
 struct SongTriggerState {
-    u8 m_unk[16];
+    SongTriggerGameObjectPtr m_songTriggerGameObject;    
+    u8 m_unk[12];
 };
 
 struct SFXTriggerState {
-    u8 m_unk[160];
+    SFXTriggerGameObjectPtr m_sfxTriggerGameObject;
+    u8 m_unk[156];
 };
 
 struct CCNode {
