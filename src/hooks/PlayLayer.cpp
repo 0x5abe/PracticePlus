@@ -262,14 +262,14 @@ inline std::string PPPlayLayer::getStartpointFilePath(bool i_checkExists) {
 	
 	switch(m_level->m_levelType) {
 		case GJLevelType::Local:
-			l_filePath.append(std::format("/local_{}{}", m_level->m_levelID.value(), SPF_EXT));
+			l_filePath.append(std::format("/startpoints/local/{}{}", m_level->m_levelID.value(), SPF_EXT));
 			break;
 		case GJLevelType::Editor:
-			l_filePath.append(std::format("/editor_{}_rev{}{}", m_level->m_levelName.c_str(), m_level->m_levelRev, SPF_EXT));
+			l_filePath.append(std::format("/startpoints/editor/{}_rev{}{}", m_level->m_levelName.c_str(), m_level->m_levelRev, SPF_EXT));
 			break;
 		case GJLevelType::Saved:
 		default:
-			l_filePath.append(std::format("/online_{}{}", m_level->m_levelID.value(), SPF_EXT));
+			l_filePath.append(std::format("/startpoints/online/{}{}", m_level->m_levelID.value(), SPF_EXT));
 			break;
 	}
 	log::info("Filepath: \"{}\"", l_filePath);
