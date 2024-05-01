@@ -101,20 +101,30 @@ void PPCCArray::loadOne<PPCheckpointObject>(InputStream& i_stream) {
 // #endif
 // }
 
+// template <>
+// void PPCCArray::save<PPCheckpointObject>(OutputStream& o_stream) {
+// 	unsigned int l_size = count();
+// 	geode::log::info("SIZE SPS: {}", l_size);
+// 	o_stream << l_size;
+// 	if (l_size == 0) return;
+// #if defined(PP_DEBUG) && defined(PP_DESCRIBE)
+// 	geode::log::info("Startpoints to be saved:");
+// 	this->describe<PPCheckpointObject>();
+// #endif
+// 	//geode::log::info("CCARRAY CheckpointObject SIZE out: {}", l_size);
+// 	for (int i = 0; i < l_size; i++) {
+// 		reinterpret_cast<PPCheckpointObject*>(objectAtIndex(i))->save(o_stream); 
+// 	}
+// }
+
 template <>
-void PPCCArray::save<PPCheckpointObject>(OutputStream& o_stream) {
-	unsigned int l_size = count();
-	geode::log::info("SIZE SPS: {}", l_size);
-	o_stream << l_size;
-	if (l_size == 0) return;
+void PPCCArray::saveOne<PPCheckpointObject>(OutputStream& o_stream, unsigned int i_index) {
 #if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 	geode::log::info("Startpoints to be saved:");
 	this->describe<PPCheckpointObject>();
 #endif
 	//geode::log::info("CCARRAY CheckpointObject SIZE out: {}", l_size);
-	for (int i = 0; i < l_size; i++) {
-		reinterpret_cast<PPCheckpointObject*>(objectAtIndex(i))->save(o_stream); 
-	}
+	reinterpret_cast<PPCheckpointObject*>(objectAtIndex(i_index))->save(o_stream); 
 }
 
 #if defined(PP_DEBUG) && defined(PP_DESCRIBE)

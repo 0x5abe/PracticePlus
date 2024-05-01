@@ -79,9 +79,11 @@ public:
 
 	void loadOneStartpointFromStream();
 
-	void saveStartpointsToStream();
+	void saveOneStartpointToStream(unsigned int index);
 
 	void clean();
+
+	void endOutputStream();
 
 #if defined(PP_DEBUG)
 	geode::Ref<cocos2d::CCArray> getStartpointArray();

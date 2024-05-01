@@ -22,6 +22,7 @@ public:
 		unsigned int m_remainingStartpointLoadCount = 0;
 		bool m_startedSavingStartpoints = false;
 		bool m_finishedSavingStartpoints = false;
+		unsigned int m_remainingStartpointSaveCount = 0;
 		unsigned int m_bytesToRead = 0;
 		unsigned int m_bytesRead = 0;
 	};

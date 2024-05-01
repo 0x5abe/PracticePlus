@@ -187,12 +187,17 @@ void PPPlayLayer::loadStartpoints() {
 		m_fields->m_bytesToRead = std::filesystem::file_size(l_filePath);
 		m_fields->m_bytesRead = 0;
 		InputStream& l_inputStream = StartpointManager::get().m_inputStream;
-		if(!l_inputStream.setFileToRead(l_filePath, &m_fields->m_bytesRead)) {
+		if(m_fields->m_bytesToRead == 0 || !l_inputStream.setFileToRead(l_filePath, &m_fields->m_bytesRead)) {
 			goto finishedLoading;
 		}
 		
 		if (!readSpfHeader()) {
 			goto finishedLoading;
+		}
+
+		LevelInfoLayer* m_levelInfoLayer = static_cast<LevelInfoLayer*>(CCScene::get()->getChildByID("LevelInfoLayer"));
+		if (m_levelInfoLayer) {
+			m_levelInfoLayer->m_progressTimer->setColor(ccColor3B(220, 32, 64));
 		}
 
 		l_inputStream >> m_fields->m_remainingStartpointLoadCount;
@@ -218,23 +223,52 @@ void PPPlayLayer::writeSpfHeader() {
 }
 
 void PPPlayLayer::saveStartpoints() {
-	reinterpret_cast<PPGJGameLevel*>(m_level)->describe();
+	StartpointManager& l_startpointManager = StartpointManager::get();
+	log::info("SaveStartpoints Gets run");
+	log::info("m_fields->m_startedSavingStartpoints before check: {}", m_fields->m_startedSavingStartpoints);
+	if (!m_fields->m_startedSavingStartpoints) {
+		log::info("Goes into beginning");
+		m_fields->m_startedSavingStartpoints = true;
+		m_fields->m_finishedSavingStartpoints = false;
+
+		reinterpret_cast<PPGJGameLevel*>(m_level)->describe();
 	
-	std::string l_filePath = getStartpointFilePath();
-	
-	OutputStream& l_outputStream = StartpointManager::get().m_outputStream;
-	if (!l_outputStream.setFileToWrite(l_filePath)) {
-		goto finishedSaving;
+		std::string l_filePath = getStartpointFilePath();
+		
+		OutputStream& l_outputStream = StartpointManager::get().m_outputStream;
+		if (!l_outputStream.setFileToWrite(l_filePath)) {
+			goto finishedSaving;
+		}
+		
+		writeSpfHeader();
+
+		m_fields->m_remainingStartpointSaveCount = l_startpointManager.getStartpointCount();
+		l_outputStream << m_fields->m_remainingStartpointSaveCount;
 	}
-	
-	writeSpfHeader();
-
-	StartpointManager::get().saveStartpointsToStream();
-
-	finishedSaving:
-		m_fields->m_startedLoadingStartpoints = false;
-		m_fields->m_finishedSavingStartpoints = true;
-		return;
+	if (m_fields->m_remainingStartpointSaveCount > 0) {
+		l_startpointManager.saveOneStartpointToStream(l_startpointManager.getStartpointCount()-m_fields->m_remainingStartpointSaveCount);
+		m_fields->m_remainingStartpointSaveCount--;
+		log::info("Remaining save count: {}", m_fields->m_remainingStartpointSaveCount);
+		CCScene* l_currentScene = CCScene::get();
+		if (l_currentScene) {
+			l_currentScene->runAction(
+				CCSequence::create(
+					CCDelayTime::create(0.0f),
+					CCCallFunc::create(
+						this,
+						callfunc_selector(PPPlayLayer::saveStartpoints)
+					),
+					nullptr
+				)
+			);
+		}
+	} else {
+		l_startpointManager.endOutputStream();
+		finishedSaving:
+			m_fields->m_startedSavingStartpoints = false;
+			m_fields->m_finishedSavingStartpoints = true;
+			return;
+	}
 }
 
 bool PPPlayLayer::setActiveStartpointAndReload(int i_index) {
@@ -356,7 +390,20 @@ void PPPlayLayer::setupKeybinds() {
 			if (event->isDown() && isPlusMode()) {
 				m_fields->m_startedLoadingStartpoints = true;
 				m_fields->m_finishedSavingStartpoints = false;
-				saveStartpoints();
+				CCScene* l_currentScene = CCScene::get();
+				if (l_currentScene) {
+					l_currentScene->runAction(
+						CCSequence::create(
+							CCDelayTime::create(0.0f),
+							CCCallFunc::create(
+								this,
+								callfunc_selector(PPPlayLayer::saveStartpoints)
+							),
+							nullptr
+						)
+					);
+				}
+				//saveStartpoints();
 			}
 			return ListenerResult::Propagate;
 		},

@@ -54,9 +54,11 @@ public:
 	void write(char* i_value, int i_size) { m_stream->write(i_value, i_size); }
 
 	void end() {
-		m_stream->flush();
-		m_stream->close();
-		delete m_stream;
+		if (m_stream) {
+			m_stream->flush();
+			m_stream->close();
+			delete m_stream;
+		}
 		m_stream = nullptr;
 	}
 

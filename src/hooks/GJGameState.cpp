@@ -17,9 +17,9 @@ void PPGJGameState::save(OutputStream& o_stream) {
 }
 
 inline void operator>>(InputStream& i_stream, PPGJGameState& o_value) {
-	i_stream >> o_value.m_zoom;
+	i_stream >> o_value.m_cameraZoom;
 	SEPARATOR_I
-	i_stream >> o_value.m_unkFloat1;
+	i_stream >> o_value.m_targetCameraZoom;
 	SEPARATOR_I
 	i_stream >> o_value.m_cameraOffset;
 	SEPARATOR_I
@@ -151,9 +151,9 @@ inline void operator>>(InputStream& i_stream, PPGJGameState& o_value) {
 	SEPARATOR_I
 	i_stream >> o_value.m_unkFloat8;
 	SEPARATOR_I
-	i_stream >> o_value.m_screenRotation;
+	i_stream >> o_value.m_cameraAngle;
 	SEPARATOR_I
-	i_stream >> o_value.m_unkInt16;
+	i_stream >> o_value.m_targetCameraAngle;
 	SEPARATOR_I
 	i_stream >> o_value.m_unkBool7;
 	SEPARATOR_I
@@ -207,7 +207,7 @@ inline void operator>>(InputStream& i_stream, PPGJGameState& o_value) {
 		o_value.m_unkGameObjPtr2 = nullptr;
 	}
 	SEPARATOR_I
-	i_stream >> o_value.m_cameraMove;
+	i_stream >> o_value.m_cameraPosition;
 	SEPARATOR_I
 	i_stream >> o_value.m_unkBool8;
 	SEPARATOR_I
@@ -388,9 +388,9 @@ inline void operator>>(InputStream& i_stream, PPGJGameState& o_value) {
 }
 
 inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
-	o_stream << i_value.m_zoom;
+	o_stream << i_value.m_cameraZoom;
 	SEPARATOR_O
-	o_stream << i_value.m_unkFloat1;
+	o_stream << i_value.m_targetCameraZoom;
 	SEPARATOR_O
 	o_stream << i_value.m_cameraOffset;
 	SEPARATOR_O
@@ -522,9 +522,9 @@ inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
 	SEPARATOR_O
 	o_stream << i_value.m_unkFloat8;
 	SEPARATOR_O
-	o_stream << i_value.m_screenRotation;
+	o_stream << i_value.m_cameraAngle;
 	SEPARATOR_O
-	o_stream << i_value.m_unkInt16;
+	o_stream << i_value.m_targetCameraAngle;
 	SEPARATOR_O
 	o_stream << i_value.m_unkBool7;
 	SEPARATOR_O
@@ -576,7 +576,7 @@ inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
 	}
 	o_stream << l_objectIndex;
 	SEPARATOR_O
-	o_stream << i_value.m_cameraMove;
+	o_stream << i_value.m_cameraPosition;
 	SEPARATOR_O
 	o_stream << i_value.m_unkBool8;
 	SEPARATOR_O
@@ -788,8 +788,8 @@ void PPGJGameState::clean() {
 
 #if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPGJGameState::describe() {
-	log::info("[PPGJGameState - describe] m_zoom: {}", m_zoom);
-	log::info("[PPGJGameState - describe] m_unkFloat1: {}", m_unkFloat1);
+	log::info("[PPGJGameState - describe] m_cameraZoom: {}", m_cameraZoom);
+	log::info("[PPGJGameState - describe] m_targetCameraZoom: {}", m_targetCameraZoom);
 	log::info("[PPGJGameState - describe] m_cameraOffset: {}", m_cameraOffset);
 	log::info("[PPGJGameState - describe] m_unkPoint1: {}", m_unkPoint1);
 	log::info("[PPGJGameState - describe] m_unkPoint2: {}", m_unkPoint2);
@@ -855,8 +855,8 @@ void PPGJGameState::describe() {
 	log::info("[PPGJGameState - describe] m_unkFloat6: {}", m_unkFloat6);
 	log::info("[PPGJGameState - describe] m_unkFloat7: {}", m_unkFloat7);
 	log::info("[PPGJGameState - describe] m_unkFloat8: {}", m_unkFloat8);
-	log::info("[PPGJGameState - describe] m_screenRotation: {}", m_screenRotation);
-	log::info("[PPGJGameState - describe] m_unkInt16: {}", m_unkInt16);
+	log::info("[PPGJGameState - describe] m_cameraAngle: {}", m_cameraAngle);
+	log::info("[PPGJGameState - describe] m_targetCameraAngle: {}", m_targetCameraAngle);
 	log::info("[PPGJGameState - describe] m_unkBool7: {}", m_unkBool7);
 	log::info("[PPGJGameState - describe] m_timeWarpFactor: {}", m_timeWarpFactor);
 	log::info("[PPGJGameState - describe] m_timeWarpRelated: {}", m_timeWarpRelated);
@@ -896,7 +896,7 @@ void PPGJGameState::describe() {
 		if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(m_unkGameObjPtr2);
 	}
 	log::info("[PPGJGameState - describe] m_unkGameObjPtr2 objectIndex: {}", l_objectIndex);
-	log::info("[PPGJGameState - describe] m_cameraMove: {}", m_cameraMove);
+	log::info("[PPGJGameState - describe] m_cameraPosition: {}", m_cameraPosition);
 	log::info("[PPGJGameState - describe] m_unkBool8: {}", m_unkBool8);
 	log::info("[PPGJGameState - describe] m_unkBool9: {}", m_unkBool9);
 	log::info("[PPGJGameState - describe] m_unkBool10: {}", m_unkBool10);

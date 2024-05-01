@@ -156,14 +156,21 @@ void StartpointManager::loadOneStartpointFromStream() {
 }
 
 //Todo saveOne with looping CCAction (same idea as load)
-void StartpointManager::saveStartpointsToStream() {
-	if (m_startpoints->count() > 0) {
-		log::info("Saving Startpoints to stream");
-		cocos2d::CCArray* l_intermediate = m_startpoints;
-		static_cast<PPCCArray*>(l_intermediate)->save<PPCheckpointObject>(m_outputStream);
-		m_outputStream.end();
-		log::info("Saved Startpoints to stream");
-	}
+// void StartpointManager::saveStartpointsToStream() {
+// 	if (m_startpoints->count() > 0) {
+// 		log::info("Saving Startpoints to stream");
+// 		cocos2d::CCArray* l_intermediate = m_startpoints;
+// 		static_cast<PPCCArray*>(l_intermediate)->save<PPCheckpointObject>(m_outputStream);
+// 		m_outputStream.end();
+// 		log::info("Saved Startpoints to stream");
+// 	}
+// }
+
+void StartpointManager::saveOneStartpointToStream(unsigned int i_index) {
+	log::info("Saving Startpoints to stream");
+	cocos2d::CCArray* l_intermediate = m_startpoints;
+	static_cast<PPCCArray*>(l_intermediate)->saveOne<PPCheckpointObject>(m_outputStream, i_index);
+	log::info("Saved Startpoints to stream");
 }
 
 void StartpointManager::clean() {
@@ -171,6 +178,10 @@ void StartpointManager::clean() {
 		PPCheckpointObject* l_startpoint = static_cast<PPCheckpointObject*>(m_startpoints->objectAtIndex(i));
 		l_startpoint->clean();
 	}
+}
+
+void StartpointManager::endOutputStream() {
+	m_outputStream.end();
 }
 
 #if defined(PP_DEBUG)

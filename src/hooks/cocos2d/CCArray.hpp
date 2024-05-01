@@ -16,6 +16,9 @@ public:
 	template <typename T>
 	void loadOne(InputStream& o_stream);
 
+	template <typename T>
+	void saveOne(OutputStream& o_stream, unsigned int i_index);
+
 	template <>
 	void load<GradientTriggerObject>(InputStream& i_stream);
 
@@ -26,7 +29,7 @@ public:
 	void loadOne<PPCheckpointObject>(InputStream& o_stream);
 
 	template <>
-	void save<PPCheckpointObject>(OutputStream& o_stream);
+	void saveOne<PPCheckpointObject>(OutputStream& o_stream, unsigned int i_index);
 
 #if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 	template <class T>
