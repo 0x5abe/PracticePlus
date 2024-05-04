@@ -6,6 +6,7 @@
 #include <util/InputStream.hpp>
 #include <util/OutputStream.hpp>
 #include <util/algorithm.hpp>
+#include <util/filesystem.hpp>
 
 using namespace geode::prelude;
 
@@ -234,7 +235,11 @@ void PPPlayLayer::saveStartpoints() {
 		reinterpret_cast<PPGJGameLevel*>(m_level)->describe();
 	
 		std::string l_filePath = getStartpointFilePath();
-		
+		std::string l_fileDirectory = util::filesystem::getParentDirectoryFromPath(l_filePath);
+		if (!std::filesystem::exists(l_fileDirectory) && !std::filesystem::create_directories(l_fileDirectory)) {
+			goto finishedSaving;
+		}
+
 		OutputStream& l_outputStream = StartpointManager::get().m_outputStream;
 		if (!l_outputStream.setFileToWrite(l_filePath)) {
 			goto finishedSaving;
