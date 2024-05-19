@@ -1,4 +1,7 @@
 #include "PlayLayer.hpp"
+#include "Geode/binding/FLAlertLayer.hpp"
+#include "Geode/loader/Log.hpp"
+#include "Geode/ui/Popup.hpp"
 #include <filesystem>
 #include <geode.custom-keybinds/include/Keybinds.hpp>
 #include <managers/StartpointManager.hpp>
@@ -30,15 +33,14 @@ bool PPPlayLayer::init(GJGameLevel* i_level, bool i_useReplay, bool i_dontCreate
 }
 
 void PPPlayLayer::createObjectsFromSetupFinished() {
-	if (m_fields->m_startedLoadingStartpoints) {
-		return;
+	if (m_fields->m_startpointLoadingState == LoadingState::Setup) {
+		PlayLayer::createObjectsFromSetupFinished();
 	}
-	PlayLayer::createObjectsFromSetupFinished();
 }
 
 void PPPlayLayer::setupHasCompleted() {
 	//log::info("[setupHasCompleted] begin");
-	if (!m_fields->m_finishedLoadingStartpoints) {
+	if (m_fields->m_startpointLoadingState != LoadingState::Ready) {
 		//log::info("[setupHasCompleted] hasnt finished loading SP");
 
 		loadStartpoints();
@@ -56,14 +58,12 @@ void PPPlayLayer::setupHasCompleted() {
 		// }
 		log::info("[setupHasCompleted] m_loadingProgress: {}", m_loadingProgress);
 	}
-	if (m_fields->m_finishedLoadingStartpoints) {
+	if (m_fields->m_startpointLoadingState == LoadingState::Ready) {
 		log::info("[setupHasCompleted] finished loading SP");
 		m_loadingProgress = 1.0f;
 		PlayLayer::setupHasCompleted();
 
 		//StartpointManager::get().fetchStartpointsFromTempStorage();
-		m_fields->m_startedLoadingStartpoints = false;
-		m_fields->m_finishedLoadingStartpoints = false;
 		m_fields->m_startpointLoadingProgress = 0.0f;
 		m_fields->m_bytesToRead = 0;
 		m_fields->m_bytesRead = 0;
@@ -113,7 +113,6 @@ void PPPlayLayer::createStartpoint() {
 	addStartpoint(StartpointManager::get().createStartpoint(l_startpoint, m_player1->getPosition()));
 
 	//Todo: see if we want to save to file here, make it so it only saves the changes instead of the whole thing
-	// probably better to use Actions than threading, save one SP per tick of the action
 }
 
 void PPPlayLayer::addStartpoint(PPCheckpointObject* i_startpoint, int i_index) {
@@ -133,7 +132,6 @@ bool PPPlayLayer::removeStartpoint(int i_index) {
 	l_startpointManager.removeStartpoint(i_index);
 
 	//Todo: see if we want to save to file here, make it so it only saves the changes instead of the whole thing
-	// probably better to use Actions than threading, save one SP per tick of the action
 	return true;
 }
 
@@ -144,6 +142,7 @@ void PPPlayLayer::removeAllStartpoints(bool i_reset) {
 		l_startpoint = l_startpointManager.getStartpoint(i);
 		if (!l_startpoint) continue;
 		//Todo: see wth happens here (has crashed before)
+		// May be related to objects appearing invisible
 		PlayLayer::removeObjectFromSection(l_startpoint->m_physicalCheckpointObject);
 		l_startpoint->m_physicalCheckpointObject->removeMeAndCleanup();
 		//EndTodo
@@ -151,68 +150,161 @@ void PPPlayLayer::removeAllStartpoints(bool i_reset) {
 	l_startpointManager.removeAllStartpoints(i_reset);
 }
 
-bool PPPlayLayer::checkLevelStringHash() {
+bool PPPlayLayer::readSpfLevelStringHash() {
 	unsigned int l_savedLevelStringHash;
 	InputStream& l_inputStream = StartpointManager::get().m_inputStream;
 
 	l_inputStream >> l_savedLevelStringHash;
 	
 	if (l_savedLevelStringHash != util::algorithm::hash_string(m_level->m_levelString.c_str())) {
-		//Todo: let user decide what to do with a warning
-		log::info("!!!!!!!!!!!!! Mismatch LevelString HASH !!!!!!!!!!!!!!!");
+		log::info("[readSpfLevelStringHash] different levelstring hash");
 		return false;
-		//EndTodo
 	}
+	log::info("[readSpfLevelStringHash] same levelstring hash");
 	return true;
 }
 
-bool PPPlayLayer::readSpfHeader() {
+bool PPPlayLayer::readSpfVersion() {
+	char l_spfMagicAndVer[sizeof(s_spfMagicAndVer)];
 	InputStream& l_inputStream = StartpointManager::get().m_inputStream;
-	l_inputStream.ignore(sizeof(s_spfMagicAndVer));
-	return checkLevelStringHash();
+
+	l_inputStream.read(l_spfMagicAndVer, sizeof(s_spfMagicAndVer));
+	if (std::strncmp(s_spfMagicAndVer, l_spfMagicAndVer, sizeof(s_spfMagicAndVer))) {
+		log::info("[readSpfVersion] different version");
+		return false;
+	}
+	log::info("[readSpfVersion] same version");
+	return true;
 }
 
 void PPPlayLayer::loadStartpoints() {
 	StartpointManager& l_startpointManager = StartpointManager::get();
+	InputStream& l_inputStream = StartpointManager::get().m_inputStream;
+	switch (m_fields->m_startpointLoadingState) {
+		case LoadingState::Setup: {
+			log::info("[loadStartpoints] started loading SP");
+			m_fields->m_startpointLoadingProgress = 0.0f;
+			LevelInfoLayer* m_levelInfoLayer = static_cast<LevelInfoLayer*>(CCScene::get()->getChildByID("LevelInfoLayer"));
+			if (m_levelInfoLayer) {
+				m_levelInfoLayer->m_progressTimer->setColor(ccColor3B(220, 32, 64));
+			}
 
-	if (!m_fields->m_startedLoadingStartpoints) {
-		log::info("[setupHasCompleted] started loading SP");
-		m_fields->m_startedLoadingStartpoints = true;
-		m_fields->m_startpointLoadingProgress = 0.0f;
+			std::string l_filePath = getStartpointFilePath(true);
+			if (l_filePath == "") {
+				m_fields->m_startpointLoadingState = LoadingState::Ready;
+				break;
+			}
 
-		std::string l_filePath = getStartpointFilePath(true);
-		if (l_filePath == "") {
-			goto finishedLoading;
+			m_fields->m_bytesToRead = std::filesystem::file_size(l_filePath);
+			m_fields->m_bytesRead = 0;
+			if(m_fields->m_bytesToRead == 0 || !l_inputStream.setFileToRead(l_filePath, &m_fields->m_bytesRead)) {
+				m_fields->m_startpointLoadingState = LoadingState::HandleFileError;
+				break;
+			}
+
+			m_fields->m_startpointLoadingState = LoadingState::ReadVersion;
+			// falls through
 		}
-
-		m_fields->m_bytesToRead = std::filesystem::file_size(l_filePath);
-		m_fields->m_bytesRead = 0;
-		InputStream& l_inputStream = StartpointManager::get().m_inputStream;
-		if(m_fields->m_bytesToRead == 0 || !l_inputStream.setFileToRead(l_filePath, &m_fields->m_bytesRead)) {
-			goto finishedLoading;
+		case LoadingState::ReadVersion: {
+			if (!readSpfVersion()) {
+				m_fields->m_startpointLoadingState = LoadingState::HandleIncorrectVersion;
+				break;
+			}
+			m_fields->m_startpointLoadingState = LoadingState::ReadHash;
+			// falls through
 		}
-		
-		if (!readSpfHeader()) {
-			goto finishedLoading;
+		case LoadingState::ReadHash: {
+			if (!readSpfLevelStringHash()) {
+				m_fields->m_startpointLoadingState = LoadingState::HandleIncorrectHash;
+				break;
+			}
+			m_fields->m_startpointLoadingState = LoadingState::ReadStartpointCount;
+			// falls through
 		}
-
-		LevelInfoLayer* m_levelInfoLayer = static_cast<LevelInfoLayer*>(CCScene::get()->getChildByID("LevelInfoLayer"));
-		if (m_levelInfoLayer) {
-			m_levelInfoLayer->m_progressTimer->setColor(ccColor3B(220, 32, 64));
+		case LoadingState::ReadStartpointCount: {
+			l_inputStream >> m_fields->m_remainingStartpointLoadCount;
+			m_fields->m_startpointLoadingState = LoadingState::ReadStartpoint;
+			// falls through
 		}
+		case LoadingState::ReadStartpoint: {
+			log::info("Remaining startpoints: {}", m_fields->m_remainingStartpointLoadCount);
+			if (m_fields->m_remainingStartpointLoadCount > 0) {
+				l_startpointManager.loadOneStartpointFromStream();
+				m_fields->m_remainingStartpointLoadCount--;
+			}
+			if (m_fields->m_remainingStartpointLoadCount == 0) {
+				m_fields->m_startpointLoadingState = LoadingState::Ready;
+			}
+			break;
+		}
+		case LoadingState::HandleFileError: {
+			//Todo Give back mouse control to the user to let them choose an option
+			m_fields->m_startpointLoadingState = LoadingState::WaitingForPopup;
+			createQuickPopup("Error loading startpoints",
+				"The startpoint file for this level could not be opened",
+				"Cancel",
+				"Ok",
+				[&](FLAlertLayer*, bool i_btn2) {
+					m_fields->m_startpointLoadingState = LoadingState::Ready;
+					//Todo Disable mouse control
+    			}
+			);
+			break;
+		}
+		case LoadingState::HandleIncorrectVersion: {
+			//Todo Give back mouse control to the user to let them choose an option
+			log::info("!!!!!!!!!!!!!!!! CREATED POPUP");
+			m_fields->m_startpointLoadingState = LoadingState::WaitingForPopup;
+			createQuickPopup("Error loading startpoints",
+				"The version of the startpoint file does not match the current one. Try to update it?",
+				"Cancel",
+				"Ok",
+				[&](FLAlertLayer*, bool i_btn2) {
+					if (i_btn2) {
+						m_fields->m_startpointLoadingState = LoadingState::UpdateVersion;
+					} else {
+						m_fields->m_startpointLoadingState = LoadingState::Ready;
+					}
+					//Todo Disable mouse control
+    			}
+			);
+			break;
+		}
+		case LoadingState::UpdateVersion: {
+			if (true) {
+				m_fields->m_startpointLoadingState = LoadingState::ReadHash;
+			} else {
+				m_fields->m_startpointLoadingState = LoadingState::Ready;
+			}
+			break;
+		}
+		case LoadingState::HandleIncorrectHash: {
+			//Todo Give back mouse control to the user to let them choose an option
+			m_fields->m_startpointLoadingState = LoadingState::WaitingForPopup;
+			createQuickPopup("Error loading startpoints",
+				"The version of the level in the startpoint file does not match the current one. Try to load it anyways? (this might be unstable or crash the game)",
+				"Cancel",
+				"Ok",
+				[&](FLAlertLayer*, bool i_btn2) {
+					if (i_btn2) {
+						m_fields->m_startpointLoadingState = LoadingState::ReadStartpointCount;
+					} else {
+						m_fields->m_startpointLoadingState = LoadingState::Ready;
+					}
+					//Todo Disable mouse control
+    			}
+			);
+			break;
+		}
+		case LoadingState::WaitingForPopup:
+		case LoadingState::Ready: {
+			//Todo Fix case with levels that dont use CCAction to load it gets stuck in infinite loop (maybe load it with CCAction in those cases as well)
+			log::info("!!!!!!!!!!!!!!!! DO NOTHING");
+			break;
+		}
+		case LoadingState::ErrorEndLevelLoad: {
 
-		l_inputStream >> m_fields->m_remainingStartpointLoadCount;
-		log::info("Remaining startpoints: {}", m_fields->m_remainingStartpointLoadCount);
-	}
-	log::info("Remaining startpoints: {}", m_fields->m_remainingStartpointLoadCount);
-	if (m_fields->m_remainingStartpointLoadCount > 0) {
-		l_startpointManager.loadOneStartpointFromStream();
-		m_fields->m_remainingStartpointLoadCount--;
-	}
-	if (m_fields->m_remainingStartpointLoadCount == 0) {
-		finishedLoading:
-			m_fields->m_finishedLoadingStartpoints = true;
-			return;
+		}
 	}
 }
 
@@ -226,53 +318,65 @@ void PPPlayLayer::writeSpfHeader() {
 void PPPlayLayer::saveStartpoints() {
 	StartpointManager& l_startpointManager = StartpointManager::get();
 	log::info("SaveStartpoints Gets run");
-	log::info("m_fields->m_startedSavingStartpoints before check: {}", m_fields->m_startedSavingStartpoints);
-	if (!m_fields->m_startedSavingStartpoints) {
-		log::info("Goes into beginning");
-		m_fields->m_startedSavingStartpoints = true;
-		m_fields->m_finishedSavingStartpoints = false;
+	switch (m_fields->m_startpointSavingState) {
+		case SavingState::Setup: {
+			log::info("Goes into beginning");
 
-		reinterpret_cast<PPGJGameLevel*>(m_level)->describe();
-	
-		std::string l_filePath = getStartpointFilePath();
-		std::string l_fileDirectory = util::filesystem::getParentDirectoryFromPath(l_filePath);
-		if (!std::filesystem::exists(l_fileDirectory) && !std::filesystem::create_directories(l_fileDirectory)) {
-			goto finishedSaving;
-		}
-
-		OutputStream& l_outputStream = StartpointManager::get().m_outputStream;
-		if (!l_outputStream.setFileToWrite(l_filePath)) {
-			goto finishedSaving;
-		}
+			reinterpret_cast<PPGJGameLevel*>(m_level)->describe();
+			m_fields->m_remainingStartpointSaveCount = l_startpointManager.getStartpointCount();
+			if (m_fields->m_remainingStartpointSaveCount == 0) {
+				m_fields->m_startpointSavingState = SavingState::Ready;
+				break;
+			}
 		
-		writeSpfHeader();
+			std::string l_filePath = getStartpointFilePath();
+			std::string l_fileDirectory = util::filesystem::getParentDirectoryFromPath(l_filePath);
+			if (!std::filesystem::exists(l_fileDirectory) && !std::filesystem::create_directories(l_fileDirectory)) {
+				m_fields->m_startpointSavingState = SavingState::Ready;
+				break;
+			}
 
-		m_fields->m_remainingStartpointSaveCount = l_startpointManager.getStartpointCount();
-		l_outputStream << m_fields->m_remainingStartpointSaveCount;
-	}
-	if (m_fields->m_remainingStartpointSaveCount > 0) {
-		l_startpointManager.saveOneStartpointToStream(l_startpointManager.getStartpointCount()-m_fields->m_remainingStartpointSaveCount);
-		m_fields->m_remainingStartpointSaveCount--;
-		log::info("Remaining save count: {}", m_fields->m_remainingStartpointSaveCount);
-		CCScene* l_currentScene = CCScene::get();
-		if (l_currentScene) {
-			l_currentScene->runAction(
-				CCSequence::create(
-					CCDelayTime::create(0.0f),
-					CCCallFunc::create(
-						this,
-						callfunc_selector(PPPlayLayer::saveStartpoints)
-					),
-					nullptr
-				)
-			);
+			OutputStream& l_outputStream = StartpointManager::get().m_outputStream;
+			if (!l_outputStream.setFileToWrite(l_filePath)) {
+				m_fields->m_startpointSavingState = SavingState::Ready;
+				break;
+			}
+			
+			writeSpfHeader();
+
+			l_outputStream << m_fields->m_remainingStartpointSaveCount;
+
+			m_fields->m_startpointSavingState = SavingState::Started;
+			// falls through
 		}
-	} else {
-		l_startpointManager.endOutputStream();
-		finishedSaving:
-			m_fields->m_startedSavingStartpoints = false;
-			m_fields->m_finishedSavingStartpoints = true;
-			return;
+		case SavingState::Started: {
+			if (m_fields->m_remainingStartpointSaveCount > 0) {
+				l_startpointManager.saveOneStartpointToStream(l_startpointManager.getStartpointCount()-m_fields->m_remainingStartpointSaveCount);
+				m_fields->m_remainingStartpointSaveCount--;
+				log::info("Remaining save count: {}", m_fields->m_remainingStartpointSaveCount);
+				CCScene* l_currentScene = CCScene::get();
+				if (l_currentScene) {
+					l_currentScene->runAction(
+						CCSequence::create(
+							CCDelayTime::create(0.0f),
+							CCCallFunc::create(
+								this,
+								callfunc_selector(PPPlayLayer::saveStartpoints)
+							),
+							nullptr
+						)
+					);
+				}
+				break;
+			}
+			if (m_fields->m_remainingStartpointSaveCount == 0) {
+				l_startpointManager.endOutputStream();
+				m_fields->m_startpointSavingState = SavingState::Ready;
+			}
+		}
+		case SavingState::Ready: {
+			break;
+		}
 	}
 }
 
@@ -325,7 +429,7 @@ void PPPlayLayer::setupKeybinds() {
 			bool l_player1IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player1)+0x81a);
 			bool l_player2IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player2)+0x81a);
 			if (event->isDown() && !l_player1IsLocked && !l_player2IsLocked && !m_player1->m_isDead && isPlusMode()) {
-				if (!m_fields->m_startedSavingStartpoints) {
+				if (m_fields->m_startpointSavingState == SavingState::Ready) {
 					createStartpoint();
 				}
 			}
@@ -339,7 +443,7 @@ void PPPlayLayer::setupKeybinds() {
 			bool l_player1IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player1)+0x81a);
 			bool l_player2IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player2)+0x81a);
 			if (event->isDown() && !l_player1IsLocked && !l_player2IsLocked && isPlusMode()) {
-				if (!m_fields->m_startedSavingStartpoints) {
+				if (m_fields->m_startpointSavingState == SavingState::Ready) {
 					removeStartpoint();
 				}
 			}
@@ -393,8 +497,7 @@ void PPPlayLayer::setupKeybinds() {
 	addEventListener<keybinds::InvokeBindFilter>(
 		[this](keybinds::InvokeBindEvent* event) {
 			if (event->isDown() && isPlusMode()) {
-				m_fields->m_startedLoadingStartpoints = true;
-				m_fields->m_finishedSavingStartpoints = false;
+				m_fields->m_startpointSavingState = SavingState::Setup;
 				CCScene* l_currentScene = CCScene::get();
 				if (l_currentScene) {
 					l_currentScene->runAction(

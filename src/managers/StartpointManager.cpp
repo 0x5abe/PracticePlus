@@ -155,17 +155,6 @@ void StartpointManager::loadOneStartpointFromStream() {
 	static_cast<PPCCArray*>(l_intermediate)->loadOne<PPCheckpointObject>(m_inputStream);
 }
 
-//Todo saveOne with looping CCAction (same idea as load)
-// void StartpointManager::saveStartpointsToStream() {
-// 	if (m_startpoints->count() > 0) {
-// 		log::info("Saving Startpoints to stream");
-// 		cocos2d::CCArray* l_intermediate = m_startpoints;
-// 		static_cast<PPCCArray*>(l_intermediate)->save<PPCheckpointObject>(m_outputStream);
-// 		m_outputStream.end();
-// 		log::info("Saved Startpoints to stream");
-// 	}
-// }
-
 void StartpointManager::saveOneStartpointToStream(unsigned int i_index) {
 	log::info("Saving Startpoints to stream");
 	cocos2d::CCArray* l_intermediate = m_startpoints;

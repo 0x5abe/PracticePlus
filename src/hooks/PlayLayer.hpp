@@ -4,6 +4,27 @@
 #include <hooks/CheckpointObject.hpp>
 #include <managers/StartpointManager.hpp>
 
+enum class LoadingState {
+	Ready,
+	Setup,
+	HandleFileError,
+	ReadVersion,
+	HandleIncorrectVersion,
+	UpdateVersion,
+	ReadHash,
+	HandleIncorrectHash,
+	ReadStartpointCount,
+	ReadStartpoint,
+	WaitingForPopup,
+	ErrorEndLevelLoad
+};
+
+enum class SavingState {
+	Ready,
+	Setup,
+	Started
+};
+
 class $modify(PPPlayLayer, PlayLayer) {
 protected:
 	void updatePlusModeVisibility(bool i_isPlusMode);
@@ -16,15 +37,16 @@ public:
 	struct Fields {
 		int m_uniqueIdBase = 12;
 		bool m_onQuitCalled = false;
-		bool m_startedLoadingStartpoints = false;
-		bool m_finishedLoadingStartpoints = false;
+		LoadingState m_startpointLoadingState = LoadingState::Setup;
 		float m_startpointLoadingProgress = 0.0f;
 		unsigned int m_remainingStartpointLoadCount = 0;
-		bool m_startedSavingStartpoints = false;
-		bool m_finishedSavingStartpoints = false;
+		SavingState m_startpointSavingState = SavingState::Ready;
 		unsigned int m_remainingStartpointSaveCount = 0;
 		unsigned int m_bytesToRead = 0;
 		unsigned int m_bytesRead = 0;
+		bool m_readyToLoad = false;
+		bool m_updateStartpointFileVersion = false;
+		bool m_popupOpen = false;
 	};
 
 	// overrides
@@ -60,9 +82,9 @@ public:
 
 	void removeAllStartpoints(bool i_reset);
 
-	bool checkLevelStringHash();
+	bool readSpfLevelStringHash();
 
-	bool readSpfHeader();
+	bool readSpfVersion();
 
 	void loadStartpoints();
 

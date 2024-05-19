@@ -7,7 +7,7 @@ using namespace geode::prelude;
 
 void PPPauseLayer::onEdit(CCObject* i_sender) {
 	PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-	if (l_playLayer && l_playLayer->m_fields->m_startedSavingStartpoints) {
+	if (l_playLayer && l_playLayer->m_fields->m_startpointSavingState != SavingState::Ready) {
 		Notification::create("Cannot edit level while startpoints are being saved", NotificationIcon::Warning, 1.0f)->show();
 		return;
 	}
@@ -17,7 +17,7 @@ void PPPauseLayer::onEdit(CCObject* i_sender) {
 
 void PPPauseLayer::tryQuit(CCObject* i_sender) {
 	PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-	if (l_playLayer && l_playLayer->m_fields->m_startedSavingStartpoints) {
+	if (l_playLayer && l_playLayer->m_fields->m_startpointSavingState != SavingState::Ready) {
 		Notification::create("Cannot exit level while startpoints are being saved", NotificationIcon::Warning, 1.0f)->show();
 		return;
 	}
