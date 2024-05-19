@@ -155,9 +155,9 @@ inline void operator>>(InputStream& i_stream, PPGJGameState& o_value) {
 	SEPARATOR_I
 	i_stream >> o_value.m_targetCameraAngle;
 	SEPARATOR_I
-	i_stream >> o_value.m_unkBool7;
+	i_stream >> o_value.m_unk184;
 	SEPARATOR_I
-	i_stream >> o_value.m_timeWarpFactor;
+	i_stream >> o_value.m_timeWarp;
 	SEPARATOR_I
 	i_stream >> o_value.m_timeWarpRelated;
 	SEPARATOR_I
@@ -526,9 +526,9 @@ inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
 	SEPARATOR_O
 	o_stream << i_value.m_targetCameraAngle;
 	SEPARATOR_O
-	o_stream << i_value.m_unkBool7;
+	o_stream << i_value.m_unk184;
 	SEPARATOR_O
-	o_stream << i_value.m_timeWarpFactor;
+	o_stream << i_value.m_timeWarp;
 	SEPARATOR_O
 	o_stream << i_value.m_timeWarpRelated;
 	SEPARATOR_O
@@ -857,8 +857,8 @@ void PPGJGameState::describe() {
 	log::info("[PPGJGameState - describe] m_unkFloat8: {}", m_unkFloat8);
 	log::info("[PPGJGameState - describe] m_cameraAngle: {}", m_cameraAngle);
 	log::info("[PPGJGameState - describe] m_targetCameraAngle: {}", m_targetCameraAngle);
-	log::info("[PPGJGameState - describe] m_unkBool7: {}", m_unkBool7);
-	log::info("[PPGJGameState - describe] m_timeWarpFactor: {}", m_timeWarpFactor);
+	log::info("[PPGJGameState - describe] m_unk184: {}", m_unk184);
+	log::info("[PPGJGameState - describe] m_timeWarp: {}", m_timeWarp);
 	log::info("[PPGJGameState - describe] m_timeWarpRelated: {}", m_timeWarpRelated);
 	log::info("[PPGJGameState - describe] m_currentChannel: {}", m_currentChannel);
 	log::info("[PPGJGameState - describe] m_unkInt17: {}", m_unkInt17);
