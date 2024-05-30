@@ -216,9 +216,9 @@ void PPPlayLayer::loadStartpoints() {
 		case LoadingState::Setup: {
 			log::info("[loadStartpoints] started loading SP");
 			m_fields->m_startpointLoadingProgress = 0.0f;
-			LevelInfoLayer* m_levelInfoLayer = static_cast<LevelInfoLayer*>(CCScene::get()->getChildByID("LevelInfoLayer"));
-			if (m_levelInfoLayer) {
-				m_levelInfoLayer->m_progressTimer->setColor(ccColor3B(220, 32, 64));
+			LevelInfoLayer* l_levelInfoLayer = static_cast<LevelInfoLayer*>(CCScene::get()->getChildByID("LevelInfoLayer"));
+			if (l_levelInfoLayer) {
+				l_levelInfoLayer->m_progressTimer->setColor(ccColor3B(220, 32, 64));
 			}
 
 			std::string l_filePath = getStartpointFilePath(true);
@@ -277,7 +277,11 @@ void PPPlayLayer::loadStartpoints() {
 				"Cancel",
 				"Ok",
 				[&](FLAlertLayer*, bool i_btn2) {
-					m_fields->m_startpointLoadingState = LoadingState::Ready;
+					if (i_btn2) {
+						m_fields->m_startpointLoadingState = LoadingState::Ready;
+					} else {
+						m_fields->m_startpointLoadingState = LoadingState::ErrorCancelLevelLoad;
+					}
 					CCEGLView::get()->showCursor(false);
     			}
 			);

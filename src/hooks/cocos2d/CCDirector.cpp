@@ -34,7 +34,26 @@ bool PPCCDirector::replaceScene(CCScene* i_scene) {
 			CC_SAFE_RELEASE(s_currentPlayLayer->m_fields->m_transitionFadeScene);
 			s_currentPlayLayer->m_fields->m_transitionFadeScene = nullptr;
 			s_currentPlayLayer = nullptr;
-
+			CCScene* l_currentScene = CCScene::get();
+			LevelInfoLayer* l_levelInfoLayer = static_cast<LevelInfoLayer*>(CCScene::get()->getChildByID("LevelInfoLayer"));
+			if (l_levelInfoLayer) {
+				l_levelInfoLayer->m_isBusy = false;
+				CCMenu* l_playMenu = static_cast<CCMenu*>(l_levelInfoLayer->getChildByID("play-menu"));
+				if (!l_playMenu) {
+					return false;
+				}
+				//Todo: Fix scale and color of play button
+				l_playMenu->setTouchEnabled(true);
+				CCNode* l_playButton = l_playMenu->getChildByID("play-button");
+				if (!l_playButton) {
+					return false;
+				}
+				CCNode* l_playButtonSprite = static_cast<CCNode*>(l_playButton->getChildren()->objectAtIndex(0));
+				if (!l_playButtonSprite) {
+					return false;
+				}
+				l_playButtonSprite->removeAllChildrenWithCleanup(true);
+			}
 			return false;
 		}
 	}
