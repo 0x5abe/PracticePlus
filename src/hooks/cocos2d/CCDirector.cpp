@@ -35,6 +35,7 @@ bool PPCCDirector::replaceScene(CCScene* i_scene) {
 			s_currentPlayLayer->m_fields->m_transitionFadeScene = nullptr;
 			s_currentPlayLayer = nullptr;
 			CCScene* l_currentScene = CCScene::get();
+
 			LevelInfoLayer* l_levelInfoLayer = static_cast<LevelInfoLayer*>(CCScene::get()->getChildByID("LevelInfoLayer"));
 			if (l_levelInfoLayer) {
 				l_levelInfoLayer->m_isBusy = false;
@@ -54,6 +55,32 @@ bool PPCCDirector::replaceScene(CCScene* i_scene) {
 				}
 				l_playButtonSprite->removeAllChildrenWithCleanup(true);
 			}
+
+			LevelSelectLayer* l_mainLayer = static_cast<LevelSelectLayer*>(CCScene::get()->getChildByID("main-layer"));
+			if (l_mainLayer) {
+				BoomScrollLayer* l_levelsList = static_cast<BoomScrollLayer*>(l_mainLayer->getChildByID("levels-list"));
+				if (!l_levelsList) {
+					return false;
+				}
+				ExtendedLayer* l_levelPages = static_cast<ExtendedLayer*>(l_levelsList->getChildByID("level-pages"));
+				if (!l_levelPages) {
+					return false;
+				}
+				LevelPage* l_levelPage1 = static_cast<LevelPage*>(l_levelPages->getChildByID("level-page-1"));
+				if (l_levelPage1) {
+					l_levelPage1->m_isBusy = false;
+				}
+				LevelPage* l_levelPage2 = static_cast<LevelPage*>(l_levelPages->getChildByID("level-page-2"));
+				if (l_levelPage2) {
+					l_levelPage2->m_isBusy = false;
+				}
+				LevelPage* l_levelPage3 = static_cast<LevelPage*>(l_levelPages->getChildByID("level-page-3"));
+				if (l_levelPage3) {
+					l_levelPage3->m_isBusy = false;
+				}
+				*reinterpret_cast<byte*>(geode::base::get()+0x4f0336) = 0;
+			}
+			
 			return false;
 		}
 	}

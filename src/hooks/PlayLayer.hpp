@@ -4,6 +4,10 @@
 #include <hooks/CheckpointObject.hpp>
 #include <managers/StartpointManager.hpp>
 
+#define SPF_EXT ".spf"
+extern PPPlayLayer* s_currentPlayLayer;
+extern char s_spfMagicAndVer[11];
+
 enum class LoadingState {
 	Ready,
 	Setup,
@@ -11,6 +15,8 @@ enum class LoadingState {
 	ReadVersion,
 	HandleIncorrectVersion,
 	UpdateVersion,
+	ReadFinishedSaving,
+	HandleDidNotFinishSaving,
 	ReadHash,
 	HandleIncorrectHash,
 	ReadStartpointCount,
@@ -24,8 +30,6 @@ enum class SavingState {
 	Setup,
 	Started
 };
-
-extern PPPlayLayer* s_currentPlayLayer;
 
 class $modify(PPPlayLayer, PlayLayer) {
 protected:
@@ -102,6 +106,8 @@ public:
 	bool readSpfLevelStringHash();
 
 	bool readSpfVersion();
+
+	bool readSpfFinishedSaving();
 
 	void loadStartpoints();
 

@@ -18,6 +18,7 @@ class PPCheckpointObject;
 class OutputStream {
 protected:
 	std::ofstream* m_stream;
+	const char m_zeros[256] = {};
 public:
 	OutputStream() {
 		m_stream = nullptr;
@@ -52,6 +53,11 @@ public:
 	}
 
 	void write(char* i_value, int i_size) { m_stream->write(i_value, i_size); }
+	void writeZero(int i_size) { 
+		m_stream->write(m_zeros, i_size);
+	}
+
+	void seek(int i_pos) { m_stream->seekp(i_pos, std::ios_base::beg); }
 
 	void end() {
 		if (m_stream) {
