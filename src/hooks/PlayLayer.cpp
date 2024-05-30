@@ -1,7 +1,4 @@
 #include "PlayLayer.hpp"
-#include "Geode/binding/FLAlertLayer.hpp"
-#include "Geode/loader/Log.hpp"
-#include "Geode/ui/Popup.hpp"
 #include <filesystem>
 #include <geode.custom-keybinds/include/Keybinds.hpp>
 #include <managers/StartpointManager.hpp>
@@ -17,6 +14,8 @@ using namespace geode::prelude;
 
 static char s_spfMagicAndVer[] = "SPF v0.0.1 lol ";
 
+PPPlayLayer* s_currentPlayLayer = nullptr;
+
 // overrides
 
 bool PPPlayLayer::init(GJGameLevel* i_level, bool i_useReplay, bool i_dontCreateObjects) {
@@ -26,7 +25,19 @@ bool PPPlayLayer::init(GJGameLevel* i_level, bool i_useReplay, bool i_dontCreate
 	*reinterpret_cast<int*>(geode::base::get()+0x4ea028) = 10;
 	m_fields->m_uniqueIdBase = *reinterpret_cast<int*>(geode::base::get()+0x4ea028) + 2;
 
+	// for processing objects asynchronously every time
+	s_currentPlayLayer = this;
+	m_fields->m_signalForAsyncLoad = !i_dontCreateObjects;
+	if (m_fields->m_signalForAsyncLoad) {
+		m_loadingProgress = 1.0f;
+	}
+
 	if (!PlayLayer::init(i_level, i_useReplay, i_dontCreateObjects)) return false;
+
+	// for processing objects asynchronously every time
+	if (m_fields->m_signalForAsyncLoad) {
+		m_loadingProgress = 0.0f;
+	}
 
 	setupKeybinds();
 	return true;
@@ -58,7 +69,7 @@ void PPPlayLayer::setupHasCompleted() {
 		// }
 		log::info("[setupHasCompleted] m_loadingProgress: {}", m_loadingProgress);
 	}
-	if (m_fields->m_startpointLoadingState == LoadingState::Ready) {
+	if (m_fields->m_startpointLoadingState == LoadingState::Ready && !m_fields->m_cancelLevelLoad) {
 		log::info("[setupHasCompleted] finished loading SP");
 		m_loadingProgress = 1.0f;
 		PlayLayer::setupHasCompleted();
@@ -103,6 +114,7 @@ void PPPlayLayer::onQuit() {
 		m_fields->m_onQuitCalled = true;
 	}
 	PlayLayer::onQuit();
+	s_currentPlayLayer = nullptr;
 }
 
 // custom methods
@@ -148,6 +160,26 @@ void PPPlayLayer::removeAllStartpoints(bool i_reset) {
 		//EndTodo
 	}
 	l_startpointManager.removeAllStartpoints(i_reset);
+}
+
+bool PPPlayLayer::setActiveStartpointAndReload(int i_index) {
+	StartpointManager::get().setActiveStartpointId(i_index);
+	reloadFromActiveStartpoint();
+	return true;
+}
+
+void PPPlayLayer::reloadFromActiveStartpoint() {
+	while (m_checkpointArray->count() > 0) {
+		PlayLayer::removeCheckpoint(false);
+	}
+	resetLevel();
+}
+
+void PPPlayLayer::togglePlusMode(bool i_value) {
+	StartpointManager& l_startpointManager = StartpointManager::get();
+	l_startpointManager.togglePlusMode(i_value);
+	l_startpointManager.updatePlusModeLogic();
+	l_startpointManager.updatePlusModeVisibility();
 }
 
 bool PPPlayLayer::readSpfLevelStringHash() {
@@ -238,7 +270,7 @@ void PPPlayLayer::loadStartpoints() {
 			break;
 		}
 		case LoadingState::HandleFileError: {
-			//Todo Give back mouse control to the user to let them choose an option
+			CCEGLView::get()->showCursor(true);
 			m_fields->m_startpointLoadingState = LoadingState::WaitingForPopup;
 			createQuickPopup("Error loading startpoints",
 				"The startpoint file for this level could not be opened",
@@ -246,13 +278,13 @@ void PPPlayLayer::loadStartpoints() {
 				"Ok",
 				[&](FLAlertLayer*, bool i_btn2) {
 					m_fields->m_startpointLoadingState = LoadingState::Ready;
-					//Todo Disable mouse control
+					CCEGLView::get()->showCursor(false);
     			}
 			);
 			break;
 		}
 		case LoadingState::HandleIncorrectVersion: {
-			//Todo Give back mouse control to the user to let them choose an option
+			CCEGLView::get()->showCursor(true);
 			log::info("!!!!!!!!!!!!!!!! CREATED POPUP");
 			m_fields->m_startpointLoadingState = LoadingState::WaitingForPopup;
 			createQuickPopup("Error loading startpoints",
@@ -265,7 +297,7 @@ void PPPlayLayer::loadStartpoints() {
 					} else {
 						m_fields->m_startpointLoadingState = LoadingState::Ready;
 					}
-					//Todo Disable mouse control
+					CCEGLView::get()->showCursor(false);
     			}
 			);
 			break;
@@ -279,7 +311,7 @@ void PPPlayLayer::loadStartpoints() {
 			break;
 		}
 		case LoadingState::HandleIncorrectHash: {
-			//Todo Give back mouse control to the user to let them choose an option
+			CCEGLView::get()->showCursor(true);
 			m_fields->m_startpointLoadingState = LoadingState::WaitingForPopup;
 			createQuickPopup("Error loading startpoints",
 				"The version of the level in the startpoint file does not match the current one. Try to load it anyways? (this might be unstable or crash the game)",
@@ -291,20 +323,52 @@ void PPPlayLayer::loadStartpoints() {
 					} else {
 						m_fields->m_startpointLoadingState = LoadingState::Ready;
 					}
-					//Todo Disable mouse control
+					CCEGLView::get()->showCursor(false);
     			}
 			);
 			break;
 		}
 		case LoadingState::WaitingForPopup:
 		case LoadingState::Ready: {
-			//Todo Fix case with levels that dont use CCAction to load it gets stuck in infinite loop (maybe load it with CCAction in those cases as well)
 			log::info("!!!!!!!!!!!!!!!! DO NOTHING");
 			break;
 		}
-		case LoadingState::ErrorEndLevelLoad: {
-
+		case LoadingState::ErrorCancelLevelLoad: {
+			m_fields->m_cancelLevelLoad = true;
+			m_fields->m_startpointLoadingState = LoadingState::Ready;
 		}
+	}
+}
+
+void PPPlayLayer::updateAsyncProcessCreateObjectsFromSetup() {
+	cocos2d::SEL_CallFunc l_sel = callfunc_selector(PPPlayLayer::updateAsyncProcessCreateObjectsFromSetup);
+	PPPlayLayer::processCreateObjectsFromSetup();
+	if (m_loadingProgress >= 1.0) {
+		log::info("Finished loading!!!!!");
+		l_sel = callfunc_selector(PPPlayLayer::endAsyncProcessCreateObjectsFromSetup);
+	}
+	 
+	CCScene* l_currentScene = CCScene::get();
+	if (l_currentScene) {
+		log::info("Loop load!!!!!");
+		l_currentScene->runAction(
+			CCSequence::create(
+				CCDelayTime::create(0.0f),
+				CCCallFunc::create(
+					this,
+					l_sel
+				),
+				nullptr
+			)
+		);
+	}
+}
+
+void PPPlayLayer::endAsyncProcessCreateObjectsFromSetup() {
+	if (m_fields->m_transitionFadeScene) {
+		CCDirector::get()->replaceScene(m_fields->m_transitionFadeScene);
+		CC_SAFE_RELEASE(m_fields->m_transitionFadeScene);
+		m_fields->m_transitionFadeScene = nullptr;
 	}
 }
 
@@ -378,26 +442,6 @@ void PPPlayLayer::saveStartpoints() {
 			break;
 		}
 	}
-}
-
-bool PPPlayLayer::setActiveStartpointAndReload(int i_index) {
-	StartpointManager::get().setActiveStartpointId(i_index);
-	reloadFromActiveStartpoint();
-	return true;
-}
-
-void PPPlayLayer::reloadFromActiveStartpoint() {
-	while (m_checkpointArray->count() > 0) {
-		PlayLayer::removeCheckpoint(false);
-	}
-	resetLevel();
-}
-
-void PPPlayLayer::togglePlusMode(bool i_value) {
-	StartpointManager& l_startpointManager = StartpointManager::get();
-	l_startpointManager.togglePlusMode(i_value);
-	l_startpointManager.updatePlusModeLogic();
-	l_startpointManager.updatePlusModeVisibility();
 }
 
 inline std::string PPPlayLayer::getStartpointFilePath(bool i_checkExists) {

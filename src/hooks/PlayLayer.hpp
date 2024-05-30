@@ -16,7 +16,7 @@ enum class LoadingState {
 	ReadStartpointCount,
 	ReadStartpoint,
 	WaitingForPopup,
-	ErrorEndLevelLoad
+	ErrorCancelLevelLoad
 };
 
 enum class SavingState {
@@ -24,6 +24,8 @@ enum class SavingState {
 	Setup,
 	Started
 };
+
+extern PPPlayLayer* s_currentPlayLayer;
 
 class $modify(PPPlayLayer, PlayLayer) {
 protected:
@@ -47,6 +49,9 @@ public:
 		bool m_readyToLoad = false;
 		bool m_updateStartpointFileVersion = false;
 		bool m_popupOpen = false;
+		bool m_signalForAsyncLoad = false;
+		cocos2d::CCScene* m_transitionFadeScene = nullptr;
+		bool m_cancelLevelLoad = false;
 	};
 
 	// overrides
@@ -81,17 +86,7 @@ public:
 	bool removeStartpoint(int i_index = -1);
 
 	void removeAllStartpoints(bool i_reset);
-
-	bool readSpfLevelStringHash();
-
-	bool readSpfVersion();
-
-	void loadStartpoints();
-
-	void writeSpfHeader();
-
-	void saveStartpoints();
-
+	
 	inline PPCheckpointObject* getActiveStartpoint() { return StartpointManager::get().getActiveStartpoint(); }
 
 	inline int getActiveStartpointId() { return StartpointManager::get().getActiveStartpointId(); }
@@ -103,12 +98,24 @@ public:
 	inline bool isPlusMode() { return StartpointManager::get().isPlusMode(); }
 
 	void togglePlusMode(bool i_value);
+
+	bool readSpfLevelStringHash();
+
+	bool readSpfVersion();
+
+	void loadStartpoints();
+
+	void updateAsyncProcessCreateObjectsFromSetup();
+
+	void endAsyncProcessCreateObjectsFromSetup();
+
+	void writeSpfHeader();
+
+	void saveStartpoints();
 	
 	inline int getGameObjectIndex(GameObject* i_object) {
 		return i_object->m_uniqueID-m_fields->m_uniqueIdBase;
 	}
-
-	static void ioThreadUpdate();
 
 	void setupKeybinds();
 };
