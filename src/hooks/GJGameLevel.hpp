@@ -15,7 +15,7 @@ public:
 
 	void clean();
 
-//#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
+#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 	void describe();
-//#endif
+#endif
 };

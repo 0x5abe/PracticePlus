@@ -702,7 +702,9 @@ struct CheckpointObject {
 };
 
 struct SPF {
-    u8 spfHeader[16];
+    u8 spfHeader[11];
+    bool finishedSaving;
+    padding[4];
     u32 levelStringChecksum;
     u32 checkpointObjectCount;
     CheckpointObject checkpointObjects[checkpointObjectCount];

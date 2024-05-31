@@ -141,13 +141,13 @@ void OutputStream::operator<<<PPCheckpointObject*>(gd::vector<PPCheckpointObject
 
 template <>
 void OutputStream::operator<<<SongTriggerState>(gd::vector<SongTriggerState>& i_value) {
-	geode::log::info("AWAWAWAWWAAWAWWAAWAW VECTOR CustomWrite SongTriggerState");
+	//geode::log::info("AWAWAWAWWAAWAWWAAWAW VECTOR CustomWrite SongTriggerState");
 	writeGenericVector<SongTriggerState, PPSongTriggerState>(this, i_value);
 }
 
 template <>
 void OutputStream::operator<<<SFXTriggerState>(gd::vector<SFXTriggerState>& i_value) {
-	geode::log::info("EWEWEWEWEWEWE VECTOR CustomWrite SongTriggerState");
+	//geode::log::info("EWEWEWEWEWEWE VECTOR CustomWrite SongTriggerState");
 	writeGenericVector<SFXTriggerState, PPSFXTriggerState>(this, i_value);
 }
 

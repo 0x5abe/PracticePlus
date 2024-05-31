@@ -37,6 +37,8 @@ bool PPPlayLayer::init(GJGameLevel* i_level, bool i_useReplay, bool i_dontCreate
 	}
 
 	setupKeybinds();
+	setupSavingIcon();
+
 	return true;
 }
 
@@ -54,8 +56,8 @@ void PPPlayLayer::setupHasCompleted() {
 		loadStartpoints();
 		
 		//m_fields->m_startpointLoadingProgress += (m_fields->m_startpointLoadingProgress/8.0f);
-		log::info("[setupHasCompleted] m_bytesRead: {}", m_fields->m_bytesRead);
-		log::info("[setupHasCompleted] m_bytesToRead: {}", m_fields->m_bytesToRead);
+		//log::info("[setupHasCompleted] m_bytesRead: {}", m_fields->m_bytesRead);
+		//log::info("[setupHasCompleted] m_bytesToRead: {}", m_fields->m_bytesToRead);
 		if (m_fields->m_bytesToRead > 0) {
 			m_fields->m_startpointLoadingProgress = (static_cast<float>(m_fields->m_bytesRead)/static_cast<float>(m_fields->m_bytesToRead));
 		}
@@ -64,10 +66,10 @@ void PPPlayLayer::setupHasCompleted() {
 		// } else {
 		// 	m_loadingProgress = 0.99f;
 		// }
-		log::info("[setupHasCompleted] m_loadingProgress: {}", m_loadingProgress);
+		//log::info("[setupHasCompleted] m_loadingProgress: {}", m_loadingProgress);
 	}
 	if (m_fields->m_startpointLoadingState == LoadingState::Ready && !m_fields->m_cancelLevelLoad) {
-		log::info("[setupHasCompleted] finished loading SP");
+		//log::info("[setupHasCompleted] finished loading SP");
 		m_loadingProgress = 1.0f;
 		PlayLayer::setupHasCompleted();
 
@@ -100,9 +102,7 @@ void PPPlayLayer::togglePracticeMode(bool i_value) {
 void PPPlayLayer::updateVisibility(float i_unkFloat) {
 	PlayLayer::updateVisibility(i_unkFloat);
 
-	if (!isPlusMode()) {
-		StartpointManager::get().updatePlusModeVisibility();
-	}
+	StartpointManager::get().updatePlusModeVisibility();
 }
 
 void PPPlayLayer::onQuit() {
@@ -194,9 +194,9 @@ std::string PPPlayLayer::getStartpointFilePath(bool i_checkExists) {
 			l_filePath.append(std::format("/startpoints/online/{}{}", m_level->m_levelID.value(), SPF_EXT));
 			break;
 	}
-	log::info("Filepath: \"{}\"", l_filePath);
+	//log::info("Filepath: \"{}\"", l_filePath);
 	if (i_checkExists && !std::filesystem::exists(l_filePath)) {
-		log::info("File doesnt exist: {}", l_filePath);
+		//log::info("File doesnt exist: {}", l_filePath);
 		return "";
 	}
 	return l_filePath;
@@ -259,6 +259,17 @@ void PPPlayLayer::setupKeybinds() {
 		"switch-sp-next"_spr
 	);
 
+	addEventListener<keybinds::InvokeBindFilter>(
+		[this](keybinds::InvokeBindEvent* event) {
+			if (event->isDown() && isPlusMode()) {
+				StartpointManager::get().toggleVisibleStartpoints();
+				StartpointManager::get().updatePlusModeVisibility();
+			}
+			return ListenerResult::Propagate;
+		},
+		"toggle-sp-visible"_spr
+	);
+
 	// TodoRemove
 	addEventListener<keybinds::InvokeBindFilter>(
 		[this](keybinds::InvokeBindEvent* event) {
@@ -276,6 +287,7 @@ void PPPlayLayer::setupKeybinds() {
 	addEventListener<keybinds::InvokeBindFilter>(
 		[this](keybinds::InvokeBindEvent* event) {
 			if (event->isDown() && isPlusMode()) {
+				if (m_fields->m_startpointSavingState != SavingState::Ready) return ListenerResult::Propagate;
 				m_fields->m_startpointSavingState = SavingState::Setup;
 				CCScene* l_currentScene = CCScene::get();
 				if (l_currentScene) {
@@ -297,4 +309,34 @@ void PPPlayLayer::setupKeybinds() {
 		"test-key-2"_spr
 	);
 	// EndTodo
+}
+
+void PPPlayLayer::setupSavingIcon() {
+	CCSize l_winSize = CCDirector::sharedDirector()->getWinSize();
+	float l_separation = l_winSize.height/10;
+
+	m_fields->m_savingIcon = CCSprite::create("loadingCircle.png");
+	m_fields->m_savingIcon->setBlendFunc({ GL_ONE, GL_ONE });
+	m_fields->m_savingIcon->setPosition({l_winSize.width-l_separation,l_separation});
+	m_fields->m_savingIcon->setZOrder(100);
+	m_fields->m_savingIcon->setScale(0.5f);
+
+	m_fields->m_savingIcon->runAction(CCRepeatForever::create(CCRotateBy::create(1.0f, 360.f)));
+	m_fields->m_savingIcon->pauseSchedulerAndActions();
+	//m_fields->m_savingIcon->setVisible(false);
+}
+
+void PPPlayLayer::showSavingIcon(bool i_show) {
+	CCScene* l_currentScene = CCScene::get();
+	if (!l_currentScene || !m_fields->m_savingIcon) return;
+	if (i_show) {
+		if (!l_currentScene->getChildren()->containsObject(m_fields->m_savingIcon)) {
+			l_currentScene->addChild(m_fields->m_savingIcon);
+		}
+		m_fields->m_savingIcon->resumeSchedulerAndActions();
+		m_fields->m_savingIcon->setVisible(true);
+		return;	
+	}
+	m_fields->m_savingIcon->pauseSchedulerAndActions();
+	m_fields->m_savingIcon->setVisible(false);
 }

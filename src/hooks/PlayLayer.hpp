@@ -56,6 +56,7 @@ public:
 		bool m_signalForAsyncLoad = false;
 		cocos2d::CCScene* m_transitionFadeScene = nullptr;
 		bool m_cancelLevelLoad = false;
+		geode::Ref<cocos2d::CCSprite> m_savingIcon = nullptr;
 	};
 
 	// overrides
@@ -124,4 +125,8 @@ public:
 	}
 
 	void setupKeybinds();
+
+	void setupSavingIcon();
+
+	void showSavingIcon(bool i_show);
 };

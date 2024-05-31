@@ -16,6 +16,7 @@ protected:
 	bool m_isPlusMode = false;
 	bool m_prevPlusMode = false;
 	bool m_practiceModeIsPlusMode = true;
+	bool m_visibleStartpoints = true;
 	InputStream m_inputStream;
 	OutputStream m_outputStream;
 
@@ -66,6 +67,10 @@ public:
 	void togglePlusMode(bool i_value);
 
 	void togglePlusMode();
+
+	void toggleVisibleStartpoints(bool i_visible);
+
+	void toggleVisibleStartpoints();
 
 	bool prevStartpoint();
 

@@ -1,5 +1,4 @@
 #include "PlayLayer.hpp"
-#include <cstddef>
 #include <filesystem>
 #include <managers/StartpointManager.hpp>
 #include <hooks/GJGameLevel.hpp>
@@ -54,17 +53,19 @@ void PPPlayLayer::loadStartpoints() {
 	InputStream& l_inputStream = StartpointManager::get().m_inputStream;
 	switch (m_fields->m_startpointLoadingState) {
 		case LoadingState::Setup: {
-			log::info("[loadStartpoints] started loading SP");
+			//log::info("[loadStartpoints] started loading SP");
 			m_fields->m_startpointLoadingProgress = 0.0f;
-			LevelInfoLayer* l_levelInfoLayer = static_cast<LevelInfoLayer*>(CCScene::get()->getChildByID("LevelInfoLayer"));
-			if (l_levelInfoLayer) {
-				l_levelInfoLayer->m_progressTimer->setColor(ccColor3B(220, 32, 64));
-			}
 
 			std::string l_filePath = getStartpointFilePath(true);
 			if (l_filePath == "") {
 				m_fields->m_startpointLoadingState = LoadingState::Ready;
+				m_fields->m_startpointLoadingProgress = 0.99f;
 				break;
+			}
+
+			LevelInfoLayer* l_levelInfoLayer = static_cast<LevelInfoLayer*>(CCScene::get()->getChildByID("LevelInfoLayer"));
+			if (l_levelInfoLayer) {
+				l_levelInfoLayer->m_progressTimer->setColor(ccColor3B(220, 32, 64));
 			}
 
 			m_fields->m_bytesToRead = std::filesystem::file_size(l_filePath);
@@ -107,7 +108,7 @@ void PPPlayLayer::loadStartpoints() {
 			// falls through
 		}
 		case LoadingState::ReadStartpoint: {
-			log::info("Remaining startpoints: {}", m_fields->m_remainingStartpointLoadCount);
+			//log::info("Remaining startpoints: {}", m_fields->m_remainingStartpointLoadCount);
 			if (m_fields->m_remainingStartpointLoadCount > 0) {
 				l_startpointManager.loadOneStartpointFromStream();
 				m_fields->m_remainingStartpointLoadCount--;
@@ -137,7 +138,7 @@ void PPPlayLayer::loadStartpoints() {
 		}
 		case LoadingState::HandleIncorrectVersion: {
 			CCEGLView::get()->showCursor(true);
-			log::info("!!!!!!!!!!!!!!!! CREATED POPUP");
+			//log::info("!!!!!!!!!!!!!!!! CREATED POPUP");
 			m_fields->m_startpointLoadingState = LoadingState::WaitingForPopup;
 			createQuickPopup("Error loading startpoints",
 				"The version of the startpoint file does not match the current one. Try to update it?",
@@ -200,11 +201,15 @@ void PPPlayLayer::loadStartpoints() {
 		}
 		case LoadingState::WaitingForPopup:
 		case LoadingState::Ready: {
-			log::info("!!!!!!!!!!!!!!!! DO NOTHING");
+			//log::info("!!!!!!!!!!!!!!!! DO NOTHING");
 			break;
 		}
 		case LoadingState::ErrorCancelLevelLoad: {
 			m_fields->m_cancelLevelLoad = true;
+			LevelInfoLayer* l_levelInfoLayer = static_cast<LevelInfoLayer*>(CCScene::get()->getChildByID("LevelInfoLayer"));
+			if (l_levelInfoLayer) {
+				l_levelInfoLayer->m_progressTimer->setVisible(false);
+			}
 			m_fields->m_startpointLoadingState = LoadingState::Ready;
 		}
 	}
@@ -214,14 +219,13 @@ void PPPlayLayer::updateAsyncProcessCreateObjectsFromSetup() {
 	cocos2d::SEL_CallFunc l_sel = callfunc_selector(PPPlayLayer::updateAsyncProcessCreateObjectsFromSetup);
 	PPPlayLayer::processCreateObjectsFromSetup();
 	if (m_loadingProgress >= 1.0) {
-		log::info("Finished loading!!!!!");
+		//log::info("Finished loading!!!!!");
 		l_sel = callfunc_selector(PPPlayLayer::endAsyncProcessCreateObjectsFromSetup);
 	}
 	 
 	CCScene* l_currentScene = CCScene::get();
 	if (l_currentScene) {
-		log::info("Loop load!!!!!");
-		log::info("offset of boomtestmember {}", offsetof(BoomScrollLayer, m_selectedLevelPage));
+		//log::info("Loop load!!!!!");
 		l_currentScene->runAction(
 			CCSequence::create(
 				CCDelayTime::create(0.0f),

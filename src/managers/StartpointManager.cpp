@@ -99,6 +99,14 @@ void StartpointManager::togglePlusMode() {
 	togglePlusMode(!m_isPlusMode);
 }
 
+void StartpointManager::toggleVisibleStartpoints(bool i_visible) {
+	m_visibleStartpoints = i_visible;
+}
+
+void StartpointManager::toggleVisibleStartpoints() {
+	toggleVisibleStartpoints(!m_visibleStartpoints);
+}
+
 bool StartpointManager::prevStartpoint() {
 	if (m_startpoints->count() == 0) return false;
 	int l_nextActiveStartpointId;
@@ -138,7 +146,7 @@ void StartpointManager::updatePlusModeVisibility() {
 	for (int i = 0; i < m_startpoints->count(); i++) {
 		l_startpoint = getStartpoint(i);
 		if (l_startpoint) {
-			l_startpoint->m_physicalCheckpointObject->setVisible(isPlusMode());
+			l_startpoint->m_physicalCheckpointObject->setVisible(isPlusMode() && m_visibleStartpoints);
 		}
 	}
 }
@@ -150,16 +158,16 @@ void StartpointManager::updatePlusModeLogic() {
 }
 
 void StartpointManager::loadOneStartpointFromStream() {
-	log::info("start load one");
+	//log::info("start load one");
 	cocos2d::CCArray* l_intermediate = m_startpoints;
 	static_cast<PPCCArray*>(l_intermediate)->loadOne<PPCheckpointObject>(m_inputStream);
 }
 
 void StartpointManager::saveOneStartpointToStream(unsigned int i_index) {
-	log::info("Saving Startpoints to stream");
+	//log::info("Saving Startpoints to stream");
 	cocos2d::CCArray* l_intermediate = m_startpoints;
 	static_cast<PPCCArray*>(l_intermediate)->saveOne<PPCheckpointObject>(m_outputStream, i_index);
-	log::info("Saved Startpoints to stream");
+	//log::info("Saved Startpoints to stream");
 }
 
 void StartpointManager::clean() {

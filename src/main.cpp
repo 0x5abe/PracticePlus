@@ -44,6 +44,14 @@ void setupKeybinds() {
 		Category::PLAY,
 	});
 
+	BindManager::get()->registerBindable({
+		"toggle-sp-visible"_spr,
+		"Toggle show startpoints",
+		"Toggles between showing and hiding startpoints",
+		{ Keybind::create(cocos2d::KEY_M, Modifier::None) },
+		Category::PLAY,
+	});
+
 	// TODO REMOVE
 	BindManager::get()->registerBindable({
 		"test-key-1"_spr,

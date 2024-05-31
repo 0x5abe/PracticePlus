@@ -115,28 +115,27 @@ void InputStream::operator>><CAState>(gd::vector<CAState>& o_value) {
 	readGenericVector<CAState, PPCAState>(this, o_value);
 }
 
-template <>
-void InputStream::operator>><CheckpointObject*>(gd::vector<CheckpointObject*>& o_value) {
-	unsigned int l_size;
-	read(reinterpret_cast<char*>(&l_size), 4);
-	if (l_size == 0) return;
-	o_value.resize(l_size);
-	CheckpointObject* l_checkpointObject;
-	geode::log::info("reading {} startpoints", l_size);
-	geode::log::info("vector size before: {}", o_value.size());
-	for (int i = 0; i < l_size; i++) {
-		l_checkpointObject = CheckpointObject::create();
-		CC_SAFE_RETAIN(l_checkpointObject);
-		reinterpret_cast<PPCheckpointObject*>(l_checkpointObject)->load(*this);
-		#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
-		reinterpret_cast<PPCheckpointObject*>(l_checkpointObject)->describe();
-		#endif
-		*reinterpret_cast<PPCheckpointObject**>(reinterpret_cast<unsigned int>(o_value.data())+(i*sizeof(PPCheckpointObject*))) = reinterpret_cast<PPCheckpointObject*>(l_checkpointObject);
-		geode::log::info("Startpoint in ioThread {}", l_checkpointObject);
-		std::this_thread::sleep_for (std::chrono::milliseconds(500));
-	}
-	geode::log::info("vector size after: {}", o_value.size());
-}
+// template <>
+// void InputStream::operator>><CheckpointObject*>(gd::vector<CheckpointObject*>& o_value) {
+// 	unsigned int l_size;
+// 	read(reinterpret_cast<char*>(&l_size), 4);
+// 	if (l_size == 0) return;
+// 	o_value.resize(l_size);
+// 	CheckpointObject* l_checkpointObject;
+// 	//geode::log::info("reading {} startpoints", l_size);
+// 	//geode::log::info("vector size before: {}", o_value.size());
+// 	for (int i = 0; i < l_size; i++) {
+// 		l_checkpointObject = CheckpointObject::create();
+// 		CC_SAFE_RETAIN(l_checkpointObject);
+// 		reinterpret_cast<PPCheckpointObject*>(l_checkpointObject)->load(*this);
+// 		#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
+// 		reinterpret_cast<PPCheckpointObject*>(l_checkpointObject)->describe();
+// 		#endif
+// 		*reinterpret_cast<PPCheckpointObject**>(reinterpret_cast<unsigned int>(o_value.data())+(i*sizeof(PPCheckpointObject*))) = reinterpret_cast<PPCheckpointObject*>(l_checkpointObject);
+// 		std::this_thread::sleep_for (std::chrono::milliseconds(500));
+// 	}
+// 	//geode::log::info("vector size after: {}", o_value.size());
+// }
 
 template <>
 void InputStream::operator>><SongTriggerState>(gd::vector<SongTriggerState>& o_value) {

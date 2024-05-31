@@ -18,12 +18,13 @@ void PPPlayLayer::writeSpfHeader() {
 
 void PPPlayLayer::saveStartpoints() {
 	StartpointManager& l_startpointManager = StartpointManager::get();
-	log::info("SaveStartpoints Gets run");
+	//log::info("SaveStartpoints Gets run");
 	switch (m_fields->m_startpointSavingState) {
 		case SavingState::Setup: {
-			log::info("Goes into beginning");
-
+			//log::info("Goes into beginning");
+			#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 			reinterpret_cast<PPGJGameLevel*>(m_level)->describe();
+			#endif
 			m_fields->m_remainingStartpointSaveCount = l_startpointManager.getStartpointCount();
 			if (m_fields->m_remainingStartpointSaveCount == 0) {
 				m_fields->m_startpointSavingState = SavingState::Ready;
@@ -42,6 +43,8 @@ void PPPlayLayer::saveStartpoints() {
 				m_fields->m_startpointSavingState = SavingState::Ready;
 				break;
 			}
+
+			showSavingIcon(true);
 			
 			writeSpfHeader();
 
@@ -54,7 +57,7 @@ void PPPlayLayer::saveStartpoints() {
 			if (m_fields->m_remainingStartpointSaveCount > 0) {
 				l_startpointManager.saveOneStartpointToStream(l_startpointManager.getStartpointCount()-m_fields->m_remainingStartpointSaveCount);
 				m_fields->m_remainingStartpointSaveCount--;
-				log::info("Remaining save count: {}", m_fields->m_remainingStartpointSaveCount);
+				//log::info("Remaining save count: {}", m_fields->m_remainingStartpointSaveCount);
 				CCScene* l_currentScene = CCScene::get();
 				if (l_currentScene) {
 					l_currentScene->runAction(
@@ -71,16 +74,17 @@ void PPPlayLayer::saveStartpoints() {
 				break;
 			}
 			if (m_fields->m_remainingStartpointSaveCount == 0) {
+				StartpointManager& l_startpointManager = StartpointManager::get();
+				OutputStream& l_outputStream = StartpointManager::get().m_outputStream;
+				l_outputStream.seek(sizeof(s_spfMagicAndVer));
+				bool o_finishedSaving = true;
+				l_outputStream.write((char*)&o_finishedSaving,sizeof(bool));
+				l_startpointManager.endOutputStream();
 				m_fields->m_startpointSavingState = SavingState::Ready;
 			}
 		}
 		case SavingState::Ready: {
-			StartpointManager& l_startpointManager = StartpointManager::get();
-			OutputStream& l_outputStream = StartpointManager::get().m_outputStream;
-			l_outputStream.seek(sizeof(s_spfMagicAndVer));
-			bool o_finishedSaving = true;
-			l_outputStream.write((char*)&o_finishedSaving,sizeof(bool));
-			l_startpointManager.endOutputStream();
+			showSavingIcon(false);
 			break;
 		}
 	}
