@@ -1,6 +1,5 @@
 #include "CCDirector.hpp"
 #include <hooks/PlayLayer.hpp>
-#include <hooks/cocos2d/CCTransitionFade.hpp>
 
 using namespace geode::prelude;
 
@@ -29,6 +28,7 @@ bool PPCCDirector::replaceScene(CCScene* i_scene) {
 
 			return false;
 		}
+
 		if (s_currentPlayLayer->m_fields->m_cancelLevelLoad) {
 			CCEGLView::get()->showCursor(true);
 			CC_SAFE_RELEASE(s_currentPlayLayer->m_fields->m_transitionFadeScene);
