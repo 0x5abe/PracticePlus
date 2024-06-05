@@ -5,8 +5,8 @@
 #include <hooks/ActiveSaveObject.hpp>
 #include <hooks/SequenceTriggerState.hpp>
 #include <hooks/FMODQueuedMusic.hpp>
-#include <hooks/FMODSoundState_padded.hpp>
-#include <hooks/TimerItem_padded.hpp>
+#include <hooks/FMODSoundState.hpp>
+#include <hooks/TimerItem.hpp>
 #include <hooks/TimerTriggerAction.hpp>
 #include <hooks/KeyframeObject.hpp>
 #include <hooks/GroupCommandObject2.hpp>
@@ -176,14 +176,14 @@ void OutputStream::operator<<<int, FMODQueuedMusic>(gd::unordered_map<int, FMODQ
 }
 
 template <>
-void OutputStream::operator<<<int, FMODSoundState_padded>(gd::unordered_map<int, FMODSoundState_padded>& i_value) {
-	writeGenericUnorderedMap<int, FMODSoundState_padded, PPFMODSoundState_padded>(this, i_value);
+void OutputStream::operator<<<int, FMODSoundState>(gd::unordered_map<int, FMODSoundState>& i_value) {
+	writeGenericUnorderedMap<int, FMODSoundState, PPFMODSoundState>(this, i_value);
 }
 
 template <>
-void OutputStream::operator<<<int, TimerItem_padded>(gd::unordered_map<int, TimerItem_padded>& i_value) {
-	//geode::log::info("999999999999999999999 Unordered Map CustomWrite TimerItem_padded");
-	writeGenericUnorderedMap<int, TimerItem_padded, PPTimerItem_padded>(this, i_value);
+void OutputStream::operator<<<int, TimerItem>(gd::unordered_map<int, TimerItem>& i_value) {
+	//geode::log::info("999999999999999999999 Unordered Map CustomWrite TimerItem");
+	writeGenericUnorderedMap<int, TimerItem, PPTimerItem>(this, i_value);
 }
 
 template <>

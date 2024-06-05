@@ -2,7 +2,7 @@
 #include <Geode/binding/CountTriggerAction.hpp>
 #include <Geode/binding/OpacityEffectAction.hpp>
 #include <Geode/binding/PulseEffectAction.hpp>
-#include <Geode/binding/TimerItem_padded.hpp>
+#include <Geode/binding/TimerItem.hpp>
 #include <Geode/binding/TimerTriggerAction.hpp>
 #include <hooks/cocos2d/CCNode.hpp>
 #include <hooks/CountTriggerAction.hpp>
@@ -11,7 +11,7 @@
 #include <hooks/ToggleTriggerAction.hpp>
 #include <hooks/SpawnTriggerAction.hpp>
 #include <hooks/GroupCommandObject2.hpp>
-#include <hooks/TimerItem_padded.hpp>
+#include <hooks/TimerItem.hpp>
 #include <hooks/TimerTriggerAction.hpp>
 #include <hooks/CAState.hpp>
 #include <util/debug.hpp>
@@ -277,10 +277,10 @@ void PPEffectManagerState::describe() {
 	l_size = m_unorderedMapInt_TimerItem.size();
 	log::info("[PPEffectManagerState - describe] m_unorderedMapInt_TimerItem.size(): {}", l_size);
 	i = 0;
-	for (std::pair<int, TimerItem_padded> l_pair : m_unorderedMapInt_TimerItem) {
+	for (std::pair<int, TimerItem> l_pair : m_unorderedMapInt_TimerItem) {
 		log::info("[PPEffectManagerState - describe] m_unorderedMapInt_TimerItem element {} key: {}", i, l_pair.first);
 		log::info("[PPEffectManagerState - describe] m_unorderedMapInt_TimerItem element {} value:", i);
-		reinterpret_cast<PPTimerItem_padded*>(&l_pair.second)->describe();
+		reinterpret_cast<PPTimerItem*>(&l_pair.second)->describe();
 		i++;
 	}
 	i = 0;

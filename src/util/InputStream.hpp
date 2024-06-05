@@ -198,10 +198,10 @@ public:
 	void operator>><int, FMODQueuedMusic>(gd::unordered_map<int, FMODQueuedMusic>& o_value);
 
 	template <>
-	void operator>><int, FMODSoundState_padded>(gd::unordered_map<int, FMODSoundState_padded>& o_value);
+	void operator>><int, FMODSoundState>(gd::unordered_map<int, FMODSoundState>& o_value);
 
 	template <>
-	void operator>><int, TimerItem_padded>(gd::unordered_map<int, TimerItem_padded>& o_value);
+	void operator>><int, TimerItem>(gd::unordered_map<int, TimerItem>& o_value);
 
 	template <>
 	void operator>><int, EnhancedGameObject*>(gd::unordered_map<int, EnhancedGameObject*>& o_value);

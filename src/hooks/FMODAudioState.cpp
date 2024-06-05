@@ -1,10 +1,10 @@
 #include "FMODAudioState.hpp"
 #include <Geode/binding/FMODQueuedMusic.hpp>
-#include <Geode/binding/FMODSoundState_padded.hpp>
+#include <Geode/binding/FMODSoundState.hpp>
 #include <Geode/binding/FMODSoundTween.hpp>
 #include <hooks/cocos2d/CCNode.hpp>
 #include <hooks/FMODQueuedMusic.hpp>
-#include <hooks/FMODSoundState_padded.hpp>
+#include <hooks/FMODSoundState.hpp>
 #include <util/debug.hpp>
 
 using namespace geode::prelude;
@@ -230,10 +230,10 @@ void PPFMODAudioState::describe() {
 	l_size = m_unkMapIntFMODSoundState.size();
 	log::info("[PPFMODAudioState - describe] m_unkMapIntFMODSoundState.size(): {}", l_size);
 	i = 0;
-	for (std::pair<int, FMODSoundState_padded> l_pair : m_unkMapIntFMODSoundState) {
+	for (std::pair<int, FMODSoundState> l_pair : m_unkMapIntFMODSoundState) {
 		log::info("[PPFMODAudioState - describe] m_unkMapIntFMODSoundState element {} key: {}", i, l_pair.first);
 		log::info("[PPFMODAudioState - describe] m_unkMapIntFMODSoundState element {} value:", i);
-		reinterpret_cast<PPFMODSoundState_padded*>(&l_pair.second)->describe();
+		reinterpret_cast<PPFMODSoundState*>(&l_pair.second)->describe();
 	}
 	log::info("[PPFMODAudioState - describe] m_unkInt1", m_unkInt1);
 	log::info("[PPFMODAudioState - describe] m_unkInt2", m_unkInt2);

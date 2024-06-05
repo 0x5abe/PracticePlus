@@ -78,7 +78,7 @@ bool PPCCDirector::replaceScene(CCScene* i_scene) {
 				if (l_levelPage3) {
 					l_levelPage3->m_isBusy = false;
 				}
-				*reinterpret_cast<byte*>(geode::base::get()+0x4f0336) = 0;
+				*reinterpret_cast<byte*>(geode::base::get()+0x685ff8) = 0;
 			}
 			
 			return false;

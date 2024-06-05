@@ -5,8 +5,8 @@
 #include <hooks/ActiveSaveObject.hpp>
 #include <hooks/SequenceTriggerState.hpp>
 #include <hooks/FMODQueuedMusic.hpp>
-#include <hooks/FMODSoundState_padded.hpp>
-#include <hooks/TimerItem_padded.hpp>
+#include <hooks/FMODSoundState.hpp>
+#include <hooks/TimerItem.hpp>
 #include <hooks/TimerTriggerAction.hpp>
 #include <hooks/KeyframeObject.hpp>
 #include <hooks/GroupCommandObject2.hpp>
@@ -36,7 +36,7 @@ inline void readGenericVector(InputStream* i_stream, gd::vector<T>& o_value) {
 	for (int i = 0; i < l_size; i++) {
 		//geode::log::info("VECTOR SIZE CustomRead SIZE in TRYING TO LOAD: {}", l_size);
 		//geode::log::info("VECTOR REAL SIZE CustomRead SIZE in TRYING TO LOAD: {}", o_value.size());
-		reinterpret_cast<U*>((reinterpret_cast<unsigned int>(o_value.data())+(i*sizeof(T))))->load(*i_stream);
+		reinterpret_cast<U*>((reinterpret_cast<size_t>(o_value.data())+(i*sizeof(T))))->load(*i_stream);
 	}
 }
 
@@ -176,13 +176,13 @@ void InputStream::operator>><int, FMODQueuedMusic>(gd::unordered_map<int, FMODQu
 }
 
 template <>
-void InputStream::operator>><int, FMODSoundState_padded>(gd::unordered_map<int, FMODSoundState_padded>& o_value) {
-	readGenericUnorderedMap<int, FMODSoundState_padded, PPFMODSoundState_padded>(this, o_value);
+void InputStream::operator>><int, FMODSoundState>(gd::unordered_map<int, FMODSoundState>& o_value) {
+	readGenericUnorderedMap<int, FMODSoundState, PPFMODSoundState>(this, o_value);
 }
 
 template <>
-void InputStream::operator>><int, TimerItem_padded>(gd::unordered_map<int, TimerItem_padded>& o_value) {
-	readGenericUnorderedMap<int, TimerItem_padded, PPTimerItem_padded>(this, o_value);
+void InputStream::operator>><int, TimerItem>(gd::unordered_map<int, TimerItem>& o_value) {
+	readGenericUnorderedMap<int, TimerItem, PPTimerItem>(this, o_value);
 }
 
 template <>

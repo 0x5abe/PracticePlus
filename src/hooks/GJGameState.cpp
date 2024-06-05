@@ -99,7 +99,9 @@ inline void operator>>(InputStream& i_stream, PPGJGameState& o_value) {
 	SEPARATOR_I
 	i_stream >> o_value.m_unkInt4;
 	SEPARATOR_I
-	i_stream >> o_value.m_unkShort1;
+	i_stream >> o_value.m_unkBool4;
+	SEPARATOR_I
+	i_stream >> o_value.m_unkBool5;
 	SEPARATOR_I
 	i_stream >> o_value.m_unkFloat2;
 	SEPARATOR_I
@@ -125,7 +127,7 @@ inline void operator>>(InputStream& i_stream, PPGJGameState& o_value) {
 	SEPARATOR_I
 	i_stream >> o_value.m_portalY;
 	SEPARATOR_I
-	i_stream >> o_value.m_unkBool4;
+	i_stream >> o_value.m_unkBool6;
 	SEPARATOR_I
 	i_stream >> o_value.m_gravityRelated;
 	SEPARATOR_I
@@ -137,11 +139,11 @@ inline void operator>>(InputStream& i_stream, PPGJGameState& o_value) {
 	SEPARATOR_I
 	i_stream >> o_value.m_unkInt15;
 	SEPARATOR_I
-	i_stream >> o_value.m_unkShort2;
+	i_stream >> o_value.m_unkBool7;
 	SEPARATOR_I
-	i_stream >> o_value.m_unkBool5;
+	i_stream >> o_value.m_unkBool8;
 	SEPARATOR_I
-	i_stream >> o_value.m_unkBool6;
+	i_stream >> o_value.m_unkBool9;
 	SEPARATOR_I
 	i_stream >> o_value.m_unkFloat5;
 	SEPARATOR_I
@@ -209,29 +211,15 @@ inline void operator>>(InputStream& i_stream, PPGJGameState& o_value) {
 	SEPARATOR_I
 	i_stream >> o_value.m_cameraPosition;
 	SEPARATOR_I
-	i_stream >> o_value.m_unkBool8;
-	SEPARATOR_I
-	i_stream >> o_value.m_unkBool9;
-	SEPARATOR_I
 	i_stream >> o_value.m_unkBool10;
+	SEPARATOR_I
+	i_stream >> o_value.m_unkUint8;
 	SEPARATOR_I
 	i_stream >> o_value.m_unkBool11;
 	SEPARATOR_I
 	i_stream >> o_value.m_unkBool12;
 	SEPARATOR_I
-	i_stream >> o_value.m_unkBool13;
-	SEPARATOR_I
-	i_stream >> o_value.m_unkBool14;
-	SEPARATOR_I
-	i_stream >> o_value.m_unkBool15;
-	SEPARATOR_I
-	i_stream >> o_value.m_unkBool16;
-	SEPARATOR_I
-	i_stream >> o_value.m_unkBool17;
-	SEPARATOR_I
 	i_stream >> o_value.m_isDualMode;
-	SEPARATOR_I
-	i_stream >> o_value.m_unkBool18;
 	SEPARATOR_I
 	i_stream >> o_value.m_unkFloat9;
 	SEPARATOR_I
@@ -278,21 +266,15 @@ inline void operator>>(InputStream& i_stream, PPGJGameState& o_value) {
 	SEPARATOR_I
 	i_stream >> o_value.m_unkPoint33;
 	SEPARATOR_I
-	i_stream >> o_value.m_unkBool19;
-	SEPARATOR_I
 	i_stream >> o_value.m_unkBool20;
 	SEPARATOR_I
 	i_stream >> o_value.m_unkBool21;
 	SEPARATOR_I
 	i_stream >> o_value.m_unkBool22;
 	SEPARATOR_I
-	i_stream >> o_value.m_unkBool23;
-	SEPARATOR_I
-	i_stream >> o_value.m_unkBool24;
-	SEPARATOR_I
 	i_stream >> o_value.m_unkUint14;
 	SEPARATOR_I
-	i_stream >> o_value.m_unkBool25;
+	i_stream >> o_value.m_unkBool26;
 	SEPARATOR_I
 	i_stream >> o_value.m_cameraShakeEnabled;
 	SEPARATOR_I
@@ -340,7 +322,7 @@ inline void operator>>(InputStream& i_stream, PPGJGameState& o_value) {
 	i_stream >> o_value.m_unkUnorderedSet1;
 	USET_SEPARATOR_I
 	SEPARATOR_I
-	i_stream >> o_value.m_unkBool26;
+	i_stream >> o_value.m_unkBool27;
 	SEPARATOR_I
 	VEC_SEPARATOR_I
 	i_stream >> o_value.m_advanceFollowInstances;
@@ -350,14 +332,14 @@ inline void operator>>(InputStream& i_stream, PPGJGameState& o_value) {
 	i_stream >> o_value.m_dynamicObjActions2;
 	VEC_SEPARATOR_I
 	SEPARATOR_I
-	i_stream >> o_value.m_unkBool27;
-	SEPARATOR_I
 	i_stream >> o_value.m_unkBool28;
+	SEPARATOR_I
+	i_stream >> o_value.m_unkBool29;
 	SEPARATOR_I
 	i_stream >> o_value.m_unkUint17;
 	SEPARATOR_I
 	UMAP_SEPARATOR_I
-	i_stream >> o_value.unkUMap8;
+	i_stream >> o_value.m_unkUMap8;
 	UMAP_SEPARATOR_I
 	MAP_SEPARATOR_I
 	i_stream >> o_value.proximityVolumeRelated;
@@ -371,7 +353,7 @@ inline void operator>>(InputStream& i_stream, PPGJGameState& o_value) {
 	i_stream >> o_value.m_sfxTriggerStates;
 	VEC_SEPARATOR_I
 	SEPARATOR_I
-	i_stream >> o_value.m_unkBool29;
+	i_stream >> o_value.m_unkBool30;
 	SEPARATOR_I
 	i_stream >> o_value.m_unkUint18;
 	SEPARATOR_I
@@ -379,11 +361,15 @@ inline void operator>>(InputStream& i_stream, PPGJGameState& o_value) {
 	SEPARATOR_I
 	i_stream >> o_value.m_unkUint19;
 	SEPARATOR_I
-	i_stream >> o_value.m_unkBool30;
+	i_stream >> o_value.m_unkBool31;
 	SEPARATOR_I
 	i_stream >> o_value.m_unkUint20;
 	SEPARATOR_I
-	i_stream >> o_value.m_unkBool31;
+	i_stream >> o_value.m_unkBool32;
+	SEPARATOR_I
+	i_stream >> o_value.m_unkUint21;
+	SEPARATOR_I
+	i_stream >> o_value.m_unkUint22;
 	SEPARATOR_I
 }
 
@@ -470,7 +456,9 @@ inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
 	SEPARATOR_O
 	o_stream << i_value.m_unkInt4;
 	SEPARATOR_O
-	o_stream << i_value.m_unkShort1;
+	o_stream << i_value.m_unkBool4;
+	SEPARATOR_O
+	o_stream << i_value.m_unkBool5;
 	SEPARATOR_O
 	o_stream << i_value.m_unkFloat2;
 	SEPARATOR_O
@@ -496,7 +484,7 @@ inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
 	SEPARATOR_O
 	o_stream << i_value.m_portalY;
 	SEPARATOR_O
-	o_stream << i_value.m_unkBool4;
+	o_stream << i_value.m_unkBool6;
 	SEPARATOR_O
 	o_stream << i_value.m_gravityRelated;
 	SEPARATOR_O
@@ -508,11 +496,11 @@ inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
 	SEPARATOR_O
 	o_stream << i_value.m_unkInt15;
 	SEPARATOR_O
-	o_stream << i_value.m_unkShort2;
+	o_stream << i_value.m_unkBool7;
 	SEPARATOR_O
-	o_stream << i_value.m_unkBool5;
+	o_stream << i_value.m_unkBool8;
 	SEPARATOR_O
-	o_stream << i_value.m_unkBool6;
+	o_stream << i_value.m_unkBool9;
 	SEPARATOR_O
 	o_stream << i_value.m_unkFloat5;
 	SEPARATOR_O
@@ -578,29 +566,15 @@ inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
 	SEPARATOR_O
 	o_stream << i_value.m_cameraPosition;
 	SEPARATOR_O
-	o_stream << i_value.m_unkBool8;
-	SEPARATOR_O
-	o_stream << i_value.m_unkBool9;
-	SEPARATOR_O
 	o_stream << i_value.m_unkBool10;
+	SEPARATOR_O
+	o_stream << i_value.m_unkUint8;
 	SEPARATOR_O
 	o_stream << i_value.m_unkBool11;
 	SEPARATOR_O
 	o_stream << i_value.m_unkBool12;
 	SEPARATOR_O
-	o_stream << i_value.m_unkBool13;
-	SEPARATOR_O
-	o_stream << i_value.m_unkBool14;
-	SEPARATOR_O
-	o_stream << i_value.m_unkBool15;
-	SEPARATOR_O
-	o_stream << i_value.m_unkBool16;
-	SEPARATOR_O
-	o_stream << i_value.m_unkBool17;
-	SEPARATOR_O
 	o_stream << i_value.m_isDualMode;
-	SEPARATOR_O
-	o_stream << i_value.m_unkBool18;
 	SEPARATOR_O
 	o_stream << i_value.m_unkFloat9;
 	SEPARATOR_O
@@ -647,21 +621,15 @@ inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
 	SEPARATOR_O
 	o_stream << i_value.m_unkPoint33;
 	SEPARATOR_O
-	o_stream << i_value.m_unkBool19;
-	SEPARATOR_O
 	o_stream << i_value.m_unkBool20;
 	SEPARATOR_O
 	o_stream << i_value.m_unkBool21;
 	SEPARATOR_O
 	o_stream << i_value.m_unkBool22;
 	SEPARATOR_O
-	o_stream << i_value.m_unkBool23;
-	SEPARATOR_O
-	o_stream << i_value.m_unkBool24;
-	SEPARATOR_O
 	o_stream << i_value.m_unkUint14;
 	SEPARATOR_O
-	o_stream << i_value.m_unkBool25;
+	o_stream << i_value.m_unkBool26;
 	SEPARATOR_O
 	o_stream << i_value.m_cameraShakeEnabled;
 	SEPARATOR_O
@@ -709,7 +677,7 @@ inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
 	o_stream << i_value.m_unkUnorderedSet1;
 	USET_SEPARATOR_O
 	SEPARATOR_O
-	o_stream << i_value.m_unkBool26;
+	o_stream << i_value.m_unkBool27;
 	SEPARATOR_O
 	VEC_SEPARATOR_O
 	o_stream << i_value.m_advanceFollowInstances;
@@ -719,14 +687,14 @@ inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
 	o_stream << i_value.m_dynamicObjActions2;
 	VEC_SEPARATOR_O
 	SEPARATOR_O
-	o_stream << i_value.m_unkBool27;
-	SEPARATOR_O
 	o_stream << i_value.m_unkBool28;
+	SEPARATOR_O
+	o_stream << i_value.m_unkBool29;
 	SEPARATOR_O
 	o_stream << i_value.m_unkUint17;
 	SEPARATOR_O
 	UMAP_SEPARATOR_O
-	o_stream << i_value.unkUMap8;
+	o_stream << i_value.m_unkUMap8;
 	UMAP_SEPARATOR_O
 	MAP_SEPARATOR_O
 	o_stream << i_value.proximityVolumeRelated;
@@ -740,7 +708,7 @@ inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
 	o_stream << i_value.m_sfxTriggerStates;
 	VEC_SEPARATOR_O
 	SEPARATOR_O
-	o_stream << i_value.m_unkBool29;
+	o_stream << i_value.m_unkBool30;
 	SEPARATOR_O
 	o_stream << i_value.m_unkUint18;
 	SEPARATOR_O
@@ -748,11 +716,15 @@ inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
 	SEPARATOR_O
 	o_stream << i_value.m_unkUint19;
 	SEPARATOR_O
-	o_stream << i_value.m_unkBool30;
+	o_stream << i_value.m_unkBool31;
 	SEPARATOR_O
 	o_stream << i_value.m_unkUint20;
 	SEPARATOR_O
-	o_stream << i_value.m_unkBool31;
+	o_stream << i_value.m_unkBool32;
+	SEPARATOR_O
+	o_stream << i_value.m_unkUint21;
+	SEPARATOR_O
+	o_stream << i_value.m_unkUint22;
 	SEPARATOR_O
 }
 
@@ -786,6 +758,7 @@ void PPGJGameState::clean() {
 	gd::vector<AdvancedFollowInstance>().swap(m_advanceFollowInstances);
 }
 
+// TODO FIX DESCRIBE
 #if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPGJGameState::describe() {
 	log::info("[PPGJGameState - describe] m_cameraZoom: {}", m_cameraZoom);
@@ -902,7 +875,7 @@ void PPGJGameState::describe() {
 	log::info("[PPGJGameState - describe] m_unkBool10: {}", m_unkBool10);
 	log::info("[PPGJGameState - describe] m_unkBool11: {}", m_unkBool11);
 	log::info("[PPGJGameState - describe] m_unkBool12: {}", m_unkBool12);
-	log::info("[PPGJGameState - describe] m_unkBool13: {}", m_unkBool13);
+	log::info("[PPGJGameState - describe] m_isDualMode: {}", m_isDualMode);
 	log::info("[PPGJGameState - describe] m_unkBool14: {}", m_unkBool14);
 	log::info("[PPGJGameState - describe] m_unkBool15: {}", m_unkBool15);
 	log::info("[PPGJGameState - describe] m_unkBool16: {}", m_unkBool16);

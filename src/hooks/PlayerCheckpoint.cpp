@@ -51,17 +51,24 @@ inline void operator>>(InputStream& i_stream, PPPlayerCheckpoint& o_value) {
 	SEPARATOR_I
 	i_stream >> o_value.m_isGoingLeft;
 	SEPARATOR_I
-	i_stream.read((char*)o_value.m_unkBytes2, 42);
+	i_stream.read((char*)o_value.m_unkBytes2, 27);
+	SEPARATOR_I
+	// TODO SEE IF IT IS A PTR
+	i_stream >> o_value.m_maybeAPointer;
+	SEPARATOR_I
+	i_stream >> o_value.m_unkBool;
 	SEPARATOR_I
 	i_stream >> o_value.m_unkFloat1;
 	SEPARATOR_I
 	i_stream >> o_value.m_possiblyFlags;
 	SEPARATOR_I
 	i_stream >> o_value.m_timeOrPercentRelated;
+	SEPARATOR_I
+	i_stream.read((char*)o_value.m_unkBytes3, 4);
 	VEC_SEPARATOR_I
 	i_stream >> o_value.m_yPositionVector;
 	VEC_SEPARATOR_I
-	i_stream.read((char*)o_value.m_unkBytes3, 8);
+	i_stream.read((char*)o_value.m_unkBytes4, 8);
 	SEPARATOR_I
 }
 
@@ -102,17 +109,24 @@ inline void operator<<(OutputStream& o_stream, PPPlayerCheckpoint& i_value) {
 	SEPARATOR_O
 	o_stream << i_value.m_isGoingLeft;
 	SEPARATOR_O
-	o_stream.write((char*)i_value.m_unkBytes2, 42);
+	o_stream.write((char*)i_value.m_unkBytes2, 27);
+	SEPARATOR_O
+	// TODO SEE IF IT IS A PTR
+	o_stream << i_value.m_maybeAPointer;
+	SEPARATOR_O
+	o_stream << i_value.m_unkBool;
 	SEPARATOR_O
 	o_stream << i_value.m_unkFloat1;
 	SEPARATOR_O
 	o_stream << i_value.m_possiblyFlags;
 	SEPARATOR_O
 	o_stream << i_value.m_timeOrPercentRelated;
+	SEPARATOR_O
+	o_stream.write((char*)i_value.m_unkBytes3, 4);
 	VEC_SEPARATOR_O
 	o_stream << i_value.m_yPositionVector;
 	VEC_SEPARATOR_O
-	o_stream.write((char*)i_value.m_unkBytes3, 8);
+	o_stream.write((char*)i_value.m_unkBytes4, 8);
 	SEPARATOR_O
 }
 
@@ -136,15 +150,18 @@ void PPPlayerCheckpoint::describe() {
 	log::info("[PPPlayerCheckpoint - describe] m_speed: {}", m_speed);
 	log::info("[PPPlayerCheckpoint - describe] m_isHidden: {}", m_isHidden);
 	log::info("[PPPlayerCheckpoint - describe] m_isGoingLeft: {}", m_isGoingLeft);
-	log::info("[PPPlayerCheckpoint - describe] m_unkBytes2: [{}]", hexStr(m_unkBytes2, 42));
-	log::info("[PPPlayerCheckpoint - describe] m_position: {}", m_unkFloat1);
-	log::info("[PPPlayerCheckpoint - describe] m_position: {}", m_possiblyFlags);
-	log::info("[PPPlayerCheckpoint - describe] m_position: {}", m_timeOrPercentRelated);
+	log::info("[PPPlayerCheckpoint - describe] m_unkBytes2: [{}]", hexStr(m_unkBytes2, 27));
+	log::info("[PPPlayerCheckpoint - describe] m_maybeAPointer: {}", m_maybeAPointer);
+	log::info("[PPPlayerCheckpoint - describe] m_unkBool: {}", m_unkBool);
+	log::info("[PPPlayerCheckpoint - describe] m_unkFloat1: {}", m_unkFloat1);
+	log::info("[PPPlayerCheckpoint - describe] m_possiblyFlags: {}", m_possiblyFlags);
+	log::info("[PPPlayerCheckpoint - describe] m_timeOrPercentRelated: {}", m_timeOrPercentRelated);
+	log::info("[PPPlayerCheckpoint - describe] m_unkBytes3: [{}]", hexStr(m_unkBytes3, 4));
 	int l_size = m_yPositionVector.size();
 	log::info("[PPPlayerCheckpoint - describe] m_yPositionVector.size(): {}", l_size);
 	for (int i = 0; i < l_size; i++) {
 		log::info("[PPPlayerCheckpoint - describe] m_yPositionVector[{}]: {}", i, m_yPositionVector[i]);
 	}
-	log::info("[PPPlayerCheckpoint - describe] m_unkBytes3: [{}]", hexStr(m_unkBytes3, 8));
+	log::info("[PPPlayerCheckpoint - describe] m_unkBytes4: [{}]", hexStr(m_unkBytes4, 8));
 }
 #endif

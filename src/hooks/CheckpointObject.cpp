@@ -219,6 +219,7 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
 	o_stream << i_value.m_unkInt5;
 	VEC_SEPARATOR_O
 
+	// TODO FIX CRASH
 	// gd::vector<DynamicSaveObject> m_vectorDynamicSaveObjects;
 	o_stream << i_value.m_vectorDynamicSaveObjects;
 	VEC_SEPARATOR_O

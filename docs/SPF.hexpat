@@ -305,7 +305,8 @@ struct GJGameState {
     float m_middleGroundOffsetY;
     s32 m_unkInt3;
     s32 m_unkInt4;
-    s16 m_unkShort1;
+    bool m_unkBool4;
+    bool m_unkBool5;
     float m_unkFloat2;
     float m_unkFloat3;
     s32 m_unkInt5;
@@ -318,23 +319,23 @@ struct GJGameState {
     float m_unkFloat4;
     u32 m_unkUint1;
     float m_portalY;
-    bool m_unkBool4;
+    bool m_unkBool6;
     bool m_gravityRelated;
     s32 m_unkInt12;
     s32 m_unkInt13;
     s32 m_unkInt14;
     s32 m_unkInt15;
-    s16 m_unkShort2;
-    bool m_unkBool5;
-    bool m_unkBool6;
+    bool m_unkBool7;
+    bool m_unkBool8;
+    bool m_unkBool9;
     float m_unkFloat5;
     float m_unkFloat6;
     float m_unkFloat7;
     float m_unkFloat8;
-    float m_screenRotation;
-    s32 m_unkInt16;
-    bool m_unkBool7;
-    float m_timeWarpFactor;
+    float m_cameraAngle;
+    float m_targetCameraAngle;
+    bool m_unk184;
+    float m_timeWarp;
     float m_timeWarpRelated;
     s32 m_currentChannel;
     s32 m_unkInt17;
@@ -352,19 +353,12 @@ struct GJGameState {
     u32 m_unkUint7;
     GameObjectPtr m_unkGameObjPtr1;
     GameObjectPtr m_unkGameObjPtr2;
-    CCPoint m_cameraMove;
-    bool m_unkBool8;
-    bool m_unkBool9;
+    CCPoint m_cameraPosition;
     bool m_unkBool10;
+    u32 m_unkUint8;
     bool m_unkBool11;
     bool m_unkBool12;
-    bool m_unkBool13;
-    bool m_unkBool14;
-    bool m_unkBool15;
-    bool m_unkBool16;
-    bool m_unkBool17;
     bool m_isDualMode;
-    bool m_unkBool18;
     float m_unkFloat9;
     unordered_map<s32, GJValueTween> m_tweenActions;
     s32 m_cameraEdgeValue0;
@@ -384,14 +378,11 @@ struct GJGameState {
     u32 m_unkUint13;
     CCPoint m_unkPoint32;
     CCPoint m_unkPoint33;
-    bool m_unkBool19;
     bool m_unkBool20;
     bool m_unkBool21;
     bool m_unkBool22;
-    bool m_unkBool23;
-    bool m_unkBool24;
     u32 m_unkUint14;
-    bool m_unkBool25;
+    bool m_unkBool26;
     bool m_cameraShakeEnabled;
     float m_cameraShakeFactor;
     u32 m_unkUint15;
@@ -412,25 +403,27 @@ struct GJGameState {
     vector<EnterEffectInstance> m_enterEffectInstances4;
     vector<EnterEffectInstance> m_enterEffectInstances5;
     unordered_set<s32> m_unkUnorderedSet1;
-    bool m_unkBool26;
+    bool m_unkBool27;
     vector<AdvancedFollowInstance> m_advanceFollowInstances;
     vector<DynamicObjectAction> m_dynamicObjActions1;
     vector<DynamicObjectAction> m_dynamicObjActions2;
-    bool m_unkBool27;
     bool m_unkBool28;
+    bool m_unkBool29;
     u32 m_unkUint17;
     unordered_map<s32, vector<s32>> unkUMap8;
     map<pair<s32,s32>, SFXTriggerInstance> proximityVolumeRelated;
     unordered_map<s32, SongChannelState> m_songChannelStates;
     unordered_map<s32, vector<SongTriggerState>> m_songTriggerStateVectors;
     vector<SFXTriggerState> m_sfxTriggerStates;
-    bool m_unkBool29;
+    bool m_unkBool30;
     u32 m_unkUint18;
     s32 m_ground;
     u32 m_unkUint19;
-    bool m_unkBool30;
-    u32 m_unkUint20;
     bool m_unkBool31;
+    u32 m_unkUint20;
+    bool m_unkBool32;
+    u32 m_unkUint21;
+    u32 m_unkUint22;
 };
 
 struct GJShaderState {
@@ -448,8 +441,7 @@ struct FMODQueuedMusic {
     u8 m_unk[56];
 };
 
-struct FMODSoundState_padded {
-    u8 m_unk[4];
+struct FMODSoundState {
     string m_unkString;
     u8 m_unk2[164];
 };
@@ -472,7 +464,7 @@ struct FMODAudioState {
     unordered_map<s32,float> m_unkMapIntFloat10;
     unordered_map<s32,FMODQueuedMusic> m_unkMapIntFMODQueuedMusic1;
     unordered_map<s32,FMODQueuedMusic> m_unkMapIntFMODQueuedMusic2;
-    unordered_map<s32,FMODSoundState_padded> m_unkMapIntFMODSoundState;
+    unordered_map<s32,FMODSoundState> m_unkMapIntFMODSoundState;
     s32 m_unkInt1;
     s32 m_unkInt2;
 };
@@ -497,12 +489,15 @@ struct PlayerCheckpoint {
     float m_speed;
     bool m_isHidden;
     bool m_isGoingLeft;
-    u8 m_unkBytes2[42];
+    u8 m_unkBytes2[27];
+    u64 m_maybeAPointer;
+    bool m_unkBool;
     float m_unkFloat1;
     s32 m_possiblyFlags;
     s32 m_timeOrPercentRelated;
+    u8 m_unkBytes3[4];
     vector<float> m_yPositionVector;
-    u8 m_unkBytes3[8];
+    u8 m_unkBytes4[8];
 };
 
 struct DynamicSaveObject {
@@ -629,8 +624,8 @@ struct GroupCommandObject2 {
     u8 m_unk3[12];
 };
 
-struct TimerItem_padded {
-    u8 m_unk[60];
+struct TimerItem {
+    u8 m_unk[56];
     vector<s32> m_unkVecInt;
     u8 m_unk2[4];
 };
@@ -657,7 +652,7 @@ struct EffectManagerState {
     vector<GroupCommandObject2> m_vectorGroupCommandObject2;
     unordered_map<s32,pair<double,double>> m_unorderedMapInt_pair_double_double;
     unordered_set<s32> m_unorderedSet_int2;
-    unordered_map<s32,TimerItem_padded> m_unorderedMapInt_TimerItem;
+    unordered_map<s32,TimerItem> m_unorderedMapInt_TimerItem;
     unordered_map<s32,vector<TimerTriggerAction>> m_unorderedMapInt_vectorTimerTriggerAction;
 };
 

@@ -11,7 +11,7 @@
 using namespace geode::prelude;
 
 PPPlayLayer* s_currentPlayLayer = nullptr;
-char s_spfMagicAndVer[] = "SPF v0.0.2";
+char s_spfMagicAndVer[] = "SPF v0.0.3";
 
 // overrides
 
@@ -19,8 +19,8 @@ bool PPPlayLayer::init(GJGameLevel* i_level, bool i_useReplay, bool i_dontCreate
 	// reset uniqueID global to save/load GameObjects correctly using their index
 	// should look into not having to do this but it's harder than it looks since there's 
 	// probably maps with object id as keys, it's not just us saving pointers so I'd have to find those.
-	*reinterpret_cast<int*>(geode::base::get()+0x4ea028) = 10;
-	m_fields->m_uniqueIdBase = *reinterpret_cast<int*>(geode::base::get()+0x4ea028) + 2;
+	*reinterpret_cast<int*>(geode::base::get()+0x67f158) = 10;
+	m_fields->m_uniqueIdBase = *reinterpret_cast<int*>(geode::base::get()+0x67f158) + 2;
 
 	// for processing objects asynchronously every time
 	s_currentPlayLayer = this;
@@ -117,8 +117,12 @@ void PPPlayLayer::onQuit() {
 // custom methods
 
 void PPPlayLayer::createStartpoint() {
+	log::info("[createStartpoint] begin");
 	PPCheckpointObject* l_startpoint =  static_cast<PPCheckpointObject*>(PlayLayer::createCheckpoint());
+	log::info("[createStartpoint] created startpoint");
 	l_startpoint->m_fields->m_percentage = PlayLayer::getCurrentPercent();
+	log::info("[createStartpoint] m_percentage: {}", l_startpoint->m_fields->m_percentage);
+	log::info("[createStartpoint] calling addStartpoint");
 	addStartpoint(StartpointManager::get().createStartpoint(l_startpoint, m_player1->getPosition()));
 
 	//Todo: see if we want to save to file here, make it so it only saves the changes instead of the whole thing
@@ -205,10 +209,10 @@ std::string PPPlayLayer::getStartpointFilePath(bool i_checkExists) {
 void PPPlayLayer::setupKeybinds() {
 	addEventListener<keybinds::InvokeBindFilter>(
 		[this](keybinds::InvokeBindEvent* event) {
-			bool l_player1IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player1)+0x81a);
-			bool l_player2IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player2)+0x81a);
-			if (event->isDown() && !l_player1IsLocked && !l_player2IsLocked && !m_player1->m_isDead && isPlusMode()) {
+			log::info("Place SP");
+			if (event->isDown() && !m_player1->m_isLocked && !m_player2->m_isLocked && !m_player1->m_isDead && isPlusMode()) {
 				if (m_fields->m_startpointSavingState == SavingState::Ready) {
+					log::info("Calls createStartpoint()");
 					createStartpoint();
 				}
 			}
@@ -219,9 +223,7 @@ void PPPlayLayer::setupKeybinds() {
 
 	addEventListener<keybinds::InvokeBindFilter>(
 		[this](keybinds::InvokeBindEvent* event) {
-			bool l_player1IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player1)+0x81a);
-			bool l_player2IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player2)+0x81a);
-			if (event->isDown() && !l_player1IsLocked && !l_player2IsLocked && isPlusMode()) {
+			if (event->isDown() && !m_player1->m_isLocked && !m_player2->m_isLocked && isPlusMode()) {
 				if (m_fields->m_startpointSavingState == SavingState::Ready) {
 					removeStartpoint();
 				}
@@ -233,9 +235,7 @@ void PPPlayLayer::setupKeybinds() {
 
 	addEventListener<keybinds::InvokeBindFilter>(
 		[this](keybinds::InvokeBindEvent* event) {
-			bool l_player1IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player1)+0x81a);
-			bool l_player2IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player2)+0x81a);
-			if (event->isDown() && !l_player1IsLocked && !l_player2IsLocked && isPlusMode()) {
+			if (event->isDown() && !m_player1->m_isLocked && !m_player2->m_isLocked && isPlusMode()) {
 				if (StartpointManager::get().prevStartpoint()) {
 					reloadFromActiveStartpoint();
 				}
@@ -247,9 +247,7 @@ void PPPlayLayer::setupKeybinds() {
 
 	addEventListener<keybinds::InvokeBindFilter>(
 		[this](keybinds::InvokeBindEvent* event) {
-			bool l_player1IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player1)+0x81a);
-			bool l_player2IsLocked = *reinterpret_cast<byte*>(reinterpret_cast<unsigned int>(m_player2)+0x81a);
-			if (event->isDown() && !l_player1IsLocked && !l_player2IsLocked && isPlusMode()) {
+			if (event->isDown() && !m_player1->m_isLocked && !m_player2->m_isLocked && isPlusMode()) {
 				if (StartpointManager::get().nextStartpoint()) {
 					reloadFromActiveStartpoint();
 				}
