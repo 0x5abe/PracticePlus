@@ -29,13 +29,18 @@ bool PPPlayLayer::init(GJGameLevel* i_level, bool i_useReplay, bool i_dontCreate
 		m_loadingProgress = 1.0f;
 	}
 
+	// for some reason orderOfArrival is reset on GJBaseGameLayer init and it's messing with the depth ordering in LevelPage in case of not changing scenes
+	// so we just don't reset it till we now we're actually gonna enter the level
+	int l_prevGlobalOrderOfArrival = *reinterpret_cast<int*>(geode::base::getCocos()+0x19e000);
+
 	if (!PlayLayer::init(i_level, i_useReplay, i_dontCreateObjects)) return false;
+
+	*reinterpret_cast<int*>(geode::base::getCocos()+0x19e000) = l_prevGlobalOrderOfArrival;
 
 	// for processing objects asynchronously every time
 	if (m_fields->m_signalForAsyncLoad) {
 		m_loadingProgress = 0.0f;
 	}
-
 	setupKeybinds();
 	setupSavingIcon();
 
@@ -71,9 +76,12 @@ void PPPlayLayer::setupHasCompleted() {
 	if (m_fields->m_startpointLoadingState == LoadingState::Ready && !m_fields->m_cancelLevelLoad) {
 		//log::info("[setupHasCompleted] finished loading SP");
 		m_loadingProgress = 1.0f;
+
+		// now reset the order of arrival that we're actually going into the level
+		CCNode::resetGlobalOrderOfArrival();
+
 		PlayLayer::setupHasCompleted();
 
-		//StartpointManager::get().fetchStartpointsFromTempStorage();
 		m_fields->m_startpointLoadingProgress = 0.0f;
 		m_fields->m_bytesToRead = 0;
 		m_fields->m_bytesRead = 0;

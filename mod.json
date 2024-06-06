@@ -11,7 +11,7 @@
 	"dependencies": [
 		{
 			"id": "geode.custom-keybinds",
-			"version": "1.5.11",
+			"version": "v1.6.0-beta.1",
 			"importance": "required",
 			"platforms": [
 				"windows"

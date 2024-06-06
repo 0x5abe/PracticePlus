@@ -78,9 +78,11 @@ bool PPCCDirector::replaceScene(CCScene* i_scene) {
 				if (l_levelPage3) {
 					l_levelPage3->m_isBusy = false;
 				}
+				// isBusy2
+				// it's for when trying to use a button to get into the level instead of click
 				*reinterpret_cast<byte*>(geode::base::get()+0x685ff8) = 0;
 			}
-			
+
 			return false;
 		}
 	}
