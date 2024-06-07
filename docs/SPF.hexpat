@@ -502,7 +502,6 @@ struct PlayerCheckpoint {
 
 struct DynamicSaveObject {
     GameObjectPtr m_gameObject;
-    u32 m_unkIntUnusedMaybe;
     double m_unkDouble1;
     double m_unkDouble2;
     float m_unkFloat1;

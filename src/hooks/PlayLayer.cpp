@@ -280,19 +280,6 @@ void PPPlayLayer::setupKeybinds() {
 	addEventListener<keybinds::InvokeBindFilter>(
 		[this](keybinds::InvokeBindEvent* event) {
 			if (event->isDown() && isPlusMode()) {
-				//removeAllStartpoints(false);
-				//m_fields->m_startedLoadingStartpoints = false;
-				//InputStream l_ifstream = InputStream("./testPlayerCheckpoint.spf");
-				//StartpointManager::get().loadStartpointsFromStream(l_ifstream);
-			}
-			return ListenerResult::Propagate;
-		},
-		"test-key-1"_spr
-	);
-
-	addEventListener<keybinds::InvokeBindFilter>(
-		[this](keybinds::InvokeBindEvent* event) {
-			if (event->isDown() && isPlusMode()) {
 				if (m_fields->m_startpointSavingState != SavingState::Ready) return ListenerResult::Propagate;
 				m_fields->m_startpointSavingState = SavingState::Setup;
 				CCScene* l_currentScene = CCScene::get();

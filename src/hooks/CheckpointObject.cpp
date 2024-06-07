@@ -74,19 +74,16 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 		reinterpret_cast<PPPlayerCheckpoint*>(o_value.m_player2Checkpoint)->load(i_stream);
 	}
 	
+	// void* m_maybeAPointer1;
+	i_stream >> *reinterpret_cast<double*>(&o_value.m_maybeAPointer1);
+	log::info("maybe a pointer 1 as int: {}", reinterpret_cast<int64_t>(o_value.m_maybeAPointer1));
+	log::info("maybe a pointer 1 as double: {}", *reinterpret_cast<double*>(&o_value.m_maybeAPointer1));
+	//log::info("o_value.m_maybeAPointer1 in: {}", reinterpret_cast<int64_t>(o_value.m_maybeAPointer1));
+	SEPARATOR_I
+
 	// int m_unkInt1;
 	i_stream >> o_value.m_unkInt1;
-	//log::info("o_value.m_unkInt1 in: {}", o_value.m_unkInt1);
-	SEPARATOR_I
-
-	// int m_unkInt2;
-	i_stream >> o_value.m_unkInt2;
-	//log::info("o_value.m_unkInt2 in: {}", o_value.m_unkInt2);
-	SEPARATOR_I
-
-	// int m_unkInt3;
-	i_stream >> o_value.m_unkInt3;
-	//log::info("o_value.m_unkInt3 in: {}", o_value.m_unkInt3);
+	//log::info("o_value.m_unkInt1 in: {}", o_value.m_unkInt2);
 	SEPARATOR_I
 
 	// short m_unkShort1;
@@ -94,12 +91,11 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	//log::info("o_value.m_unkShort1 in: {}", o_value.m_unkShort1);
 	SEPARATOR_I
 
-	// int m_unkInt4;
-	i_stream >> o_value.m_unkInt4;
-	SEPARATOR_I
-
-	// int m_unkInt5;
-	i_stream >> o_value.m_unkInt5;
+	// void* m_maybeAPointer2;
+	i_stream >> *reinterpret_cast<double*>(&o_value.m_maybeAPointer2);
+	log::info("maybe a pointer 2 as int: {}", reinterpret_cast<int64_t>(o_value.m_maybeAPointer2));
+	log::info("maybe a pointer 2 as double: {}", *reinterpret_cast<double*>(&o_value.m_maybeAPointer2));
+	//log::info("o_value.m_maybeAPointer2 in: {}", reinterpret_cast<int64_t>(o_value.m_maybeAPointer2));
 	VEC_SEPARATOR_I
 
 	i_stream >> o_value.m_vectorDynamicSaveObjects;
@@ -135,8 +131,11 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	i_stream >> o_value.m_sequenceTriggerStateUnorderedMap;
 	UMAP_SEPARATOR_I
 
-	// int m_unkGetsCopiedFromGameState;
-	i_stream >> o_value.m_unkGetsCopiedFromGameState;
+	// void* m_maybeAPointer3;
+	i_stream >> *reinterpret_cast<double*>(&o_value.m_maybeAPointer3);
+	log::info("maybe a pointer 3 as int: {}", reinterpret_cast<int64_t>(o_value.m_maybeAPointer3));
+	log::info("maybe a pointer 3 as double: {}", *reinterpret_cast<double*>(&o_value.m_maybeAPointer3));
+	//log::info("o_value.m_maybeAPointer3 in: {}", reinterpret_cast<int64_t>(o_value.m_maybeAPointer3));
 	SEPARATOR_I
 
 	// custom members
@@ -191,19 +190,16 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
 		reinterpret_cast<PPPlayerCheckpoint*>(i_value.m_player2Checkpoint)->save(o_stream);
 	}
 	
+	// void* m_maybeAPointer1;
+	//log::info("o_value.m_maybeAPointer1 in: {}", reinterpret_cast<int64_t>(o_value.m_maybeAPointer1));
+	log::info("maybe a pointer 1 as int: {}", reinterpret_cast<int64_t>(i_value.m_maybeAPointer1));
+	log::info("maybe a pointer 1 as double: {}", *reinterpret_cast<double*>(&i_value.m_maybeAPointer1));
+	o_stream << *reinterpret_cast<double*>(&i_value.m_maybeAPointer1);
+	SEPARATOR_O
+
 	// int m_unkInt1;
 	//log::info("i_value.m_unkInt1 in: {}", i_value.m_unkInt1);
 	o_stream << i_value.m_unkInt1;
-	SEPARATOR_O
-
-	// int m_unkInt2;
-	//log::info("i_value.m_unkInt2 in: {}", i_value.m_unkInt2);
-	o_stream << i_value.m_unkInt2;
-	SEPARATOR_O
-
-	// int m_unkInt3;
-	//log::info("i_value.m_unkInt3 in: {}", i_value.m_unkInt3);
-	o_stream << i_value.m_unkInt3;
 	SEPARATOR_O
 
 	// short m_unkShort1;
@@ -211,12 +207,11 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
 	o_stream << i_value.m_unkShort1;
 	SEPARATOR_O
 
-	// int m_unkInt4;
-	o_stream << i_value.m_unkInt4;
-	SEPARATOR_O
-
-	// int m_unkInt5;
-	o_stream << i_value.m_unkInt5;
+	// void* m_maybeAPointer2;
+	//log::info("o_value.m_maybeAPointer2 in: {}", reinterpret_cast<int64_t>(o_value.m_maybeAPointer2));
+	log::info("maybe a pointer 2 as int: {}", reinterpret_cast<int64_t>(i_value.m_maybeAPointer2));
+	log::info("maybe a pointer 2 as double: {}", *reinterpret_cast<double*>(&i_value.m_maybeAPointer2));
+	o_stream << *reinterpret_cast<double*>(&i_value.m_maybeAPointer2);
 	VEC_SEPARATOR_O
 
 	// TODO FIX CRASH
@@ -257,8 +252,11 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
 	o_stream << i_value.m_sequenceTriggerStateUnorderedMap;
 	UMAP_SEPARATOR_O
 
-	// int m_unkGetsCopiedFromGameState;
-	o_stream << i_value.m_unkGetsCopiedFromGameState;
+	// void* m_maybeAPointer3;
+	//log::info("o_value.m_maybeAPointer3 in: {}", reinterpret_cast<int64_t>(o_value.m_maybeAPointer3));
+	log::info("maybe a pointer 3 as int: {}", reinterpret_cast<int64_t>(i_value.m_maybeAPointer3));
+	log::info("maybe a pointer 3 as double: {}", *reinterpret_cast<double*>(&i_value.m_maybeAPointer3));
+	o_stream << *reinterpret_cast<double*>(&i_value.m_maybeAPointer3);
 	SEPARATOR_O
 
 	// custom members
@@ -297,12 +295,10 @@ void PPCheckpointObject::describe() {
 	if (m_player2Checkpoint) {
 		reinterpret_cast<PPPlayerCheckpoint*>(m_player2Checkpoint)->describe();
 	}
+	log::info("[PPCheckpointObject - describe] m_maybeAPointer1: {}", reinterpret_cast<int64_t>(i_value.m_maybeAPointer1));
 	log::info("[PPCheckpointObject - describe] m_unkInt1: {}", m_unkInt1);
-	log::info("[PPCheckpointObject - describe] m_unkInt2: {}", m_unkInt2);
-	log::info("[PPCheckpointObject - describe] m_unkInt3: {}", m_unkInt3);
-	log::info("[PPCheckpointObject - describe] m_unkInt3: {}", m_unkInt3);
-	log::info("[PPCheckpointObject - describe] m_unkInt3: {}", m_unkInt3);
-	log::info("[PPCheckpointObject - describe] m_unkInt3: {}", m_unkInt3);
+	log::info("[PPCheckpointObject - describe] m_unkShort1: {}", m_unkShort1);
+	log::info("[PPCheckpointObject - describe] m_maybeAPointer2: {}", reinterpret_cast<int64_t>(i_value.m_maybeAPointer2));
 	int l_size = m_vectorDynamicSaveObjects.size();
 	log::info("[PPEffectManagerState - describe] m_vectorDynamicSaveObjects.size(): {}", l_size);
 	for (int i = 0; i < l_size; i++) {
@@ -335,6 +331,6 @@ void PPCheckpointObject::describe() {
 		reinterpret_cast<PPSequenceTriggerState*>(&l_pair.second)->describe();
 		i++;
 	}
-	log::info("[PPCheckpointObject - describe] m_unkGetsCopiedFromGameState: {}", m_unkGetsCopiedFromGameState);
+	log::info("[PPCheckpointObject - describe] m_maybeAPointer3: {}", reinterpret_cast<int64_t>(i_value.m_maybeAPointer3));
 }
 #endif

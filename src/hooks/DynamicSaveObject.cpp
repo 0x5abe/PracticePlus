@@ -16,8 +16,6 @@ inline void operator>>(InputStream& i_stream, PPDynamicSaveObject& o_value) {
 	int l_objectIndex;
 	i_stream >> l_objectIndex;
 	SEPARATOR_I
-	i_stream >> o_value.m_unkIntUnusedMaybe;
-	SEPARATOR_I
 	i_stream >> o_value.m_unkDouble1;
 	SEPARATOR_I
 	i_stream >> o_value.m_unkDouble2;
@@ -55,8 +53,6 @@ inline void operator<<(OutputStream& o_stream, PPDynamicSaveObject& i_value) {
 	}
 	o_stream << l_objectIndex;
 	SEPARATOR_O
-	o_stream << i_value.m_unkIntUnusedMaybe;
-	SEPARATOR_O
 	o_stream << i_value.m_unkDouble1;
 	SEPARATOR_O
 	o_stream << i_value.m_unkDouble2;
@@ -86,7 +82,6 @@ void PPDynamicSaveObject::describe() {
 	}
 	
 	log::info("[PPDynamicSaveObject - describe] l_objectIndex: {}", l_objectIndex);
-	log::info("[PPDynamicSaveObject - describe] m_unkIntUnusedMaybe: {}", m_unkIntUnusedMaybe);
 	log::info("[PPDynamicSaveObject - describe] m_unkDouble1: {}", m_unkDouble1);
 	log::info("[PPDynamicSaveObject - describe] m_unkDouble2: {}", m_unkDouble2);
 	log::info("[PPDynamicSaveObject - describe] m_unkFloat1: {}", m_unkFloat1);

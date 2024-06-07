@@ -54,13 +54,6 @@ void setupKeybinds() {
 
 	// TODO REMOVE
 	BindManager::get()->registerBindable({
-		"test-key-1"_spr,
-		"Test 1",
-		"Load startpoints",
-		{ Keybind::create(KEY_L, Modifier::None) },
-		Category::PLAY,
-	});
-	BindManager::get()->registerBindable({
 		"test-key-2"_spr,
 		"Test 2",
 		"Save startpoints",
