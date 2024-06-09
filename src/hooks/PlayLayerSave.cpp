@@ -1,12 +1,11 @@
 #include "PlayLayer.hpp"
 #include <filesystem>
 #include <managers/StartpointManager.hpp>
-#include <hooks/GJGameLevel.hpp>
-#include <util/OutputStream.hpp>
 #include <util/algorithm.hpp>
 #include <util/filesystem.hpp>
 
 using namespace geode::prelude;
+using namespace persistencyUtils;
 
 void PPPlayLayer::writeSpfHeader() {
 	OutputStream& l_outputStream = StartpointManager::get().m_outputStream;
@@ -22,9 +21,6 @@ void PPPlayLayer::saveStartpoints() {
 	switch (m_fields->m_startpointSavingState) {
 		case SavingState::Setup: {
 			//log::info("Goes into beginning");
-			#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
-			reinterpret_cast<PPGJGameLevel*>(m_level)->describe();
-			#endif
 			m_fields->m_remainingStartpointSaveCount = l_startpointManager.getStartpointCount();
 			if (m_fields->m_remainingStartpointSaveCount == 0) {
 				m_fields->m_startpointSavingState = SavingState::Ready;

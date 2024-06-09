@@ -2,6 +2,7 @@
 #include <hooks/PlayLayer.hpp>
 
 using namespace geode::prelude;
+using namespace persistencyUtils;
 
 // overrides
 

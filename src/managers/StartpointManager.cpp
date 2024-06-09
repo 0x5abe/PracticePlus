@@ -5,12 +5,11 @@
 #include <Geode/binding/GJGameState.hpp>
 #include <hooks/PlayLayer.hpp>
 #include <hooks/CheckpointObject.hpp>
-#include <hooks/PlayerCheckpoint.hpp>
-#include <hooks/cocos2d/CCArray.hpp>
 #include <util/algorithm.hpp>
 #include <util/debug.hpp>
 
 using namespace geode::prelude;
+using namespace persistencyUtils;
 
 PPCheckpointObject* StartpointManager::createStartpoint(PPCheckpointObject* i_startpoint) {
 	log::info("[StartpointManager::createStartpoint] begin");

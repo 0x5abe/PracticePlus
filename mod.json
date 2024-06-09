@@ -21,6 +21,11 @@
 			"id": "geode.node-ids",
 			"version": "v1.12.0-beta.2",
 			"importance": "required"
+		},
+		{
+			"id": "sabe.persistencyutils",
+			"version": "v0.0.1",
+			"importance": "required"
 		}
 	],
 	"incompatibilities": [

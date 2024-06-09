@@ -1,9 +1,7 @@
 #pragma once
 #include <Geode/Geode.hpp>
-#include <hooks/cocos2d/CCArray.hpp>
 #include <hooks/CheckpointObject.hpp>
-#include <util/InputStream.hpp>
-#include <util/OutputStream.hpp>
+#include <sabe.persistencyutils/include/PersistencyUtils.hpp>
 
 class PPPlayLayer;
 
@@ -17,8 +15,8 @@ protected:
 	bool m_prevPlusMode = false;
 	bool m_practiceModeIsPlusMode = true;
 	bool m_visibleStartpoints = true;
-	InputStream m_inputStream;
-	OutputStream m_outputStream;
+	persistencyUtils::InputStream m_inputStream;
+	persistencyUtils::OutputStream m_outputStream;
 
 	StartpointManager() {
 		m_startpoints = cocos2d::CCArray::create();

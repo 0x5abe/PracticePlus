@@ -2,13 +2,11 @@
 #include <filesystem>
 #include <geode.custom-keybinds/include/Keybinds.hpp>
 #include <managers/StartpointManager.hpp>
-#include <hooks/GJGameLevel.hpp>
-#include <util/InputStream.hpp>
-#include <util/OutputStream.hpp>
 #include <util/algorithm.hpp>
 #include <util/filesystem.hpp>
 
 using namespace geode::prelude;
+using namespace persistencyUtils;
 
 PPPlayLayer* s_currentPlayLayer = nullptr;
 char s_spfMagicAndVer[] = "SPF v0.0.3";
@@ -16,12 +14,6 @@ char s_spfMagicAndVer[] = "SPF v0.0.3";
 // overrides
 
 bool PPPlayLayer::init(GJGameLevel* i_level, bool i_useReplay, bool i_dontCreateObjects) {
-	// reset uniqueID global to save/load GameObjects correctly using their index
-	// should look into not having to do this but it's harder than it looks since there's 
-	// probably maps with object id as keys, it's not just us saving pointers so I'd have to find those.
-	*reinterpret_cast<int*>(geode::base::get()+0x67f158) = 10;
-	m_fields->m_uniqueIdBase = *reinterpret_cast<int*>(geode::base::get()+0x67f158) + 2;
-
 	// for processing objects asynchronously every time
 	s_currentPlayLayer = this;
 	m_fields->m_signalForAsyncLoad = !i_dontCreateObjects;

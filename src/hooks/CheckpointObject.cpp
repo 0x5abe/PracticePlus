@@ -8,30 +8,20 @@
 #include <Geode/cocos/cocoa/CCArray.h>
 #include <Geode/cocos/platform/CCPlatformMacros.h>
 #include <managers/StartpointManager.hpp>
-#include <hooks/cocos2d/CCObject.hpp>
-#include <hooks/cocos2d/CCNode.hpp>
-#include <hooks/PlayerCheckpoint.hpp>
-#include <hooks/DynamicSaveObject.hpp>
-#include <hooks/cocos2d/CCArray.hpp>
-#include <hooks/GJShaderState.hpp>
 #include <hooks/PlayLayer.hpp>
-#include <hooks/SequenceTriggerState.hpp>
-#include <hooks/FMODAudioState.hpp>
-#include <hooks/EffectManagerState.hpp>
-#include <hooks/GJGameState.hpp>
-#include <hooks/ActiveSaveObject.hpp>
 #include <util/debug.hpp>
 
 using namespace geode::prelude;
+using namespace persistencyUtils;
 
 void PPCheckpointObject::load(InputStream& i_stream) {
-	reinterpret_cast<PPCCNode*>(this)->load(i_stream);
+	reinterpret_cast<PUCCNode*>(this)->load(i_stream);
 	i_stream >> *this;
 }
 
 void PPCheckpointObject::save(OutputStream& o_stream) {
 	//log::info("SAVING CHECKPOINT OBJECT");
-	reinterpret_cast<PPCCNode*>(this)->save(o_stream);
+	reinterpret_cast<PUCCNode*>(this)->save(o_stream);
 	o_stream << *this;
 }
 
@@ -41,17 +31,17 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	//log::info("INPUT CCNODE frotationx: {}", o_value.m_fRotationX);
 	//log::info("INPUT CCNODE scale y: {}", o_value.m_fScaleY);
 	SEPARATOR_I_C(GAME)
-	reinterpret_cast<PPGJGameState*>(&o_value.m_gameState)->load(i_stream);
+	reinterpret_cast<PUGJGameState*>(&o_value.m_gameState)->load(i_stream);
 	SEPARATOR_I_C(GAME)
 
 	// GJShaderState m_shaderState;
 	SEPARATOR_I_C(SHAD)
-	reinterpret_cast<PPGJShaderState*>(&o_value.m_shaderState)->load(i_stream);
+	reinterpret_cast<PUGJShaderState*>(&o_value.m_shaderState)->load(i_stream);
 	SEPARATOR_I_C(SHAD)
 
 	// FMODAudioState m_audioState;
 	SEPARATOR_I_C(AUDI)
-	reinterpret_cast<PPFMODAudioState*>(&o_value.m_audioState)->load(i_stream);
+	reinterpret_cast<PUFMODAudioState*>(&o_value.m_audioState)->load(i_stream);
 	SEPARATOR_I_C(AUDI)
 
 	i_stream >> o_value.m_fields->m_position;
@@ -60,7 +50,7 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	// PlayerCheckpoint* m_player1Checkpoint;
 	o_value.m_player1Checkpoint = PlayerCheckpoint::create();
 	CC_SAFE_RETAIN(o_value.m_player1Checkpoint);
-	reinterpret_cast<PPPlayerCheckpoint*>(o_value.m_player1Checkpoint)->load(i_stream);
+	reinterpret_cast<PUPlayerCheckpoint*>(o_value.m_player1Checkpoint)->load(i_stream);
 
 	// PlayerCheckpoint* m_player2Checkpoint;
 	bool l_hasPlayer2;
@@ -70,7 +60,7 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	if (l_hasPlayer2) {
 		o_value.m_player2Checkpoint = PlayerCheckpoint::create();
 		CC_SAFE_RETAIN(o_value.m_player2Checkpoint);
-		reinterpret_cast<PPPlayerCheckpoint*>(o_value.m_player2Checkpoint)->load(i_stream);
+		reinterpret_cast<PUPlayerCheckpoint*>(o_value.m_player2Checkpoint)->load(i_stream);
 	}
 	
 	// void* m_maybeAPointer1;
@@ -108,7 +98,7 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 
 	// EffectManagerState m_effectManagerState;
 	SEPARATOR_I_C(EFFE)
-	reinterpret_cast<PPEffectManagerState*>(&o_value.m_effectManagerState)->load(i_stream);
+	reinterpret_cast<PUEffectManagerState*>(&o_value.m_effectManagerState)->load(i_stream);
 	SEPARATOR_I_C(EFFE)
 
 	// cocos2d::CCArray* m_gradientTriggerObjectArray;
@@ -118,7 +108,7 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	if (l_hasGradientTriggerObjectArray) {
 		o_value.m_gradientTriggerObjectArray = CCArray::create();
 		CC_SAFE_RETAIN(o_value.m_gradientTriggerObjectArray);
-		static_cast<PPCCArray*>(o_value.m_gradientTriggerObjectArray)->load<GradientTriggerObject>(i_stream);
+		static_cast<PUCCArray*>(o_value.m_gradientTriggerObjectArray)->load<GradientTriggerObject>(i_stream);
 		ARR_SEPARATOR_I
 	}
 
@@ -151,17 +141,17 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
 	//log::info("OUTPUT CCNODE scale y: {}", i_value.m_fScaleY);
 	// GJGameState m_gameState;
 	SEPARATOR_O_C(GAME)
-	reinterpret_cast<PPGJGameState*>(&i_value.m_gameState)->save(o_stream);
+	reinterpret_cast<PUGJGameState*>(&i_value.m_gameState)->save(o_stream);
 	SEPARATOR_O_C(GAME)
 
 	// GJShaderState m_shaderState;
 	SEPARATOR_O_C(SHAD)
-	reinterpret_cast<PPGJShaderState*>(&i_value.m_shaderState)->save(o_stream);
+	reinterpret_cast<PUGJShaderState*>(&i_value.m_shaderState)->save(o_stream);
 	SEPARATOR_O_C(SHAD)
 
 	// FMODAudioState m_audioState;
 	SEPARATOR_O_C(AUDI)
-	reinterpret_cast<PPFMODAudioState*>(&i_value.m_audioState)->save(o_stream);
+	reinterpret_cast<PUFMODAudioState*>(&i_value.m_audioState)->save(o_stream);
 	SEPARATOR_O_C(AUDI)
 
 	// GameObject* m_physicalCheckpointObject;
@@ -169,7 +159,7 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
 	SEPARATOR_O
 
 	// PlayerCheckpoint* m_player1Checkpoint;
-	reinterpret_cast<PPPlayerCheckpoint*>(i_value.m_player1Checkpoint)->save(o_stream);
+	reinterpret_cast<PUPlayerCheckpoint*>(i_value.m_player1Checkpoint)->save(o_stream);
 
 	// PlayerCheckpoint* m_player2Checkpoint;
 	bool l_hasPlayer2 = false;
@@ -180,7 +170,7 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
 	o_stream << l_hasPlayer2;
 	SEPARATOR_O
 	if (l_hasPlayer2) {
-		reinterpret_cast<PPPlayerCheckpoint*>(i_value.m_player2Checkpoint)->save(o_stream);
+		reinterpret_cast<PUPlayerCheckpoint*>(i_value.m_player2Checkpoint)->save(o_stream);
 	}
 	
 	// void* m_maybeAPointer1;
@@ -222,7 +212,7 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
 
 	// EffectManagerState m_effectManagerState;
 	SEPARATOR_O_C(EFFE)
-	reinterpret_cast<PPEffectManagerState*>(&i_value.m_effectManagerState)->save(o_stream);
+	reinterpret_cast<PUEffectManagerState*>(&i_value.m_effectManagerState)->save(o_stream);
 	SEPARATOR_O_C(EFFE)
 
 	// cocos2d::CCArray* m_gradientTriggerObjectArray;
@@ -233,7 +223,7 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
 	o_stream << l_hasGradientTriggerObjectArray;
 	SEPARATOR_O
 	if (l_hasGradientTriggerObjectArray) {
-		static_cast<PPCCArray*>(i_value.m_gradientTriggerObjectArray)->save<GradientTriggerObject>(o_stream);
+		static_cast<PUCCArray*>(i_value.m_gradientTriggerObjectArray)->save<GradientTriggerObject>(o_stream);
 		ARR_SEPARATOR_O
 	}
 	
@@ -261,9 +251,9 @@ inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {
 void PPCheckpointObject::clean() {
 	if (!m_fields->m_wasLoaded) return;
 
-	reinterpret_cast<PPGJGameState*>(&m_gameState)->clean();
+	reinterpret_cast<PUGJGameState*>(&m_gameState)->clean();
 
-	reinterpret_cast<PPEffectManagerState*>(&m_effectManagerState)->clean();
+	reinterpret_cast<PUEffectManagerState*>(&m_effectManagerState)->clean();
 
 	m_vectorDynamicSaveObjects.clear();
 	gd::vector<DynamicSaveObject>().swap(m_vectorDynamicSaveObjects);
@@ -275,53 +265,53 @@ void PPCheckpointObject::clean() {
 	gd::vector<ActiveSaveObject2>().swap(m_vectorActiveSaveObjects2);
 }
 
-#if defined(PP_DEBUG) && defined(PP_DESCRIBE)
+#if defined(PU_DEBUG) && defined(PU_DESCRIBE)
 void PPCheckpointObject::describe() {
 	log::info("[PPCheckpointObject - describe] start");
-	reinterpret_cast<PPCCObject*>(this)->describe();
-	reinterpret_cast<PPCCNode*>(this)->describe();
-	reinterpret_cast<PPGJGameState*>(&m_gameState)->describe();
-	reinterpret_cast<PPGJShaderState*>(&m_shaderState)->describe();
-	reinterpret_cast<PPFMODAudioState*>(&m_audioState)->describe();
+	reinterpret_cast<PUCCObject*>(this)->describe();
+	reinterpret_cast<PUCCNode*>(this)->describe();
+	reinterpret_cast<PUGJGameState*>(&m_gameState)->describe();
+	reinterpret_cast<PUGJShaderState*>(&m_shaderState)->describe();
+	reinterpret_cast<PUFMODAudioState*>(&m_audioState)->describe();
 	log::info("[PPCheckpointObject - describe] m_physicalCheckpointObject->m_startPosition: {}", m_physicalCheckpointObject->m_startPosition);
-	reinterpret_cast<PPPlayerCheckpoint*>(m_player1Checkpoint)->describe();
+	reinterpret_cast<PUPlayerCheckpoint*>(m_player1Checkpoint)->describe();
 	if (m_player2Checkpoint) {
-		reinterpret_cast<PPPlayerCheckpoint*>(m_player2Checkpoint)->describe();
+		reinterpret_cast<PUPlayerCheckpoint*>(m_player2Checkpoint)->describe();
 	}
 	log::info("[PPCheckpointObject - describe] m_maybeAPointer1: {}", reinterpret_cast<int64_t>(i_value.m_maybeAPointer1));
 	log::info("[PPCheckpointObject - describe] m_unkInt1: {}", m_unkInt1);
 	log::info("[PPCheckpointObject - describe] m_unkShort1: {}", m_unkShort1);
 	log::info("[PPCheckpointObject - describe] m_maybeAPointer2: {}", reinterpret_cast<int64_t>(i_value.m_maybeAPointer2));
 	int l_size = m_vectorDynamicSaveObjects.size();
-	log::info("[PPEffectManagerState - describe] m_vectorDynamicSaveObjects.size(): {}", l_size);
+	log::info("[PUEffectManagerState - describe] m_vectorDynamicSaveObjects.size(): {}", l_size);
 	for (int i = 0; i < l_size; i++) {
-		log::info("[PPEffectManagerState - describe] m_vectorDynamicSaveObjects[{}]:", i);
-		reinterpret_cast<PPDynamicSaveObject*>(&m_vectorDynamicSaveObjects[i])->describe();
+		log::info("[PUEffectManagerState - describe] m_vectorDynamicSaveObjects[{}]:", i);
+		reinterpret_cast<PUDynamicSaveObject*>(&m_vectorDynamicSaveObjects[i])->describe();
 	}
 	l_size = m_vectorActiveSaveObjects1.size();
-	log::info("[PPEffectManagerState - describe] m_vectorActiveSaveObjects1.size(): {}", l_size);
+	log::info("[PUEffectManagerState - describe] m_vectorActiveSaveObjects1.size(): {}", l_size);
 	for (int i = 0; i < l_size; i++) {
-		log::info("[PPEffectManagerState - describe] m_vectorActiveSaveObjects1[{}]:", i);
-		reinterpret_cast<PPActiveSaveObject1*>(&m_vectorActiveSaveObjects1[i])->describe();
+		log::info("[PUEffectManagerState - describe] m_vectorActiveSaveObjects1[{}]:", i);
+		reinterpret_cast<PUActiveSaveObject1*>(&m_vectorActiveSaveObjects1[i])->describe();
 	}
 	l_size = m_vectorActiveSaveObjects2.size();
-	log::info("[PPEffectManagerState - describe] m_vectorActiveSaveObjects2.size(): {}", l_size);
+	log::info("[PUEffectManagerState - describe] m_vectorActiveSaveObjects2.size(): {}", l_size);
 	for (int i = 0; i < l_size; i++) {
-		log::info("[PPEffectManagerState - describe] m_vectorActiveSaveObjects2[{}]:", i);
-		reinterpret_cast<PPActiveSaveObject2*>(&m_vectorActiveSaveObjects2[i])->describe();
+		log::info("[PUEffectManagerState - describe] m_vectorActiveSaveObjects2[{}]:", i);
+		reinterpret_cast<PUActiveSaveObject2*>(&m_vectorActiveSaveObjects2[i])->describe();
 	}
-	reinterpret_cast<PPEffectManagerState*>(&m_effectManagerState)->describe();
+	reinterpret_cast<PUEffectManagerState*>(&m_effectManagerState)->describe();
 	if (m_gradientTriggerObjectArray) {
-		reinterpret_cast<PPCCArray*>(m_gradientTriggerObjectArray)->describe<GradientTriggerObject>();
+		reinterpret_cast<PUCCArray*>(m_gradientTriggerObjectArray)->describe<GradientTriggerObject>();
 	}
 	log::info("[PPCheckpointObject - describe] m_unkBool1: {}", m_unkBool1);
 	l_size = m_sequenceTriggerStateUnorderedMap.size();
-	log::info("[PPEffectManagerState - describe] m_sequenceTriggerStateUnorderedMap.size(): {}", l_size);
+	log::info("[PUEffectManagerState - describe] m_sequenceTriggerStateUnorderedMap.size(): {}", l_size);
 	int i = 0;
 	for (std::pair<int, SequenceTriggerState> l_pair : m_sequenceTriggerStateUnorderedMap) {
-		log::info("[PPEffectManagerState - describe] m_sequenceTriggerStateUnorderedMap element {} key: {}", i, l_pair.first);
-		log::info("[PPEffectManagerState - describe] m_sequenceTriggerStateUnorderedMap element {} value:", i);
-		reinterpret_cast<PPSequenceTriggerState*>(&l_pair.second)->describe();
+		log::info("[PUEffectManagerState - describe] m_sequenceTriggerStateUnorderedMap element {} key: {}", i, l_pair.first);
+		log::info("[PUEffectManagerState - describe] m_sequenceTriggerStateUnorderedMap element {} value:", i);
+		reinterpret_cast<PUSequenceTriggerState*>(&l_pair.second)->describe();
 		i++;
 	}
 	log::info("[PPCheckpointObject - describe] m_maybeAPointer3: {}", reinterpret_cast<int64_t>(i_value.m_maybeAPointer3));

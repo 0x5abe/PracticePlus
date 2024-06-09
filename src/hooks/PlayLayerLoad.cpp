@@ -1,12 +1,11 @@
 #include "PlayLayer.hpp"
 #include <filesystem>
 #include <managers/StartpointManager.hpp>
-#include <hooks/GJGameLevel.hpp>
-#include <util/InputStream.hpp>
 #include <util/algorithm.hpp>
 #include <util/filesystem.hpp>
 
 using namespace geode::prelude;
+using namespace persistencyUtils;
 
 bool PPPlayLayer::readSpfLevelStringHash() {
 	unsigned int l_savedLevelStringHash;
