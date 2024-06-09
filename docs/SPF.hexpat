@@ -346,7 +346,7 @@ struct GJGameState {
     double m_unkDouble3;
     u32 m_unkUint2;
     u32 m_unkUint3;
-    s32 m_unk1f8;
+    s32 m_currentProgress;
     u32 m_unkUint4;
     u32 m_unkUint5;
     u32 m_unkUint6;

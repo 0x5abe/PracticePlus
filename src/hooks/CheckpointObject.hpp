@@ -13,6 +13,7 @@ public:
 	struct Fields {
 		bool m_wasLoaded = false;
 		float m_percentage = 0.0f;
+		cocos2d::CCPoint m_position;
 	};
 	
 	void load(InputStream& i_stream);

@@ -25,7 +25,7 @@ inline void operator>>(InputStream& i_stream, PPSFXTriggerState& o_value) {
 		o_value.m_sfxTriggerGameObject = nullptr;
 	}
 	SEPARATOR_I
-	i_stream.read(reinterpret_cast<char*>(&o_value) + offsetof(PPSFXTriggerState,m_sfxTriggerGameObject) + sizeof(SFXTriggerGameObject*), 156);
+	i_stream.read(reinterpret_cast<char*>(&o_value) + offsetof(PPSFXTriggerState,m_sfxTriggerGameObject) + sizeof(SFXTriggerGameObject*), 160);
 	SEPARATOR_I
 }
 
@@ -37,7 +37,7 @@ inline void operator<<(OutputStream& o_stream, PPSFXTriggerState& i_value) {
 	}
 	o_stream << l_objectIndex;
 	SEPARATOR_O
-	o_stream.write(reinterpret_cast<char*>(&i_value) + offsetof(PPSFXTriggerState,m_sfxTriggerGameObject) + sizeof(SFXTriggerGameObject*), 156);
+	o_stream.write(reinterpret_cast<char*>(&i_value) + offsetof(PPSFXTriggerState,m_sfxTriggerGameObject) + sizeof(SFXTriggerGameObject*), 160);
 	SEPARATOR_O
 }
 
@@ -49,6 +49,6 @@ void PPSFXTriggerState::describe() {
 		if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(m_sfxTriggerGameObject);
 	}
 	log::info("[PPSFXTriggerState - describe] m_sfxTriggerGameObject l_objectIndex: {}", l_objectIndex);
-	log::info("[PPSFXTriggerState - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPSFXTriggerState,m_sfxTriggerGameObject) + sizeof(SFXTriggerGameObject*), 156));
+	log::info("[PPSFXTriggerState - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPSFXTriggerState,m_sfxTriggerGameObject) + sizeof(SFXTriggerGameObject*), 160));
 }
 #endif

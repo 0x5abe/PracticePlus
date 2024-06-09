@@ -183,7 +183,7 @@ inline void operator>>(InputStream& i_stream, PPGJGameState& o_value) {
 	SEPARATOR_I
 	i_stream >> o_value.m_unkUint3;
 	SEPARATOR_I
-	i_stream >> o_value.m_unk1f8;
+	i_stream >> o_value.m_currentProgress;
 	SEPARATOR_I
 	i_stream >> o_value.m_unkUint4;
 	SEPARATOR_I
@@ -540,7 +540,7 @@ inline void operator<<(OutputStream& o_stream, PPGJGameState& i_value) {
 	SEPARATOR_O
 	o_stream << i_value.m_unkUint3;
 	SEPARATOR_O
-	o_stream << i_value.m_unk1f8;
+	o_stream << i_value.m_currentProgress;
 	SEPARATOR_O
 	o_stream << i_value.m_unkUint4;
 	SEPARATOR_O
@@ -852,7 +852,7 @@ void PPGJGameState::describe() {
 	log::info("[PPGJGameState - describe] m_unkDouble3: {}", m_unkDouble3);
 	log::info("[PPGJGameState - describe] m_unkUint2: {}", m_unkUint2);
 	log::info("[PPGJGameState - describe] m_unkUint3: {}", m_unkUint3);
-	log::info("[PPGJGameState - describe] m_unk1f8: {}", m_unk1f8);
+	log::info("[PPGJGameState - describe] m_currentProgress: {}", m_currentProgress);
 	log::info("[PPGJGameState - describe] m_unkUint4: {}", m_unkUint4);
 	log::info("[PPGJGameState - describe] m_unkUint5: {}", m_unkUint5);
 	log::info("[PPGJGameState - describe] m_unkUint6: {}", m_unkUint6);

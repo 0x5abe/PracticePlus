@@ -129,9 +129,10 @@ void PPPlayLayer::createStartpoint() {
 	PPCheckpointObject* l_startpoint =  static_cast<PPCheckpointObject*>(PlayLayer::createCheckpoint());
 	log::info("[createStartpoint] created startpoint");
 	l_startpoint->m_fields->m_percentage = PlayLayer::getCurrentPercent();
+	l_startpoint->m_fields->m_position = m_player1->getPosition();
 	log::info("[createStartpoint] m_percentage: {}", l_startpoint->m_fields->m_percentage);
 	log::info("[createStartpoint] calling addStartpoint");
-	addStartpoint(StartpointManager::get().createStartpoint(l_startpoint, m_player1->getPosition()));
+	addStartpoint(StartpointManager::get().createStartpoint(l_startpoint));
 
 	//Todo: see if we want to save to file here, make it so it only saves the changes instead of the whole thing
 }

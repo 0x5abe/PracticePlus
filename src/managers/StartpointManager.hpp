@@ -39,7 +39,7 @@ public:
 		return s_instance;
 	}
 
-	PPCheckpointObject* createStartpoint(PPCheckpointObject* i_checkpointObject, cocos2d::CCPoint i_startPosition);
+	PPCheckpointObject* createStartpoint(PPCheckpointObject* i_checkpointObject);
 
 	void removeStartpoint(int i_index);
 

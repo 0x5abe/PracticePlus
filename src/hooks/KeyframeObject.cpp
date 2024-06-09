@@ -27,7 +27,7 @@ inline void operator>>(InputStream& i_stream, PPKeyframeObject& o_value) {
 	i_stream >> o_value.m_unkVecDouble5;
 	VEC_SEPARATOR_I
 	SEPARATOR_I
-	i_stream.read(reinterpret_cast<char*>(&o_value) + offsetof(PPKeyframeObject,m_unkVecDouble5) + sizeof(gd::vector<double>), 52);
+	i_stream.read(reinterpret_cast<char*>(&o_value) + offsetof(PPKeyframeObject,m_unkVecDouble5) + sizeof(gd::vector<double>), 41);
 	SEPARATOR_I
 	VEC_SEPARATOR_I
 	i_stream >> o_value.m_unkVecDouble6;
@@ -40,7 +40,7 @@ inline void operator>>(InputStream& i_stream, PPKeyframeObject& o_value) {
 	VEC_SEPARATOR_I
 	i_stream >> o_value.m_unkVecDouble10;
 	VEC_SEPARATOR_I
-	i_stream.read(reinterpret_cast<char*>(&o_value) + offsetof(PPKeyframeObject,m_unkVecDouble10) + sizeof(gd::vector<double>), 132);
+	i_stream.read(reinterpret_cast<char*>(&o_value) + offsetof(PPKeyframeObject,m_unkVecDouble10) + sizeof(gd::vector<double>), 128);
 	SEPARATOR_I
 }
 
@@ -58,7 +58,7 @@ inline void operator<<(OutputStream& o_stream, PPKeyframeObject& i_value) {
 	o_stream << i_value.m_unkVecDouble5;
 	VEC_SEPARATOR_O
 	SEPARATOR_O
-	o_stream.write(reinterpret_cast<char*>(&i_value) + offsetof(PPKeyframeObject,m_unkVecDouble5) + sizeof(gd::vector<double>), 52);
+	o_stream.write(reinterpret_cast<char*>(&i_value) + offsetof(PPKeyframeObject,m_unkVecDouble5) + sizeof(gd::vector<double>), 41);
 	SEPARATOR_O
 	VEC_SEPARATOR_O
 	o_stream << i_value.m_unkVecDouble6;
@@ -71,7 +71,7 @@ inline void operator<<(OutputStream& o_stream, PPKeyframeObject& i_value) {
 	VEC_SEPARATOR_O
 	o_stream << i_value.m_unkVecDouble10;
 	VEC_SEPARATOR_O
-	o_stream.write(reinterpret_cast<char*>(&i_value) + offsetof(PPKeyframeObject,m_unkVecDouble10) + sizeof(gd::vector<double>), 132);
+	o_stream.write(reinterpret_cast<char*>(&i_value) + offsetof(PPKeyframeObject,m_unkVecDouble10) + sizeof(gd::vector<double>), 128);
 	SEPARATOR_O
 }
 
@@ -103,7 +103,7 @@ void PPKeyframeObject::describe() {
 	for (int i = 0; i < l_size; i++) {
 		log::info("[PPKeyframeObject - describe] m_unkVecDouble5[{}]: {}", i, m_unkVecDouble5[i]);
 	}
-	log::info("[PPKeyframeObject - describe] pad_2: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPKeyframeObject,m_unkVecDouble5) + sizeof(gd::vector<double>), 52));
+	log::info("[PPKeyframeObject - describe] pad_2: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPKeyframeObject,m_unkVecDouble5) + sizeof(gd::vector<double>), 41));
 	l_size = m_unkVecDouble6.size();
 	log::info("[PPKeyframeObject - describe] m_unkVecDouble6.size(): {}", l_size);
 	for (int i = 0; i < l_size; i++) {
@@ -129,6 +129,6 @@ void PPKeyframeObject::describe() {
 	for (int i = 0; i < l_size; i++) {
 		log::info("[PPKeyframeObject - describe] m_unkVecDouble10[{}]: {}", i, m_unkVecDouble10[i]);
 	}
-	log::info("[PPKeyframeObject - describe] pad_3: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPKeyframeObject,m_unkVecDouble10) + sizeof(gd::vector<double>), 132));
+	log::info("[PPKeyframeObject - describe] pad_3: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPKeyframeObject,m_unkVecDouble10) + sizeof(gd::vector<double>), 128));
 }
 #endif

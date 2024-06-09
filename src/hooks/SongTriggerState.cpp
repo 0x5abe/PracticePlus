@@ -25,7 +25,7 @@ inline void operator>>(InputStream& i_stream, PPSongTriggerState& o_value) {
 		o_value.m_songTriggerGameObject = nullptr;
 	}
 	SEPARATOR_I
-	i_stream.read(reinterpret_cast<char*>(&o_value) + offsetof(PPSongTriggerState,m_songTriggerGameObject) + sizeof(SongTriggerGameObject*), 12);
+	i_stream.read(reinterpret_cast<char*>(&o_value) + offsetof(PPSongTriggerState,m_songTriggerGameObject) + sizeof(SongTriggerGameObject*), 8);
 	SEPARATOR_I
 }
 
@@ -37,7 +37,7 @@ inline void operator<<(OutputStream& o_stream, PPSongTriggerState& i_value) {
 	}
 	o_stream << l_objectIndex;
 	SEPARATOR_O
-	o_stream.write(reinterpret_cast<char*>(&i_value) + offsetof(PPSongTriggerState,m_songTriggerGameObject) + sizeof(SongTriggerGameObject*), 12);
+	o_stream.write(reinterpret_cast<char*>(&i_value) + offsetof(PPSongTriggerState,m_songTriggerGameObject) + sizeof(SongTriggerGameObject*), 8);
 	SEPARATOR_O
 }
 
@@ -49,6 +49,6 @@ void PPSongTriggerState::describe() {
 		if (l_playLayer) l_objectIndex = l_playLayer->getGameObjectIndex(m_songTriggerGameObject);
 	}
 	log::info("[PPSongTriggerState - describe] m_songTriggerGameObject l_objectIndex: {}", l_objectIndex);
-	log::info("[PPSongTriggerState - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPSongTriggerState,m_songTriggerGameObject) + sizeof(SongTriggerGameObject*), 12));
+	log::info("[PPSongTriggerState - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPSongTriggerState,m_songTriggerGameObject) + sizeof(SongTriggerGameObject*), 8));
 }
 #endif

@@ -15,46 +15,46 @@ void PPGroupCommandObject2::save(OutputStream& o_stream) {
 }
 
 inline void operator>>(InputStream& i_stream, PPGroupCommandObject2& o_value) {
-	i_stream.read(reinterpret_cast<char*>(&o_value), 436);
+	i_stream.read(reinterpret_cast<char*>(&o_value), 440);
 	VEC_SEPARATOR_I
 	i_stream >> o_value.m_unkVecKeyframeObject;
 	VEC_SEPARATOR_I
-	i_stream.read(reinterpret_cast<char*>(&o_value) + offsetof(PPGroupCommandObject2,m_unkVecKeyframeObject) + sizeof(gd::vector<KeyframeObject>), 16);
+	i_stream.read(reinterpret_cast<char*>(&o_value) + offsetof(PPGroupCommandObject2,m_unkVecKeyframeObject) + sizeof(gd::vector<KeyframeObject>), 24);
 	VEC_SEPARATOR_I
 	i_stream >> o_value.m_unkVecInt;
 	VEC_SEPARATOR_I
-	i_stream.read(reinterpret_cast<char*>(&o_value) + offsetof(PPGroupCommandObject2,m_unkVecInt) + sizeof(gd::vector<int>), 12);
+	i_stream.read(reinterpret_cast<char*>(&o_value) + offsetof(PPGroupCommandObject2,m_unkVecInt) + sizeof(gd::vector<int>), 8);
 	SEPARATOR_I
 }
 
 inline void operator<<(OutputStream& o_stream, PPGroupCommandObject2& i_value) {
-	o_stream.write(reinterpret_cast<char*>(&i_value), 436);
+	o_stream.write(reinterpret_cast<char*>(&i_value), 440);
 	VEC_SEPARATOR_O
 	o_stream << i_value.m_unkVecKeyframeObject;
 	VEC_SEPARATOR_O
-	o_stream.write(reinterpret_cast<char*>(&i_value) + offsetof(PPGroupCommandObject2,m_unkVecKeyframeObject) + sizeof(gd::vector<KeyframeObject>), 16);
+	o_stream.write(reinterpret_cast<char*>(&i_value) + offsetof(PPGroupCommandObject2,m_unkVecKeyframeObject) + sizeof(gd::vector<KeyframeObject>), 24);
 	VEC_SEPARATOR_O
 	o_stream << i_value.m_unkVecInt;
 	VEC_SEPARATOR_O
-	o_stream.write(reinterpret_cast<char*>(&i_value) + offsetof(PPGroupCommandObject2,m_unkVecInt) + sizeof(gd::vector<int>), 12);
+	o_stream.write(reinterpret_cast<char*>(&i_value) + offsetof(PPGroupCommandObject2,m_unkVecInt) + sizeof(gd::vector<int>), 8);
 	SEPARATOR_O
 }
 
 #if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 void PPGroupCommandObject2::describe() {
-	log::info("[PPGroupCommandObject2 - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this), 436));
+	log::info("[PPGroupCommandObject2 - describe] pad_1: [{}]", hexStr(reinterpret_cast<unsigned char*>(this), 440));
 	int l_size = m_unkVecKeyframeObject.size();
 	log::info("[PPGroupCommandObject2 - describe] m_unkVecKeyframeObject.size(): {}", l_size);
 	for (int i = 0; i < l_size; i++) {
 		log::info("[PPGroupCommandObject2 - describe] m_unkVecKeyframeObject[{}]:", i);
 		reinterpret_cast<PPKeyframeObject*>(&m_unkVecKeyframeObject[i])->describe();
 	}
-	log::info("[PPGroupCommandObject2 - describe] pad_2: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPGroupCommandObject2,m_unkVecKeyframeObject) + sizeof(gd::vector<KeyframeObject>), 16));
+	log::info("[PPGroupCommandObject2 - describe] pad_2: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPGroupCommandObject2,m_unkVecKeyframeObject) + sizeof(gd::vector<KeyframeObject>), 24));
 	l_size = m_unkVecInt.size();
 	log::info("[PPGroupCommandObject2 - describe] m_unkVecInt.size(): {}", l_size);
 	for (int i = 0; i < l_size; i++) {
 		log::info("[PPGroupCommandObject2 - describe] m_unkVecInt[{}]: {}", i, m_unkVecInt[i]);
 	}
-	log::info("[PPGroupCommandObject2 - describe] pad_3: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPGroupCommandObject2,m_unkVecInt) + sizeof(gd::vector<int>), 12));
+	log::info("[PPGroupCommandObject2 - describe] pad_3: [{}]", hexStr(reinterpret_cast<unsigned char*>(this) + offsetof(PPGroupCommandObject2,m_unkVecInt) + sizeof(gd::vector<int>), 8));
 }
 #endif

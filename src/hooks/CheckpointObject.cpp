@@ -54,8 +54,7 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	reinterpret_cast<PPFMODAudioState*>(&o_value.m_audioState)->load(i_stream);
 	SEPARATOR_I_C(AUDI)
 
-	CCPoint l_physicalCheckpointObjectStartPos;
-	i_stream >> l_physicalCheckpointObjectStartPos;
+	i_stream >> o_value.m_fields->m_position;
 	SEPARATOR_I
 
 	// PlayerCheckpoint* m_player1Checkpoint;
@@ -143,13 +142,7 @@ inline void operator>>(InputStream& i_stream, PPCheckpointObject& o_value) {
 	i_stream >> o_value.m_fields->m_percentage;
 	SEPARATOR_I
 
-	// add the loaded startpoint to the list
-	PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
-	if (l_playLayer) {
-		// set the checkpoint as loaded so we can clean it up properly on remove
-		o_value.m_fields->m_wasLoaded = true;
-		l_playLayer->addStartpoint(StartpointManager::get().createStartpoint(&o_value, l_physicalCheckpointObjectStartPos));
-	}
+	o_value.m_fields->m_wasLoaded = true;
 }
 
 inline void operator<<(OutputStream& o_stream, PPCheckpointObject& i_value) {

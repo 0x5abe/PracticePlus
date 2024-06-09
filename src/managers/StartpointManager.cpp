@@ -3,6 +3,7 @@
 #include <Geode/Enums.hpp>
 #include <Geode/binding/CheckpointObject.hpp>
 #include <Geode/binding/GJGameState.hpp>
+#include <hooks/PlayLayer.hpp>
 #include <hooks/CheckpointObject.hpp>
 #include <hooks/PlayerCheckpoint.hpp>
 #include <hooks/cocos2d/CCArray.hpp>
@@ -11,7 +12,7 @@
 
 using namespace geode::prelude;
 
-PPCheckpointObject* StartpointManager::createStartpoint(PPCheckpointObject* i_startpoint, CCPoint i_startPosition) {
+PPCheckpointObject* StartpointManager::createStartpoint(PPCheckpointObject* i_startpoint) {
 	log::info("[StartpointManager::createStartpoint] begin");
 	GameObject* l_newPhysicalCPO = GameObject::createWithFrame("square_01_001.png");
 	CC_SAFE_RETAIN(l_newPhysicalCPO);
@@ -24,7 +25,7 @@ PPCheckpointObject* StartpointManager::createStartpoint(PPCheckpointObject* i_st
 	CC_SAFE_RELEASE(i_startpoint->m_physicalCheckpointObject);
 	i_startpoint->m_physicalCheckpointObject = l_newPhysicalCPO;
 	
-	i_startpoint->m_physicalCheckpointObject->setStartPos(i_startPosition);
+	i_startpoint->m_physicalCheckpointObject->setStartPos(i_startpoint->m_fields->m_position);
 	//log::info("sizeof CCDictionary {}", sizeof(cocos2d::CCDictionary));
 	//log::info("sizeof CCDictElement {}", sizeof(cocos2d::CCDictElement));
 	//log::info("sizeof CAState {}", sizeof(CAState));
@@ -160,14 +161,18 @@ void StartpointManager::updatePlusModeLogic() {
 
 void StartpointManager::loadOneStartpointFromStream() {
 	//log::info("start load one");
-	cocos2d::CCArray* l_intermediate = m_startpoints;
-	static_cast<PPCCArray*>(l_intermediate)->loadOne<PPCheckpointObject>(m_inputStream);
+	PPCheckpointObject* l_object = reinterpret_cast<PPCheckpointObject*>(CheckpointObject::create());
+	l_object->load(m_inputStream); 
+
+	PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
+	if (l_playLayer) {
+		l_playLayer->addStartpoint(StartpointManager::get().createStartpoint(l_object));
+	}
 }
 
 void StartpointManager::saveOneStartpointToStream(unsigned int i_index) {
 	//log::info("Saving Startpoints to stream");
-	cocos2d::CCArray* l_intermediate = m_startpoints;
-	static_cast<PPCCArray*>(l_intermediate)->saveOne<PPCheckpointObject>(m_outputStream, i_index);
+	static_cast<PPCheckpointObject*>(m_startpoints->objectAtIndex(i_index))->save(m_outputStream);
 	//log::info("Saved Startpoints to stream");
 }
 

@@ -25,12 +25,6 @@ public:
 	template <>
 	void save<GradientTriggerObject>(OutputStream& o_stream);
 
-	template <>
-	void loadOne<PPCheckpointObject>(InputStream& o_stream);
-
-	template <>
-	void saveOne<PPCheckpointObject>(OutputStream& o_stream, unsigned int i_index);
-
 #if defined(PP_DEBUG) && defined(PP_DESCRIBE)
 	template <class T>
 	void describe();
