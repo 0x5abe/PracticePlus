@@ -4,7 +4,6 @@
 #include <sabe.persistencyutils/include/PersistencyUtils.hpp>
 
 class PPPlayLayer;
-
 class StartpointManager {
 	friend class PPPlayLayer;
 

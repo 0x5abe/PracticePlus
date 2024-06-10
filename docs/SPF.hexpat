@@ -206,17 +206,18 @@ struct DynamicObjectAction {
     u8 m_unk[60];
 };
 
+struct SFXTriggerGameObjectPtr {
+    u32 m_index;
+}; 
+
 struct SFXTriggerInstance {
     u8 m_unk[16];
+	SFXTriggerGameObjectPtr m_sfxTriggerGameObject;
 };
 
 struct SongTriggerGameObjectPtr {
     u32 m_index;
 };
-
-struct SFXTriggerGameObjectPtr {
-    u32 m_index;
-}; 
 
 struct SongChannelState {
     u8 m_unk[4];

@@ -18,6 +18,7 @@ PPCheckpointObject* StartpointManager::createStartpoint(PPCheckpointObject* i_st
 	l_newPhysicalCPO->m_objectID = 0x2c;
 	l_newPhysicalCPO->m_objectType = GameObjectType::Decoration;
 	l_newPhysicalCPO->m_glowSprite = nullptr;
+	// TODO: FIX THIS OFFSET
 	int* l_unkField1 = reinterpret_cast<int*>(reinterpret_cast<size_t>(l_newPhysicalCPO)+0x3d4);
 	*l_unkField1 = 3;
 
