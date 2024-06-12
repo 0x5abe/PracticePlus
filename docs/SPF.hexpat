@@ -220,7 +220,7 @@ struct SFXTriggerGameObjectPtr {
 
 struct SFXTriggerInstance {
     u8 m_unk[16];
-	SFXTriggerGameObjectPtr m_sfxTriggerGameObject;
+    SFXTriggerGameObjectPtr m_sfxTriggerGameObject;
 };
 
 struct SongTriggerGameObjectPtr {
