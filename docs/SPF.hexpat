@@ -203,7 +203,15 @@ struct AdvancedFollowInstance {
 };
 
 struct DynamicObjectAction {
-    u8 m_unk[60];
+    GameObjectPtr m_gameObject1;
+    GameObjectPtr m_gameObject2;
+    GameObjectPtr m_gameObject3;
+    GameObjectPtr m_gameObject4;
+    GameObjectPtr m_gameObject5;
+    GameObjectPtr m_gameObject6;
+    GameObjectPtr m_gameObject7;
+    GameObjectPtr m_gameObject8;
+    u8 m_unk[32];
 };
 
 struct SFXTriggerGameObjectPtr {
@@ -617,11 +625,11 @@ struct KeyframeObject {
 };
 
 struct GroupCommandObject2 {
-    u8 m_unk[436];
+    u8 m_unk[440];
     vector<KeyframeObject> m_unkVecKeyframeObject;
-    u8 m_unk2[16];
+    u8 m_unk2[24];
     vector<s32> m_unkVecInt;
-    u8 m_unk3[12];
+    u8 m_unk3[8];
 };
 
 struct TimerItem {
@@ -692,7 +700,7 @@ struct CheckpointObject {
     }
     bool m_unkBool1;
     unordered_map<s32,SequenceTriggerState> m_sequenceTriggerStateUnorderedMap;
-    s32 m_unkGetsCopiedFromGameState;
+    s64 m_unkGetsCopiedFromGameState;
     float m_percentage;
 };
 
