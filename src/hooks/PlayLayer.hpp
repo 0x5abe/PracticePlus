@@ -3,7 +3,7 @@
 #include <Geode/modify/PlayLayer.hpp>
 #include <hooks/CheckpointObject.hpp>
 #include <managers/StartpointManager.hpp>
-#include <sabe.persistencyutils/include/PersistencyUtils.hpp>
+#include <sabe.persistenceutils/include/PersistenceUtils.hpp>
 
 #define SPF_EXT ".spf"
 extern PPPlayLayer* s_currentPlayLayer;

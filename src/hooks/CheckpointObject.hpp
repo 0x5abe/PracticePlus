@@ -1,12 +1,12 @@
 #pragma once
 #include <Geode/Geode.hpp>
 #include <Geode/modify/CheckpointObject.hpp>
-#include <sabe.persistencyutils/include/PersistencyUtils.hpp>
+#include <sabe.persistenceutils/include/PersistenceUtils.hpp>
 
 class $modify(PPCheckpointObject, CheckpointObject) {
 protected:
-	friend void operator>>(persistencyUtils::InputStream& i_stream, PPCheckpointObject& o_value);
-	friend void operator<<(persistencyUtils::OutputStream& o_stream, PPCheckpointObject& i_value);
+	friend void operator>>(persistenceUtils::InputStream& i_stream, PPCheckpointObject& o_value);
+	friend void operator<<(persistenceUtils::OutputStream& o_stream, PPCheckpointObject& i_value);
 
 public:
 	struct Fields {
@@ -15,8 +15,8 @@ public:
 		cocos2d::CCPoint m_position;
 	};
 	
-	void load(persistencyUtils::InputStream& i_stream);
-	void save(persistencyUtils::OutputStream& o_stream);
+	void load(persistenceUtils::InputStream& i_stream);
+	void save(persistenceUtils::OutputStream& o_stream);
 
 	void clean();
 

@@ -1,5 +1,5 @@
 {
-	"geode": "3.0.0-alpha.2",
+	"geode": "3.0.0-beta.1",
 	"gd": {
 		"win": "2.206"
 	},
@@ -23,7 +23,7 @@
 			"importance": "required"
 		},
 		{
-			"id": "sabe.persistencyutils",
+			"id": "sabe.persistenceutils",
 			"version": ">=v0.0.1",
 			"importance": "required",
 			"platforms": [

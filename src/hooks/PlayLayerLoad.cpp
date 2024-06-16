@@ -5,7 +5,7 @@
 #include <util/filesystem.hpp>
 
 using namespace geode::prelude;
-using namespace persistencyUtils;
+using namespace persistenceUtils;
 
 bool PPPlayLayer::readSpfLevelStringHash() {
 	unsigned int l_savedLevelStringHash;

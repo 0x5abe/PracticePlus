@@ -12,7 +12,7 @@
 #include <util/debug.hpp>
 
 using namespace geode::prelude;
-using namespace persistencyUtils;
+using namespace persistenceUtils;
 
 void PPCheckpointObject::load(InputStream& i_stream) {
 	reinterpret_cast<PUCCNode*>(this)->load(i_stream);

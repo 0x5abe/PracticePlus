@@ -6,10 +6,10 @@
 #include <util/filesystem.hpp>
 
 using namespace geode::prelude;
-using namespace persistencyUtils;
+using namespace persistenceUtils;
 
 PPPlayLayer* s_currentPlayLayer = nullptr;
-char s_spfMagicAndVer[] = "SPF v0.0.4";
+char s_spfMagicAndVer[] = "SPF v0.0.5";
 
 // overrides
 

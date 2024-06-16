@@ -5,7 +5,7 @@
 #include <util/filesystem.hpp>
 
 using namespace geode::prelude;
-using namespace persistencyUtils;
+using namespace persistenceUtils;
 
 void PPPlayLayer::writeSpfHeader() {
 	OutputStream& l_outputStream = StartpointManager::get().m_outputStream;
