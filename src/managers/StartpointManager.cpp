@@ -9,7 +9,7 @@
 #include <util/debug.hpp>
 
 using namespace geode::prelude;
-using namespace persistenceUtils;
+using namespace persistenceAPI;
 
 PPCheckpointObject* StartpointManager::createStartpoint(PPCheckpointObject* i_startpoint) {
 	log::info("[StartpointManager::createStartpoint] begin");
