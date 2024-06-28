@@ -130,4 +130,6 @@ public:
 	void setupSavingIcon();
 
 	void showSavingIcon(bool i_show);
+
+	void hideSavingIcon();
 };

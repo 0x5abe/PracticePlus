@@ -9,7 +9,7 @@ using namespace geode::prelude;
 using namespace persistenceAPI;
 
 PPPlayLayer* s_currentPlayLayer = nullptr;
-char s_spfMagicAndVer[] = "SPF v0.0.5";
+char s_spfMagicAndVer[] = "SPF v0.0.6";
 
 // overrides
 
@@ -325,4 +325,8 @@ void PPPlayLayer::showSavingIcon(bool i_show) {
 	}
 	m_fields->m_savingIcon->pauseSchedulerAndActions();
 	m_fields->m_savingIcon->setVisible(false);
+}
+
+void PPPlayLayer::hideSavingIcon() {
+	showSavingIcon(false);
 }

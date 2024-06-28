@@ -13,5 +13,5 @@ void PPEndLevelLayer::onMenu(CCObject* i_sender) {
 		return;
 	}
 
-	PPEndLevelLayer::onMenu(i_sender);
+	EndLevelLayer::onMenu(i_sender);
 }

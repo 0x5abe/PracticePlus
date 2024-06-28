@@ -78,9 +78,10 @@ void PPPlayLayer::saveStartpoints() {
 				l_startpointManager.endOutputStream();
 				m_fields->m_startpointSavingState = SavingState::Ready;
 			}
+			// falls through
 		}
 		case SavingState::Ready: {
-			showSavingIcon(false);
+			hideSavingIcon();
 			break;
 		}
 	}
