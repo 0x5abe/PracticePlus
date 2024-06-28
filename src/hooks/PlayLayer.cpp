@@ -117,13 +117,13 @@ void PPPlayLayer::onQuit() {
 // custom methods
 
 void PPPlayLayer::createStartpoint() {
-	log::info("[createStartpoint] begin");
+	//log::info("[createStartpoint] begin");
 	PPCheckpointObject* l_startpoint =  static_cast<PPCheckpointObject*>(PlayLayer::createCheckpoint());
-	log::info("[createStartpoint] created startpoint");
+	//log::info("[createStartpoint] created startpoint");
 	l_startpoint->m_fields->m_percentage = PlayLayer::getCurrentPercent();
 	l_startpoint->m_fields->m_position = m_player1->getPosition();
-	log::info("[createStartpoint] m_percentage: {}", l_startpoint->m_fields->m_percentage);
-	log::info("[createStartpoint] calling addStartpoint");
+	//log::info("[createStartpoint] m_percentage: {}", l_startpoint->m_fields->m_percentage);
+	//log::info("[createStartpoint] calling addStartpoint");
 	addStartpoint(StartpointManager::get().createStartpoint(l_startpoint));
 
 	//Todo: see if we want to save to file here, make it so it only saves the changes instead of the whole thing
@@ -210,10 +210,10 @@ std::string PPPlayLayer::getStartpointFilePath(bool i_checkExists) {
 void PPPlayLayer::setupKeybinds() {
 	addEventListener<keybinds::InvokeBindFilter>(
 		[this](keybinds::InvokeBindEvent* event) {
-			log::info("Place SP");
+			//log::info("Place SP");
 			if (event->isDown() && !m_player1->m_isLocked && !m_player2->m_isLocked && !m_player1->m_isDead && isPlusMode()) {
 				if (m_fields->m_startpointSavingState == SavingState::Ready) {
-					log::info("Calls createStartpoint()");
+					//log::info("Calls createStartpoint()");
 					createStartpoint();
 				}
 			}

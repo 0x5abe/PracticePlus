@@ -12,7 +12,7 @@ using namespace geode::prelude;
 using namespace persistenceAPI;
 
 PPCheckpointObject* StartpointManager::createStartpoint(PPCheckpointObject* i_startpoint) {
-	log::info("[StartpointManager::createStartpoint] begin");
+	//log::info("[StartpointManager::createStartpoint] begin");
 	GameObject* l_newPhysicalCPO = GameObject::createWithFrame("square_01_001.png");
 	CC_SAFE_RETAIN(l_newPhysicalCPO);
 	l_newPhysicalCPO->m_objectID = 0x2c;
