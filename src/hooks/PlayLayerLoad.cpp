@@ -9,9 +9,9 @@ using namespace persistenceAPI;
 
 bool PPPlayLayer::readSpfLevelStringHash() {
 	unsigned int l_savedLevelStringHash;
-	InputStream& l_inputStream = StartpointManager::get().m_inputStream;
+	Stream& l_stream = StartpointManager::get().m_stream;
 
-	l_inputStream >> l_savedLevelStringHash;
+	l_stream >> l_savedLevelStringHash;
 	
 	if (l_savedLevelStringHash != util::algorithm::hash_string(m_level->m_levelString.c_str())) {
 		log::info("[readSpfLevelStringHash] different levelstring hash");
@@ -23,9 +23,9 @@ bool PPPlayLayer::readSpfLevelStringHash() {
 
 bool PPPlayLayer::readSpfVersion() {
 	char l_spfMagicAndVer[sizeof(s_spfMagicAndVer)];
-	InputStream& l_inputStream = StartpointManager::get().m_inputStream;
+	Stream& l_stream = StartpointManager::get().m_stream;
 
-	l_inputStream.read(l_spfMagicAndVer, sizeof(s_spfMagicAndVer));
+	l_stream.read(l_spfMagicAndVer, sizeof(s_spfMagicAndVer));
 	if (std::strncmp(s_spfMagicAndVer, l_spfMagicAndVer, sizeof(s_spfMagicAndVer))) {
 		log::info("[readSpfVersion] different version");
 		return false;
@@ -36,9 +36,9 @@ bool PPPlayLayer::readSpfVersion() {
 
 bool PPPlayLayer::readSpfFinishedSaving() {
 	bool l_params[16-sizeof(s_spfMagicAndVer)];
-	InputStream& l_inputStream = StartpointManager::get().m_inputStream;
+	Stream& l_stream = StartpointManager::get().m_stream;
 
-	l_inputStream.read(reinterpret_cast<char*>(l_params), 16-sizeof(s_spfMagicAndVer));
+	l_stream.read(reinterpret_cast<char*>(l_params), 16-sizeof(s_spfMagicAndVer));
 	if (l_params[0] == false) {
 		log::info("[readSpfFinishedSaving] did not finish writing");
 		return false;
@@ -49,7 +49,7 @@ bool PPPlayLayer::readSpfFinishedSaving() {
 
 void PPPlayLayer::loadStartpoints() {
 	StartpointManager& l_startpointManager = StartpointManager::get();
-	InputStream& l_inputStream = StartpointManager::get().m_inputStream;
+	Stream& l_stream = StartpointManager::get().m_stream;
 	switch (m_fields->m_startpointLoadingState) {
 		case LoadingState::Setup: {
 			//log::info("[loadStartpoints] started loading SP");
@@ -69,7 +69,7 @@ void PPPlayLayer::loadStartpoints() {
 
 			m_fields->m_bytesToRead = std::filesystem::file_size(l_filePath);
 			m_fields->m_bytesRead = 0;
-			if(m_fields->m_bytesToRead == 0 || !l_inputStream.setFileToRead(l_filePath, &m_fields->m_bytesRead)) {
+			if(m_fields->m_bytesToRead == 0 || !l_stream.setFile(l_filePath, &m_fields->m_bytesRead)) {
 				m_fields->m_startpointLoadingState = LoadingState::HandleFileError;
 				break;
 			}
@@ -102,7 +102,7 @@ void PPPlayLayer::loadStartpoints() {
 			// falls through
 		}
 		case LoadingState::ReadStartpointCount: {
-			l_inputStream >> m_fields->m_remainingStartpointLoadCount;
+			l_stream >> m_fields->m_remainingStartpointLoadCount;
 			m_fields->m_startpointLoadingState = LoadingState::ReadStartpoint;
 			// falls through
 		}
@@ -209,6 +209,7 @@ void PPPlayLayer::loadStartpoints() {
 			if (l_levelInfoLayer) {
 				l_levelInfoLayer->m_progressTimer->setVisible(false);
 			}
+			l_startpointManager.endStream();
 			m_fields->m_startpointLoadingState = LoadingState::Ready;
 		}
 	}

@@ -14,8 +14,7 @@ protected:
 	bool m_prevPlusMode = false;
 	bool m_practiceModeIsPlusMode = true;
 	bool m_visibleStartpoints = true;
-	persistenceAPI::InputStream m_inputStream;
-	persistenceAPI::OutputStream m_outputStream;
+	persistenceAPI::Stream m_stream;
 
 	StartpointManager() {
 		m_startpoints = cocos2d::CCArray::create();
@@ -85,7 +84,7 @@ public:
 
 	void clean();
 
-	void endOutputStream();
+	void endStream();
 
 #if defined(PP_DEBUG)
 	geode::Ref<cocos2d::CCArray> getStartpointArray();

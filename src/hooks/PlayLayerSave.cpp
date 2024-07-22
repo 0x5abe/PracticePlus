@@ -8,11 +8,11 @@ using namespace geode::prelude;
 using namespace persistenceAPI;
 
 void PPPlayLayer::writeSpfHeader() {
-	OutputStream& l_outputStream = StartpointManager::get().m_outputStream;
-	l_outputStream.write(s_spfMagicAndVer,sizeof(s_spfMagicAndVer));
-	l_outputStream.writeZero(16-sizeof(s_spfMagicAndVer));
+	Stream& l_stream = StartpointManager::get().m_stream;
+	l_stream.write(s_spfMagicAndVer,sizeof(s_spfMagicAndVer));
+	l_stream.writeZero(16-sizeof(s_spfMagicAndVer));
 	unsigned int l_levelStringHash = util::algorithm::hash_string(m_level->m_levelString.c_str());
-	l_outputStream << l_levelStringHash;
+	l_stream << l_levelStringHash;
 }
 
 void PPPlayLayer::saveStartpoints() {
@@ -34,8 +34,8 @@ void PPPlayLayer::saveStartpoints() {
 				break;
 			}
 
-			OutputStream& l_outputStream = StartpointManager::get().m_outputStream;
-			if (!l_outputStream.setFileToWrite(l_filePath)) {
+			Stream& l_stream = StartpointManager::get().m_stream;
+			if (!l_stream.setFile(l_filePath, true)) {
 				m_fields->m_startpointSavingState = SavingState::Ready;
 				break;
 			}
@@ -44,7 +44,7 @@ void PPPlayLayer::saveStartpoints() {
 			
 			writeSpfHeader();
 
-			l_outputStream << m_fields->m_remainingStartpointSaveCount;
+			l_stream << m_fields->m_remainingStartpointSaveCount;
 
 			m_fields->m_startpointSavingState = SavingState::Started;
 			// falls through
@@ -71,11 +71,11 @@ void PPPlayLayer::saveStartpoints() {
 			}
 			if (m_fields->m_remainingStartpointSaveCount == 0) {
 				StartpointManager& l_startpointManager = StartpointManager::get();
-				OutputStream& l_outputStream = StartpointManager::get().m_outputStream;
-				l_outputStream.seek(sizeof(s_spfMagicAndVer));
+				Stream& l_stream = StartpointManager::get().m_stream;
+				l_stream.seek(sizeof(s_spfMagicAndVer));
 				bool o_finishedSaving = true;
-				l_outputStream.write((char*)&o_finishedSaving,sizeof(bool));
-				l_startpointManager.endOutputStream();
+				l_stream.write((char*)&o_finishedSaving,sizeof(bool));
+				l_startpointManager.endStream();
 				m_fields->m_startpointSavingState = SavingState::Ready;
 			}
 			// falls through

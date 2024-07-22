@@ -5,8 +5,8 @@
 
 class $modify(PPCheckpointObject, CheckpointObject) {
 protected:
-	friend void operator>>(persistenceAPI::InputStream& i_stream, PPCheckpointObject& o_value);
-	friend void operator<<(persistenceAPI::OutputStream& o_stream, PPCheckpointObject& i_value);
+	friend void operator>>(persistenceAPI::Stream& i_stream, PPCheckpointObject& o_value);
+	friend void operator<<(persistenceAPI::Stream& o_stream, PPCheckpointObject& i_value);
 
 public:
 	struct Fields {
@@ -15,8 +15,8 @@ public:
 		cocos2d::CCPoint m_position;
 	};
 	
-	void load(persistenceAPI::InputStream& i_stream);
-	void save(persistenceAPI::OutputStream& o_stream);
+	void load(persistenceAPI::Stream& i_stream);
+	void save(persistenceAPI::Stream& o_stream);
 
 	void clean();
 

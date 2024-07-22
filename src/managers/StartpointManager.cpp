@@ -162,7 +162,7 @@ void StartpointManager::updatePlusModeLogic() {
 void StartpointManager::loadOneStartpointFromStream() {
 	//log::info("start load one");
 	PPCheckpointObject* l_object = reinterpret_cast<PPCheckpointObject*>(CheckpointObject::create());
-	l_object->load(m_inputStream); 
+	l_object->load(m_stream); 
 
 	PPPlayLayer* l_playLayer = static_cast<PPPlayLayer*>(PlayLayer::get());
 	if (l_playLayer) {
@@ -172,7 +172,7 @@ void StartpointManager::loadOneStartpointFromStream() {
 
 void StartpointManager::saveOneStartpointToStream(unsigned int i_index) {
 	//log::info("Saving Startpoints to stream");
-	static_cast<PPCheckpointObject*>(m_startpoints->objectAtIndex(i_index))->save(m_outputStream);
+	static_cast<PPCheckpointObject*>(m_startpoints->objectAtIndex(i_index))->save(m_stream);
 	//log::info("Saved Startpoints to stream");
 }
 
@@ -183,8 +183,8 @@ void StartpointManager::clean() {
 	}
 }
 
-void StartpointManager::endOutputStream() {
-	m_outputStream.end();
+void StartpointManager::endStream() {
+	m_stream.end();
 }
 
 #if defined(PP_DEBUG)
